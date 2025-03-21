@@ -6,7 +6,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "npx @tailwindcss/cli -i Source/css/input.css -o Source/css/output.css --watch"
+    "dev": "npx @tailwindcss/cli -i Source/assets/css/input.css -o Source/assets/css/output.css --watch"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.17"
