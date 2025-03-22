@@ -117,7 +117,15 @@
     <div id="main-content"
         class="ml-[16rem] max-sm:ml-4 lg:border-base-content/10 xl:border-e xl:pe-8 relative px-0 py-4 sm:py-8 lg:border-s lg:ps-8">
     </div>
-
+    <script>
+        // active nav link
+        $(document).ready(function() {
+            $(".nav-link").click(function () {
+                $(".nav-link").removeClass("active");
+                $(this).addClass("active");   
+            });
+        });
+    </script>
     <script src="../node_modules/flyonui/flyonui.js"></script>
     <script src="./assets/js/adminScript.js"></script>
 </body>

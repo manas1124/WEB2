@@ -3,27 +3,19 @@
 
 require_once __DIR__ .'/database.php'; 
 
-class KhaoSat {
-    public $ks_id;
-    public $ten_ks;
-    public $ngay_tao;
-    public $nhomks_id;
-    public $kh_id;
-    public $nks_id;
-    public $ltl_id;
-    public $ctdt_id;
-    public $field_9;
-    private $db; // Database connection
+class KhaoSatModel {
 
+    private $db; // Database connection
+    
     public function __construct() {
-        $this->db = new Database(); // Create a Database instance
+        $this->db = new MyConnection(); // Create a Database instance
     }
 
     // Database operations
     public function create() {
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("INSERT INTO khao_sat (ks_id, ten_ks, ngay_tao, nhomks_id, kh_id, nks_id, ltl_id, ctdt_id, field_9) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("issiiiiii", $this->ks_id, $this->ten_ks, $this->ngay_tao, $this->nhomks_id, $this->kh_id, $this->nks_id, $this->ltl_id, $this->ctdt_id, $this->field_9);
+        $stmt->bind_param("siiiiiiii", $this->ks_id, $this->ten_ks, $this->ngay_tao, $this->nhomks_id, $this->kh_id, $this->nks_id, $this->ltl_id, $this->ctdt_id, $this->field_9);
 
         if ($stmt->execute()) {
             return true;
@@ -31,8 +23,23 @@ class KhaoSat {
             return false;
         }
     }
+    public function getAllKhaoSat() {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM khao_sat ");
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    public function read($ks_id) {
+        $data = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+        // return data as string json
+        return json_encode($data);
+    }
+
+    public function getKhaoSatById($ks_id) {
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("SELECT * FROM khao_sat WHERE ks_id = ?");
         $stmt->bind_param("i", $ks_id);
@@ -41,16 +48,8 @@ class KhaoSat {
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $this->ks_id = $row['ks_id'];
-            $this->ten_ks = $row['ten_ks'];
-            $this->ngay_tao = $row['ngay_tao'];
-            $this->nhomks_id = $row['nhomks_id'];
-            $this->kh_id = $row['kh_id'];
-            $this->nks_id = $row['nks_id'];
-            $this->ltl_id = $row['ltl_id'];
-            $this->ctdt_id = $row['ctdt_id'];
-            $this->field_9 = $row['field_9'];
-            return true;
+            print(json_encode($row));
+            return json_encode($row);
         } else {
             return false;
         }
