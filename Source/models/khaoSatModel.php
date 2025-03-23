@@ -48,7 +48,7 @@ class KhaoSatModel {
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            print(json_encode($row));
+
             return json_encode($row);
         } else {
             return false;

@@ -15,7 +15,9 @@ if (isset($_POST['func'])) {
        
             break;
         case "getKhaoSatById":
-            
+           $id = $data['ks_id']; //lay id tu json
+
+            $result = $ksModel->getKhaoSatById($id);
             break;
         default:
             $data = [

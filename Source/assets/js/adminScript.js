@@ -16,6 +16,11 @@ $(function () {
         //     }
         // });
         $('#main-content').load("./views/admin/" + page + ".php");
+        let newUrl = window.location.pathname + "?page=" + page;
+
+        if (addToHistory) {
+        history.pushState({ page: page }, "", newUrl);
+        }
     }
 
     $('.nav-link').on('click', function (e) {
