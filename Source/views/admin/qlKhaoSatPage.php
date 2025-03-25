@@ -3,7 +3,7 @@
         <h1>Quản lý khảo sát</h1>
     </div>
 
-    <div class="w-full overflow-x-auto bg-blue-200">
+    <div class="w-full overflow-x-auto ">
         <table class="table">
             <thead>
                 <tr>

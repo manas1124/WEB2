@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <nav class="navbar bg-base-100 max-sm:rounded-box max-sm:shadow sm:border-b border-base-content/25 sm:z-[1] relative">
+    <nav class="navbar bg-base-100 max-sm:rounded-box max-sm:shadow-sm sm:border-b border-base-content/25 sm:z-1 relative">
         <button type="button" class="btn btn-text max-sm:btn-square sm:hidden me-2" aria-haspopup="dialog"
             aria-expanded="false" aria-controls="default-sidebar" data-overlay="#default-sidebar">
             <span class="icon-[tabler--menu-2] size-5"></span>
@@ -175,12 +175,12 @@
         <div class="drawer-body px-2 pt-4">
             <ul class="menu p-0">
                 <li >
-                    <a href="#" class="focus:bg-blue-400 focus:rounded-sm">
+                    <a href="#" class="focus:bg-blue-400 focus:rounded-xs">
                         <span class="icon-[tabler--home] size-5"></span>
                         Home
                     </a>
                 </li>
-                <li class=" focus-within:bg-blue-400 focus-within:rounded-sm ">
+                <li class=" focus-within:bg-blue-400 focus-within:rounded-xs ">
                     <a href="#">
                         <span class="icon-[tabler--user] size-5"></span>
                         Account
