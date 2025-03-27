@@ -1,0 +1,1 @@
+window.HSStaticMethods.autoInit() // phải dùng câu lệnh này để dùng lại js component

@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@tailwindcss/cli": "^4.0.15",
+    "@tailwindcss/cli": "^4.0.17",
     "jquery": "^3.7.1"
   },
   "scripts": {
@@ -11,6 +11,6 @@
     "@iconify/json": "^2.2.320",
     "@iconify/tailwind4": "^1.0.6",
     "flyonui": "^2.0.0",
-    "tailwindcss": "^4.0.15"
+    "tailwindcss": "^4.0.17"
   }
 }
