@@ -1,5 +1,5 @@
 
-
+window.HSStaticMethods.autoInit() // phải dùng câu lệnh này để dùng lại js component
 
 // const ctdt = document.getElementById("ctdt-content")
 // const btnAlert = document.getElementById("test")

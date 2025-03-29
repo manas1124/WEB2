@@ -33,5 +33,5 @@
             </tbody>
         </table>
     </div>
-    <script src="./views/javascript/qlKhaoSat.js"></script>
+    <!-- <script src="./views/javascript/qlKhaoSat.js"></script> -->
 </div>
