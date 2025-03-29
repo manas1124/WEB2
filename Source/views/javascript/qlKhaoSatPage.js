@@ -36,7 +36,6 @@ $(function () {
     // console.log(ksList);
     if (ksList != null) {
 
-      /*
       ksList.map((item) => {
         $("#ks-list").append(`
           <tr>
@@ -59,7 +58,7 @@ $(function () {
   
         `);
       });
-      */
+
       const t = await getKhaoSatById(1);
       console.log(t);
     } else {
