@@ -1,3 +1,5 @@
+const { error } = require("jquery");
+
 window.HSStaticMethods.autoInit() // phải dùng câu lệnh này để dùng lại js component
 function test() {
   console.log("test2");
@@ -7,12 +9,12 @@ async function getAllKhaoSat() {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "getAllKhaoSat", data: { ks_id: 1 } },
+      data: { func: "getAllKhaoSat"},
       dataType: "json",
     });
-    return response; // Directly return the JSON response
+    return { data: response }; // Directly return the JSON response
   } catch (error) {
-    return { error: `AJAX error: ${error.status} - ${error.statusText}` };
+    return { error: `error fetch bai khao sat: ${error.status} - ${error.statusText}` };
   }
 }
 
@@ -24,7 +26,8 @@ async function getKhaoSatById() {
       data: { func: "getKhaoSatById", data: { ks_id: 1 } },
       dataType: "json",
     });
-    return response; // Directly return the JSON response
+    // response is json type
+    return { data: response , error: null};  // Directly return the JSON response
   } catch (error) {
     return { error: `AJAX error: ${error.status} - ${error.statusText}` };
   }
@@ -32,10 +35,13 @@ async function getKhaoSatById() {
 
 $(function () {
   (async () => {
-    const ksList = await getAllKhaoSat();
-    // console.log(ksList);
-    if (ksList != null) {
-
+    const ksListData = await getAllKhaoSat();
+    console.log("loa trnag")
+    if (ksListData.error) {
+      console.log(ksListData.error);
+    } else {
+      console.log("dang tai")
+      const ksList = ksListData.data;
       ksList.map((item) => {
         $("#ks-list").append(`
           <tr>
@@ -58,12 +64,6 @@ $(function () {
   
         `);
       });
-
-      const t = await getKhaoSatById(1);
-      console.log(t);
-    } else {
-      console.log("null");
     }
-     // This will be the JSON object
   })();
 });
