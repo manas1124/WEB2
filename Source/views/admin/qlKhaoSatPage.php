@@ -1,6 +1,13 @@
 <div id="ctdt-content" class="container h-full">
-    <div>
+    <div class="flex items-center justify-between mb-4">
         <h1>Quản lý khảo sát</h1>
+        <div class="flex items-center gap-4">
+            <!-- <button type="button" class="action-item btn btn-primary" data-act="ks-tao"
+                data-aria-haspopup="dialog" aria-expanded="false"
+                aria-controls="create-ks-modal" data-overlay="#create-ks-modal">Tạo bài khảo sát</button> -->
+            <button class="action-item btn btn-primary" data-act="ks-tao">Tạo khảo sát</button>
+            <button class="action-item btn btn-primary" data-act="ks-sua">Test</button>
+        </div>
     </div>
 
     <div class="w-full overflow-x-auto ">
@@ -32,6 +39,7 @@
 
             </tbody>
         </table>
-    </div>
-    <!-- <script src="./views/javascript/qlKhaoSat.js"></script> -->
+    </div>   
+   
 </div>
+ <script src="views/javascript/qlKhaoSatPage.js"></script>

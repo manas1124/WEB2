@@ -14,4 +14,7 @@
     </li>
   </ul>
 </div>
-<script src="../../../node_modules/flyonui/flyonui.js"></script>
+<script >
+
+window.HSStaticMethods.autoInit()
+</script>

@@ -35,8 +35,8 @@ class KhaoSatModel {
                 $data[] = $row;
             }
         }
-        // return data as string json
-        return json_encode($data);
+        // return array
+        return $data;
     }
 
     public function getKhaoSatById($ks_id) {
@@ -49,7 +49,7 @@ class KhaoSatModel {
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
 
-            return json_encode($row);
+            return $row;
         } else {
             return false;
         }
