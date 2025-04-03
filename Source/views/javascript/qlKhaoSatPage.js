@@ -1,47 +1,69 @@
-const { error } = require("jquery");
-
-window.HSStaticMethods.autoInit() // phải dùng câu lệnh này để dùng lại js component
+window.HSStaticMethods.autoInit(); // phải dùng câu lệnh này để dùng lại js component
 function test() {
   console.log("test2");
 }
+
 async function getAllKhaoSat() {
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "getAllKhaoSat"},
+      data: { func: "getAllKhaoSat", data:  JSON.stringify({ ks_id: 1 } )},
       dataType: "json",
     });
-    return { data: response }; // Directly return the JSON response
+    console.log("fect",response)
+    return response;
   } catch (error) {
-    return { error: `error fetch bai khao sat: ${error.status} - ${error.statusText}` };
+    console.log("loi fetchdata getAllKhaoSat 1")
+    return null;
   }
 }
 
+async function getAllNhomKs() {
+  try {
+    const response = await $.ajax({
+      url: "./controller/nhomKsController.php",
+      type: "POST",
+      data: { func: "getAllNhomKs"},
+      dataType: "json",
+    });
+    return response;
+  } catch (error) {
+    console.log("loi fetchdata allnhomks ")
+    return null;
+  }
+}
 async function getKhaoSatById() {
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "getKhaoSatById", data: { ks_id: 1 } },
-      dataType: "json",
+      data: JSON.stringify({ func: "getKhaoSatById", data: { ks_id: 1 } }),
     });
     // response is json type
     return { data: response , error: null};  // Directly return the JSON response
   } catch (error) {
-    return { error: `AJAX error: ${error.status} - ${error.statusText}` };
+    console.log("loi fetchdata getKhaoSatById");
+    return null;
   }
 }
 
 $(function () {
+
+  $(".main-content").on("click",".action-item", function (e) {
+      e.preventDefault();
+      let action = $(this).data("act");
+      console.log(action)
+      // $(".main-content").load(`day la trang ${action}`)
+  });
+
+
   (async () => {
-    const ksListData = await getAllKhaoSat();
-    console.log("loa trnag")
-    if (ksListData.error) {
-      console.log(ksListData.error);
-    } else {
-      console.log("dang tai")
-      const ksList = ksListData.data;
+    let ksList  = await getAllKhaoSat();
+    // ksList = JSON.parse(ksList)
+    if (ksList != null) {
+      console.log(ksList)
+      
       ksList.map((item) => {
         $("#ks-list").append(`
           <tr>
@@ -64,6 +86,21 @@ $(function () {
   
         `);
       });
+      
     }
+    
+    // let nhomKsList = await getAllNhomKs();
+    // if (nhomKsList != null) {
+    //   console.log(nhomKsList)
+    //   nhomKsList.map( (nhom) =>{
+    //     $("#select-nhom-ks").append(`
+    //       <option value="aries"></option>
+    //       `)
+    //   } )
+      
+    // }
+
+
   })();
 });
+

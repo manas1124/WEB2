@@ -7,16 +7,19 @@ class MyConnection
     private $password = "";
     private $database = "student_survey_management";
 
+    // private $server = "localhost:3307";
+    // private $username = "root";
+    // private $password = "516423";
     public function __construct()
-    {
+    { 
+    }
+
+    public function getConnection()
+    {   
         $this->connection = new mysqli($this->server, $this->username, $this->password, $this->database);
         if ($this->connection->connect_error) {
             die("Kết nối đến MySQL thất bại: " . $this->connection->connect_error);
         }
-    }
-
-    public function getConnection()
-    {
         return $this->connection;
     }
 
