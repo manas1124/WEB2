@@ -1,6 +1,6 @@
 <?php
 
-require_once '../models/khaoSatModel.php'; 
+require_once __DIR__ . '/../models/khaoSatModel.php'; 
 // header('Content-Type: application/json'); 
 
 if (isset($_POST['func'])) {
@@ -35,6 +35,9 @@ elseif  (isset($_GET['func'])) {
     
     echo "test";
 }
+// $ksModel = new KhaoSatModel();
+// echo $ksModel->getAllKhaoSat();
+
 
 ?>
 

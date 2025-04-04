@@ -11,7 +11,7 @@ async function getAllKhaoSat() {
       data: { func: "getAllKhaoSat", data:  JSON.stringify({ ks_id: 1 } )},
       dataType: "json",
     });
-    console.log("fect",response)
+    // console.log("fect",response)
     return response;
   } catch (error) {
     console.log("loi fetchdata getAllKhaoSat 1")
@@ -62,7 +62,7 @@ $(function () {
     let ksList  = await getAllKhaoSat();
     // ksList = JSON.parse(ksList)
     if (ksList != null) {
-      console.log(ksList)
+      // console.log(ksList)
       
       ksList.map((item) => {
         $("#ks-list").append(`
