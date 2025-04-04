@@ -7,11 +7,11 @@
     <div class="flex flex-row">
         <div class="pt-0 mb-4">
             <div class="mb-2">
-                <label class="label-text" for="fullName"> Tên bài khảo sát </label>
-                <input type="text" placeholder="John Doe" class="input" id="fullName" />
+                <label class="label-text" for="ten-ks"> Tên bài khảo sát </label>
+                <input type="text" placeholder="John Doe" class="input" id="ten-ks" />
             </div>
             <div class="relative max-w-sm">
-            <label class="label-text" for="fullName"> Tên bài nhóm khảo sát </label>
+            <label class="label-text" for="select-nhomks-box"> Tên bài nhóm khảo sát </label>
                 <div id="select-nhomks-box" class="border border-gray-300 rounded-md p-2 cursor-pointer bg-white">
                     <span id="selected-option">Chọn nhóm</span>
                 </div>
@@ -44,13 +44,20 @@
             <div class="w-96">
                 <label class="label-text" for="select-nganh">Ngành </label>
                 <select class="select" id="select-nganh">
-                    <option>Chọn ngành</option>
+                    <option value="-1">Chọn ngành</option>
                 </select>
             </div>
             <div class="w-96">
                 <label class="label-text" for="select-chu-ki">Chu kì</label>
                 <select class="select" id="select-chu-ki">
-                    <option>Chọn chu kì</option>
+                    <option value="-1">Chọn chu kì</option>
+                </select>
+            </div>
+            <div class="w-96">
+                <label class="label-text" for="select-ks-type">Loại khảo sát</label>
+                <select class="select" id="select-ks-type">
+                    <option value="1">Chương trình đào tạo</option>
+                    <option value="0">Chuẩn đầu ra</option>
                 </select>
             </div>
         </div>

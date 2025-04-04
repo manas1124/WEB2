@@ -69,6 +69,47 @@ async function getAllTraLoi() {
     return null;
   }
 }
+async function createKhaoSat(data) {
+  try {
+    const response = await $.ajax({
+      url: "./controller/KhaoSatController.php",
+      type: "POST",
+      data: { func: "createKhaoSat", data: JSON.stringify(data) },
+      dataType: "json",
+    });
+    if (response.error) {
+      console.log("fect", response.error);
+    }
+    console.log("fect", response);
+    return response;
+  } catch (error) {
+    console.log(error);
+    console.log("loi  tao khao sat");
+    return false;
+  }
+}
+//return -1:not found || ctdt id
+async function checkExistCtdt(nganh_id, chu_ki_id, is_ctdt_daura) {
+  console.log("check exit input",nganh_id, chu_ki_id, is_ctdt_daura)
+  try {
+    const response = await $.ajax({
+      url: "./controller/KhaoSatController.php",
+      type: "POST",
+      data: {
+        func: "checkExistCtdt",
+        data: JSON.stringify({
+          nganh_id: nganh_id,
+          chu_ki_id: chu_ki_id,
+          is_ctdt_daura: is_ctdt_daura,
+        }),
+      },
+    });
+    return response; // return id cdtd tim duoc
+  } catch (e) {
+    console.log("loi fetchdata loi kiem tra ctdt",e);
+    return -1;
+  }
+}
 $(function () {
   window.HSStaticMethods.autoInit();
   (async () => {
@@ -115,6 +156,7 @@ $(function () {
     const nhomKsInput = document.getElementById("nhomKsInput");
     const nhomOptions = document.querySelectorAll(".nhomks-option");
     const selectedNhomKs = document.getElementById("selected-option");
+    selectedNhomKs.value = "-1"; // default value is not select -1
 
     selectNhomKsBox.addEventListener("click", () => {
       nhomKsDropdown.classList.toggle("hidden");
@@ -229,13 +271,19 @@ $(function () {
 
     //xu ly submit
     submitSurveyButton.addEventListener("click", () => {
-      const surveyData = [];
+      const surveyContent = [];
       const sections = survey.querySelectorAll(".section");
 
-      const sa = selectedNhomKs.value;
+      const tenKhaoSat = $("#ten-ks").val();
+      const idNhomKs = selectedNhomKs.value;
+      const dateStart = $("#begin").val();
+      const dateEnd = $("#end").val();
+      const loaiTraLoi = $("#select-loai-tra-loi").val();
+      const nganh = $("#select-nganh").val();
+      const chuKi = $("#select-chu-ki").val();
+      const loaiKs = $("#select-ks-type").val();
 
-      console.log(sa);
-      sections.forEach((section, sectionIndex) => {
+      sections.forEach((section) => {
         const sectionName = section.querySelector("input").value;
         const questions = [];
         const questionElements = section.querySelectorAll(".question-item");
@@ -246,13 +294,64 @@ $(function () {
           questions.push(questionInput);
         });
 
-        surveyData.push({
+        surveyContent.push({
           sectionName: sectionName,
           questions: questions,
         });
       });
 
-      console.log(JSON.stringify(surveyData, null, 2));
+      const createSurveyData = {
+        "ten-ks": tenKhaoSat,
+        "nhomks-id": idNhomKs,
+        "date-start": dateStart,
+        "date-end": dateEnd,
+        "loai-tra-loi": loaiTraLoi,
+        content: surveyContent,
+      };
+
+      let isValideData = () => {
+        if (tenKhaoSat == "") {
+          alert("Vui lòng nhập tên bài khảo sát");
+          return false;
+        } else if (idNhomKs == "-1") {
+          alert("Vui lòng chọn nhóm bài khảo sát");
+          return false;
+        } else if (dateStart == "") {
+          alert("Vui lòng chọn ngày bắt đầu");
+          return false;
+        } else if (dateEnd == "") {
+          alert("Vui lòng chọn ngày kết thúc");
+          return false;
+        } else if (loaiTraLoi == "-1") {
+          alert("Vui lòng chọn loại trả lời");
+          return false;
+        } else if (nganh == "-1") {
+          alert("Vui lòng chọn ngành");
+          return false;
+        } else if (chuKi == "-1") {
+          alert("Vui lòng chọn chu kì");
+          return false;
+        }
+        return true;
+      };
+      console.log(createSurveyData);
+     
+      if (isValideData()) {
+        checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {
+          if (isExistCtdt == -1) {
+            alert("không có chương trình đào đạo thuộc ngành, chu kì này");
+            return;
+          }
+          createSurveyData["ctdt-id"] = isExistCtdt;
+          createKhaoSat(createSurveyData).then((response) => {
+            if( response) {
+              alert("tạo ks thành công")
+            } else {
+              alert("tạo ks thất bại")
+            }
+          });
+        });
+      }
     });
   })();
 });
