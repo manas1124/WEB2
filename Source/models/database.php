@@ -3,7 +3,7 @@ class MyConnection
 {
     private $connection;
     private $server = "localhost";
-    private $username = "root";
+    private $username = "quang";
     private $password = "";
     private $database = "student_survey_management";
 
@@ -27,7 +27,7 @@ class MyConnection
     {
         if ($this->connection) {
             $this->connection->close();
-            echo "Connection closed.";
+            // echo "Connection closed.";
         }
     }
 
