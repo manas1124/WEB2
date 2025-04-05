@@ -73,7 +73,7 @@ function convertScore(value) {
             return 3;
         case "hl":
             return 4;
-        case "hl":
+        case "rhl":
             return 5;
         default:
             return 0;

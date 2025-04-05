@@ -30,6 +30,7 @@ $listSurveyFieldAndQuestion = json_decode($surveyModel->getSurveyFieldAndQuestio
                                             <td class="text-center"><input type="radio" name="radio-'. $question['ch_id'] .'" value="rhl" class="radio radio-primary" /></td>
                                         </tr>';
                             }
+                            $sttSurveyField++;
                         }
                     ?>
                 </table>
