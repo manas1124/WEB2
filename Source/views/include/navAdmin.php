@@ -22,6 +22,12 @@ echo '<aside id="default-sidebar"
                         Tài khoản
                     </a>
                 </li>
+                <li>
+                    <a href="#" class="nav-item nav-link" data-page="surveyPage">
+                        <span class="icon-[tabler--message] size-5"></span>
+                        Khảo sát - client
+                    </a>
+                </li>
 
                 <li>
                     <a href="#">
