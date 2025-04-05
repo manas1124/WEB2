@@ -1,6 +1,6 @@
 <div id="chuky-content" class="container h-full">
     <div class="flex items-center justify-between mb-4">
-        <h1>Quản lý chương trình đào tạo</h1>
+        <h1>Quản lý chu kỳ</h1>
         <div class="flex items-center gap-4">
             <!-- <button type="button" class="action-item btn btn-primary" data-act="ks-tao"
                 data-aria-haspopup="dialog" aria-expanded="false"
@@ -14,9 +14,10 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Mã CTDT</th>
+                    <th>Mã Chu kỳ</th>
                     <th>Chu kỳ</th>
                     <th>Trạng thái</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="ctdt-list">
@@ -24,6 +25,11 @@
                     <td>1</td>
                     <td>2020-2024</td>
                     <td>1</td>
+                    <td>
+                        <button class="btn btn-primary" data-act="ctdt-sua">Sửa Ctdt</button>
+                        <button class="btn btn-primary" data-act="ctdt-chitiet">Xem chi tiết</button>
+                        <button class="btn btn-primary" data-act="ctdt-khoa">Khóa</button>
+                    </td>
                 </tr>
 
             </tbody>
