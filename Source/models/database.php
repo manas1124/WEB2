@@ -3,8 +3,8 @@ class MyConnection
 {
     private $connection;
     private $server = "localhost";
-    private $username = "quang";
-    private $password = "";
+    private $username = "root";
+    private $password = "123456";
     private $database = "student_survey_management";
 
     // private $server = "localhost:3307";
