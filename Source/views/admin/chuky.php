@@ -1,4 +1,4 @@
-<div id="ctdt-content" class="container h-full">
+<div id="chuky-content" class="container h-full">
     <div class="flex items-center justify-between mb-4">
         <h1>Quản lý chương trình đào tạo</h1>
         <div class="flex items-center gap-4">
@@ -15,20 +15,14 @@
             <thead>
                 <tr>
                     <th>Mã CTDT</th>
-                    <th>Ngành</th>
                     <th>Chu kỳ</th>
-                    <th>Loại</th>
-                    <th>File</th>
                     <th>Trạng thái</th>
                 </tr>
             </thead>
             <tbody id="ctdt-list">
                 <tr>
                     <td>1</td>
-                    <td>công nghệ thông tin</td>
                     <td>2020-2024</td>
-                    <td>ctdt</td>
-                    <td>1234</td>
                     <td>1</td>
                 </tr>
 

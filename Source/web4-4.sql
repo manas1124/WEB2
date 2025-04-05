@@ -37,12 +37,6 @@ CREATE TABLE `cau_hoi` (
 -- Dumping data for table `cau_hoi`
 --
 
-LOCK TABLES `cau_hoi` WRITE;
-/*!40000 ALTER TABLE `cau_hoi` DISABLE KEYS */;
-INSERT INTO `cau_hoi` VALUES (1,'Bạn đánh giá thế nào về chương trình đào tạo?',1,0),(2,'Bạn có hài lòng với chất lượng giảng dạy?',2,0),(3,'Mức độ hài lòng của bạn về môi trường thực tập?',3,0);
-/*!40000 ALTER TABLE `cau_hoi` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `chu_ki`
 --
@@ -293,6 +287,7 @@ CREATE TABLE `muc_khao_sat` (
   `mks_id` int NOT NULL,
   `ten_muc` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ks_id` int DEFAULT NULL COMMENT 'id cua bai khao sat',
+  `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`mks_id`),
   KEY `muc_khao_sat_ks_id_fk` (`ks_id`),
   CONSTRAINT `muc_khao_sat_ks_id_fk` FOREIGN KEY (`ks_id`) REFERENCES `khao_sat` (`ks_id`)
@@ -303,11 +298,6 @@ CREATE TABLE `muc_khao_sat` (
 -- Dumping data for table `muc_khao_sat`
 --
 
-LOCK TABLES `muc_khao_sat` WRITE;
-/*!40000 ALTER TABLE `muc_khao_sat` DISABLE KEYS */;
-INSERT INTO `muc_khao_sat` VALUES (1,'Mục khảo sát 1',1),(2,'Mục khảo sát 2',2),(3,'Mục khảo sát 3',3);
-/*!40000 ALTER TABLE `muc_khao_sat` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `nganh`
@@ -456,3 +446,56 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-04-04 11:13:19
+
+INSERT INTO `muc_khao_sat` VALUES (1, 'Chất lượng chương trình đào tạo', 1, 1);
+INSERT INTO `muc_khao_sat` VALUES (2, 'Phương pháp giảng dạy', 1, 1);
+INSERT INTO `muc_khao_sat` VALUES (3, 'Cơ sở vật chất', 1, 1);
+INSERT INTO `muc_khao_sat` VALUES (4, 'Mức độ áp dụng thực tiễn', 1, 1);
+INSERT INTO `muc_khao_sat` VALUES (5, 'Chuẩn đầu ra và cơ hội việc làm', 1, 1);
+INSERT INTO `muc_khao_sat` VALUES (6, 'Mức độ hài lòng về giảng viên', 2, 1);
+INSERT INTO `muc_khao_sat` VALUES (7, 'Chương trình học', 2, 1);
+INSERT INTO `muc_khao_sat` VALUES (8, 'Hoạt động ngoại khóa', 2, 1);
+INSERT INTO `muc_khao_sat` VALUES (9, 'Cơ hội việc làm', 2, 1);
+INSERT INTO `muc_khao_sat` VALUES (10, 'Mức độ hỗ trợ từ nhà trường', 2, 1);
+
+
+INSERT INTO `cau_hoi` VALUES (1, 'Bạn đánh giá thế nào về tính cập nhật của chương trình học?', 1, 1);
+INSERT INTO `cau_hoi` VALUES (2, 'Khối lượng kiến thức trong chương trình có phù hợp không?', 1, 1);
+INSERT INTO `cau_hoi` VALUES (3, 'Chương trình có đáp ứng đúng nhu cầu của ngành học không?', 1, 1);
+INSERT INTO `cau_hoi` VALUES (4, 'Nội dung giảng dạy có dễ hiểu và logic không?', 1, 1);
+INSERT INTO `cau_hoi` VALUES (5, 'Giảng viên có sử dụng phương pháp giảng dạy dễ hiểu không?', 2, 1);
+INSERT INTO `cau_hoi` VALUES (6, 'Các bài giảng có khuyến khích tư duy sáng tạo không?', 2, 1);
+INSERT INTO `cau_hoi` VALUES (7, 'Giảng viên có tương tác với sinh viên một cách hiệu quả không?', 2, 1);
+INSERT INTO `cau_hoi` VALUES (8, 'Bạn có hài lòng với cách đánh giá và chấm điểm của giảng viên?', 2, 1);
+INSERT INTO `cau_hoi` VALUES (9, 'Phòng học có đầy đủ trang thiết bị cần thiết không?', 3, 1);
+INSERT INTO `cau_hoi` VALUES (10, 'Chất lượng máy chiếu, âm thanh, wifi có đảm bảo không?', 3, 1);
+INSERT INTO `cau_hoi` VALUES (11, 'Bạn có gặp khó khăn khi tiếp cận tài liệu học tập không?', 3, 1);
+INSERT INTO `cau_hoi` VALUES (12, 'Cơ sở vật chất có đáp ứng đủ số lượng sinh viên không?', 3, 1);
+INSERT INTO `cau_hoi` VALUES (13, 'Bạn có thấy kiến thức trong chương trình có tính thực tế không?', 4, 1);
+INSERT INTO `cau_hoi` VALUES (14, 'Nhà trường có tạo cơ hội thực hành thực tế không?', 4, 1);
+INSERT INTO `cau_hoi` VALUES (15, 'Các môn học có giúp bạn giải quyết vấn đề thực tế không?', 4, 1);
+INSERT INTO `cau_hoi` VALUES (16, 'Bạn có cơ hội áp dụng kiến thức đã học vào công việc không?', 4, 1);
+INSERT INTO `cau_hoi` VALUES (17, 'Bạn có hiểu rõ về chuẩn đầu ra của chương trình không?', 5, 1);
+INSERT INTO `cau_hoi` VALUES (18, 'Chương trình có giúp bạn chuẩn bị tốt cho công việc sau khi tốt nghiệp?', 5, 1);
+INSERT INTO `cau_hoi` VALUES (19, 'Trường có hỗ trợ kết nối với nhà tuyển dụng không?', 5, 1);
+INSERT INTO `cau_hoi` VALUES (20, 'Mức độ phù hợp giữa kiến thức đào tạo và yêu cầu của nhà tuyển dụng?', 5, 1);
+INSERT INTO `cau_hoi` VALUES (21, 'Giảng viên có trình bày bài giảng dễ hiểu không?', 6, 1);
+INSERT INTO `cau_hoi` VALUES (22, 'Giảng viên có sẵn sàng hỗ trợ khi bạn gặp khó khăn không?', 6, 1);
+INSERT INTO `cau_hoi` VALUES (23, 'Cách truyền đạt của giảng viên có tạo động lực học tập không?', 6, 1);
+INSERT INTO `cau_hoi` VALUES (24, 'Giảng viên có sử dụng các phương pháp giảng dạy hiện đại không?', 6, 1);
+INSERT INTO `cau_hoi` VALUES (25, 'Bạn có thấy chương trình học phù hợp với ngành của mình không?', 7, 1);
+INSERT INTO `cau_hoi` VALUES (26, 'Chương trình học có quá nặng hay quá nhẹ không?', 7, 1);
+INSERT INTO `cau_hoi` VALUES (27, 'Bạn có nhận thấy sự liên kết giữa các môn học không?', 7, 1);
+INSERT INTO `cau_hoi` VALUES (28, 'Kiến thức được giảng dạy có phù hợp với thực tế không?', 7, 1);
+INSERT INTO `cau_hoi` VALUES (29, 'Trường có tổ chức đủ các hoạt động ngoại khóa không?', 8, 1);
+INSERT INTO `cau_hoi` VALUES (30, 'Các hoạt động ngoại khóa có giúp ích cho kỹ năng của bạn không?', 8, 1);
+INSERT INTO `cau_hoi` VALUES (31, 'Bạn có hài lòng với chất lượng các sự kiện, hội thảo không?', 8, 1);
+INSERT INTO `cau_hoi` VALUES (32, 'Nhà trường có tạo điều kiện cho sinh viên tham gia không?', 8, 1);
+INSERT INTO `cau_hoi` VALUES (33, 'Trường có cung cấp thông tin về cơ hội việc làm không?', 9, 1);
+INSERT INTO `cau_hoi` VALUES (34, 'Bạn có được hướng dẫn cách viết CV, phỏng vấn không?', 9, 1);
+INSERT INTO `cau_hoi` VALUES (35, 'Trường có kết nối với doanh nghiệp để tạo cơ hội thực tập?', 9, 1);
+INSERT INTO `cau_hoi` VALUES (36, 'Bạn có nhận thấy chương trình học giúp ích cho công việc?', 9, 1);
+INSERT INTO `cau_hoi` VALUES (37, 'Bạn có thấy nhà trường hỗ trợ sinh viên đầy đủ không?', 10, 1);
+INSERT INTO `cau_hoi` VALUES (38, 'Các dịch vụ hỗ trợ sinh viên (học bổng, tư vấn) có hiệu quả không?', 10, 1);
+INSERT INTO `cau_hoi` VALUES (39, 'Bạn có dễ dàng tiếp cận thông tin từ nhà trường không?', 10, 1);
+INSERT INTO `cau_hoi` VALUES (40, 'Nhà trường có tạo điều kiện tốt cho sinh viên học tập không?', 10, 1);

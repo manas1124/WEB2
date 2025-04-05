@@ -27,6 +27,16 @@ if ($page) {
             require_once("../views/admin/ctdtPage.php");
             $response["html"] = ob_get_clean();
             break;
+        case "nganh":
+            ob_start();
+            require_once("../views/admin/nganh.php");
+            $response["html"] = ob_get_clean();
+            break;
+        case "chuky":
+            ob_start();
+            require_once("../views/admin/chuky.php");
+            $response["html"] = ob_get_clean();
+            break;
         case "taiKhoanPage":
             ob_start();
             require_once("../views/admin/taiKhoanPage.php");
@@ -37,7 +47,11 @@ if ($page) {
             require_once("../views/user/survey.php");
             $response["html"] = ob_get_clean();
             break;
-
+        case "ketQuaKhaoSat":
+            ob_start();
+            require_once("../views/admin/ketQuaKhaoSat.php");
+            $response["html"] = ob_get_clean();
+            break;
         default:
             $response["html"] = `loi trang ${$page}`;
             $response["error"] = "Invalid page requested.";
