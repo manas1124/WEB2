@@ -11,8 +11,8 @@ $response = [];
 
 $response["text"] = "first $page";
 
-if ($page ) {
-    
+if ($page) {
+
     switch ($page) {
         case "qlKhaoSatPage":
             // Use require_once to include the file, ensuring it's only included once
@@ -32,12 +32,18 @@ if ($page ) {
             require_once("../views/admin/taiKhoanPage.php");
             $response["html"] = ob_get_clean();
             break;
+        case "surveyPage":
+            ob_start();
+            require_once("../views/user/survey.php");
+            $response["html"] = ob_get_clean();
+            break;
+
         default:
-                $response["html"] = `loi trang ${$page}`;
+            $response["html"] = `loi trang ${$page}`;
             $response["error"] = "Invalid page requested.";
             break;
     }
-} 
+}
 
 if ($act) {
     switch ($act) {
@@ -54,7 +60,7 @@ if ($act) {
             $response["html"] = ob_get_clean();
             break;
         default:
-        $response["html"] = "load trang bi";
+            $response["html"] = "load trang bi";
             $response["error"] = "Invalid action requested.";
             break;
     }
@@ -68,4 +74,3 @@ $response["text"] = "end $page";
 header('Content-Type: application/json');
 
 echo json_encode($response);
-?>
