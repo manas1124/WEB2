@@ -8,13 +8,14 @@ async function getAllKhaoSat() {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "getAllKhaoSat", data:  JSON.stringify({ ks_id: 1 } )},
+      data: { func: "getAllKhaoSat"},
       dataType: "json",
     });
-    console.log("fect",response)
+    // console.log("fect",response)
     return response;
-  } catch (error) {
-    console.log("loi fetchdata getAllKhaoSat 1")
+  } catch (e) {
+    console.log(e)
+    console.log("loi fetchdata getAllKhaoSat")
     return null;
   }
 }
@@ -62,7 +63,7 @@ $(function () {
     let ksList  = await getAllKhaoSat();
     // ksList = JSON.parse(ksList)
     if (ksList != null) {
-      console.log(ksList)
+      // console.log(ksList)
       
       ksList.map((item) => {
         $("#ks-list").append(`

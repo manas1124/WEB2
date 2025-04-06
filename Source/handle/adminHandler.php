@@ -39,7 +39,7 @@ if ($page) {
             break;
 
         default:
-            $response["html"] = `loi trang ${$page}`;
+            $response["html"] = `loi trang handle`;
             $response["error"] = "Invalid page requested.";
             break;
     }
