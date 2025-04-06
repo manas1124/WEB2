@@ -10,10 +10,10 @@ class ChuKyModel {
     }
 
     // Thêm dữ liệu
-    public function create($ten_chu_ky, $ngay_bat_dau, $ngay_ket_thuc, $status) {
+    public function create($ten_chu_ky, $status) {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("INSERT INTO chu_ky (ten_chu_ky, status) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sssi", $ten_chu_ky, $ngay_bat_dau, $ngay_ket_thuc, $status);
+        $stmt = $conn->prepare("INSERT INTO chu_ky (ten_chu_ky, status) VALUES (?, ?)");
+        $stmt->bind_param("si", $ten_chu_ky, $status);
 
         if ($stmt->execute()) {
             return true;
@@ -54,10 +54,10 @@ class ChuKyModel {
     }
 
     // Cập nhật thông tin chu kỳ
-    public function update($ck_id, $ten_chu_ky, $ngay_bat_dau, $ngay_ket_thuc, $status) {
+    public function update($ck_id, $ten_chu_ky, $status) {
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("UPDATE chu_ky SET ten_chu_ky = ?, status = ? WHERE ck_id = ?");
-        $stmt->bind_param("sssii", $ten_chu_ky, $ngay_bat_dau, $ngay_ket_thuc, $status, $ck_id);
+        $stmt->bind_param("sii", $ten_chu_ky, $status, $ck_id);
 
         if ($stmt->execute()) {
             return true;

@@ -5,9 +5,7 @@
             <!-- <button type="button" class="action-item btn btn-primary" data-act="ks-tao"
                 data-aria-haspopup="dialog" aria-expanded="false"
                 aria-controls="create-ks-modal" data-overlay="#create-ks-modal">Tạo bài khảo sát</button> -->
-            <button class="action-item btn btn-primary" data-act="ctdt-them">Thêm Ctdt</button>
-            <button class="action-item btn btn-primary" data-act="ctdt-sua">Sửa Ctdt</button>
-            <button class="action-item btn btn-primary" data-act="ctdt-chitiet">Xem chi tiết</button>
+            <button class="action-item btn btn-primary" data-act="chuky-them">Thêm chu kỳ</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto">
@@ -20,15 +18,14 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody id="ctdt-list">
+            <tbody id="chuky-list">
                 <tr>
                     <td>1</td>
                     <td>2020-2024</td>
                     <td>1</td>
                     <td>
-                        <button class="btn btn-primary" data-act="ctdt-sua">Sửa Ctdt</button>
-                        <button class="btn btn-primary" data-act="ctdt-chitiet">Xem chi tiết</button>
-                        <button class="btn btn-primary" data-act="ctdt-khoa">Khóa</button>
+                        <button class="action-item btn btn-primary" data-act="chuky-sua">Sửa</button>
+                        <button class="btn btn-primary" data-act="chuky-khoa">Khóa</button>
                     </td>
                 </tr>
 

@@ -73,6 +73,42 @@ if ($act) {
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;
+        case "ctdt-them":
+            ob_start();
+            $filePath = "../views/admin/ctdtPage-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "ctdt-sua":
+            ob_start();
+            $filePath = "../views/admin/ctdtPage-sua.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "nganh-them":
+            ob_start();
+            $filePath = "../views/admin/nganh-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "nganh-sua":
+            ob_start();
+            $filePath = "../views/admin/nganh-sua.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "chuky-them":
+            ob_start();
+            $filePath = "../views/admin/chuky-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "chuky-sua":
+            ob_start();
+            $filePath = "../views/admin/chuky-sua.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
         default:
             $response["html"] = "load trang bi";
             $response["error"] = "Invalid action requested.";

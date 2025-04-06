@@ -103,10 +103,12 @@ class CtdtDauraModel {
     }
 
     // Xóa dữ liệu
-    public function delete($ctdt_id) {
+    public function delete($ctdt_id, $status) {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("DELETE FROM ctdt_daura WHERE ctdt_id = ?");
-        $stmt->bind_param("i", $ctdt_id);
+        $stmt = $conn->prepare("UPDATE ctdt_daura 
+                                SET status = ? 
+                                WHERE ctdt_id = ?");
+        $stmt->bind_param("ii",$status, $ctdt_id);
 
         if ($stmt->execute()) {
             return true;

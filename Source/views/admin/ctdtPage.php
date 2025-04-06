@@ -30,8 +30,7 @@
                     <td>1234</td>
                     <td>1</td>
                     <td>
-                        <button class="btn btn-primary" data-act="ctdt-sua">Sửa Ctdt</button>
-                        <button class="btn btn-primary" data-act="ctdt-chitiet">Xem chi tiết</button>
+                        <button class="action-item btn btn-primary" data-act="ctdt-sua">Sửa Ctdt</button>
                         <button class="btn btn-primary" data-act="ctdt-khoa">Khóa</button>
                     </td>
                 </tr>
