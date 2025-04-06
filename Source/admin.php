@@ -75,7 +75,7 @@
     </aside>
     -->
     <div id="main-content"
-        class="ml-[16rem] max-sm:ml-4 lg:border-base-content/10 xl:border-e xl:pe-8 relative px-0 py-4 sm:py-8 lg:border-s lg:ps-8">
+        class="ml-[16rem] max-sm:ml-4 lg:border-base-content/10 xl:border-e xl:pe-8 relative px-0 py-4 sm:py-8 lg:border-s lg:ps-8 flex flex-wrap gap-px-4 sm:gap-4">
 
     </div>
     <script>
@@ -93,6 +93,7 @@
 
     <!-- <script src="./views/javascript/indexAdmin.js"></script> -->
     <script src="./views/javascript/indexAdmin.js"></script>
+    <script src="./views/javascript/survey.js"></script>
 </body>
 
 </html>
