@@ -43,4 +43,5 @@
         <button id="btn-save-ctdt" type="submit" class="btn btn-primary">Thêm</button>
     </div>
 </div>
-<script src="views/javascript/qlKhaoSatPage-tao.js"></script>
+
+<script src="./views/javascript/ctdtPage.js"></script>

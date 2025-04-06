@@ -24,4 +24,4 @@
         <button id="btn-save-nganh" type="submit" class="btn btn-primary">Thêm</button>
     </div>
 </div>
-<script src="views/javascript/qlKhaoSatPage-tao.js"></script>
+<script src="./views/javascript/nganh.js"></script>

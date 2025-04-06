@@ -8,6 +8,17 @@
             <button class="action-item btn btn-primary" data-act="nganh-them">Thêm ngành</button>
         </div>
     </div>
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-4">
+            <div>
+                <label class="label-text" for="select-status">Status </label>
+                <select class="select" id="select-status">
+                    <option value="-1">Chọn status</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" data-act="nganh-loc">Lọc</button>
+        </div>
+    </div>
     <div class="w-full overflow-x-auto">
         <table class="table">
             <thead>
@@ -33,5 +44,5 @@
         </table>
     </div>
 </div>
-<script src="./views/javascript/ctdtPage.js"></script>
 <script src="../node_modules/flyonui/flyonui.js"></script>
+<script src="./views/javascript/nganh.js"></script>

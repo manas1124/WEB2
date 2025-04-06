@@ -2,35 +2,26 @@
 
 require_once __DIR__ . '/database.php';
 
-class ChuKyModel
+class ketQuaKhaoSatModel
 {
-    private $db; // Kết nối database
+
+    // kq_khao_sat
+    // `kqks_id` int NOT NULL,
+    // `nguoi_lamks_id` int DEFAULT NULL,
+    // `ks_id` int DEFAULT NULL COMMENT 'id cua bai khao sat',
+    // `status` tinyint(1) DEFAULT NULL,
+    private $db; // Database connection
 
     public function __construct()
     {
-        $this->db = new MyConnection(); // Tạo một kết nối database
-    }
-
-    // Thêm dữ liệu
-    public function create($ten_chu_ky, $status)
-    {
-        $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("INSERT INTO chu_ky (ten_chu_ky, status) VALUES (?, ?)");
-        $stmt->bind_param("si", $ten_chu_ky, $status);
-
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            return false;
-        }
+        $this->db = new MyConnection(); // Create a Database instance
     }
 
     public function getAll()
     {
         $conn = $this->db->getConnection();
         $sql = "SELECT * 
-                FROM chu_ky
-                WHERE status = 1";
+                FROM kq_khao_sat";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -43,14 +34,13 @@ class ChuKyModel
         return json_encode($data);
     }
 
-    // Lấy tất cả chu kỳ
     public function getAllpaging($page, $status = null)
     {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $conn = $this->db->getConnection();
         $sql = "SELECT * 
-                                        FROM chu_ky
+                                        FROM kq_khao_sat
                                         WHERE 1=1";
         $params = [];
         $types = "";
@@ -77,14 +67,11 @@ class ChuKyModel
         return json_encode($data);
     }
 
-
-
-    // Lấy thông tin chu kỳ theo ID
-    public function getById($ck_id)
+    public function getById($kqks_id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM chu_ky WHERE ck_id = ?");
-        $stmt->bind_param("i", $ck_id);
+        $stmt = $conn->prepare("SELECT * FROM kq_khao_sat WHERE kqks_id = ?");
+        $stmt->bind_param("i", $kqks_id);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -93,28 +80,5 @@ class ChuKyModel
         } else {
             return false;
         }
-    }
-
-    // Cập nhật thông tin chu kỳ
-    public function update($ck_id, $ten_chu_ky, $status)
-    {
-        $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("UPDATE chu_ky SET ten_chu_ky = ?, status = ? WHERE ck_id = ?");
-        $stmt->bind_param("sii", $ten_chu_ky, $status, $ck_id);
-
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function toggleStatus($ck_id)
-    {
-        $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("UPDATE chu_ky SET status = NOT status WHERE ck_id = ?");
-        $stmt->bind_param("i", $ck_id);
-
-        return $stmt->execute();
     }
 }

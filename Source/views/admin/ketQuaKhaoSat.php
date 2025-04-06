@@ -2,6 +2,17 @@
     <div class="flex items-center justify-between mb-4">
         <h1>Kết quả khảo sát</h1>
     </div>
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-4">
+            <div>
+                <label class="label-text" for="select-status">Status </label>
+                <select class="select" id="select-status">
+                    <option value="-1">Chọn status</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" data-act="kqks-loc">Lọc</button>
+        </div>
+    </div>
     <div class="w-full overflow-x-auto">
         <table class="table">
             <thead>
@@ -16,7 +27,7 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody id="ctdt-list">
+            <tbody id="kqks-list">
                 <tr>
                     <th>1</th>
                     <th>khảo sát mùa thu</th>
@@ -27,7 +38,7 @@
                     <th>HD</th>
                     <td>1</td>
                     <td>
-                        <button class="btn btn-primary" data-act="ctdt-chitiet">Xem chi tiết</button>
+                        <button class="btn btn-primary" data-act="kqks-chitiet">Xem chi tiết</button>
                     </td>
                 </tr>
 
@@ -35,5 +46,4 @@
         </table>
     </div>
 </div>
-<script src="./views/javascript/ctdtPage.js"></script>
 <script src="../node_modules/flyonui/flyonui.js"></script>
