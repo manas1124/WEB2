@@ -43,5 +43,7 @@ Class NhomKsModel {
 }
 
 // $test = new NhomKsModel();
-// echo $test->getAllNhomKs()[0];
+// $re = $test->getAllNhomKs()[0];
+// echo json_encode($re);
+
 ?>
