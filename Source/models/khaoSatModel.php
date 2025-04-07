@@ -53,7 +53,23 @@ class KhaoSatModel
     public function getKhaoSatById($ks_id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM khao_sat WHERE ks_id = ?");
+        $query = "
+            SELECT 
+            khao_sat.ks_id, khao_sat.ten_ks, khao_sat.ngay_bat_dau,khao_sat.ngay_ket_thuc,khao_sat.su_dung,khao_sat.status,
+            loai_tra_loi.ltl_id,loai_tra_loi.thang_diem,
+            nhom_khao_sat.nks_id,nhom_khao_sat.ten_nks,
+            chu_ki.ck_id,chu_ki.ten_ck,
+            nganh.nganh_id, nganh.ten_nganh,
+            ctdt_daura.la_ctdt
+            FROM khao_sat
+            JOIN loai_tra_loi ON khao_sat.ltl_id = loai_tra_loi.ltl_id
+            JOIN nhom_khao_sat ON khao_sat.nks_id = nhom_khao_sat.nks_id
+            JOIN ctdt_daura ON khao_sat.ctdt_id = khao_sat.ctdt_id
+            JOIN chu_ki ON ctdt_daura.ck_id = chu_ki.ck_id 
+            JOIN nganh ON  ctdt_daura.nganh_id=  nganh.nganh_id
+            Where khao_sat.ks_id = ? and khao_sat.ctdt_id = ctdt_daura.ctdt_id
+        ";
+        $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $ks_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -113,10 +129,7 @@ class KhaoSatModel
 }
 
 // $m = new KhaoSatModel();
-// $r = $m->searchCtdt(1,1,0);
-// $code = json_encode($r);
-// $code = json_encode($r[0]["ctdt_id"]);
-// $code = $r[0];
-// echo json_encode($r[0]["ctdt_id"]);
+// $r = $m->getKhaoSatById(2);
+// echo json_encode($r);
 
 ?>

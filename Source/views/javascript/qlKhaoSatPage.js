@@ -79,7 +79,7 @@ $(function () {
               }
               </td>
               <td>
-                <button class="btn btn-circle btn-text btn-sm" aria-label="Action button"><span class="icon-[tabler--pencil] size-5"></span></button>
+                <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-sua" data-id="${item.ks_id}" aria-label="Action button"><span class="icon-[tabler--pencil] size-5"></span></button>
                 <button class="btn btn-circle btn-text btn-sm" aria-label="Action button"><span class="icon-[tabler--trash] size-5"></span></button>
                 <button class="btn btn-circle btn-text btn-sm" aria-label="Action button"><span class="icon-[tabler--dots-vertical] size-5"></span></button>
               </td>

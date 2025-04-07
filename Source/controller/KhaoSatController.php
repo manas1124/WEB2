@@ -19,10 +19,10 @@ if (isset($_POST['func'])) {
         case "getAllKhaoSat":
             $response = $ksModel->getAllKhaoSat();
             break;
-        case "getKhaoSatById":
-           $id = $data['ks_id']; //lay id tu json
-
+        case "getChiTietKsById":
+           $id = $_POST['id'];  
            $response = $ksModel->getKhaoSatById($id);
+        // $response = $ksModel->getAllKhaoSat();
            break;
         case 'createKhaoSat':
             $data = $_POST['data'];

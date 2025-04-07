@@ -47,8 +47,8 @@ $(function () {
 
         // xử lí này sẽ truyền param lên url vd: ..act="them"&id=3
         let id = $(this).data("id");
-        if (id) {
-            // let newParams = { ...currentParams, act: act, id: 3 };
+        if (id !=null) {
+            newParams = { ...currentParams, act: act, id:id};
         }
         
         updateContent(newParams);
