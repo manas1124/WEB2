@@ -181,41 +181,37 @@ $(function () {
         );
       });
     }
+    //xu li gia tri mac dinh
     $("#select-ks-type").val(defaultData.la_ctdt);
     $("#ten-ks").val(defaultData.ten_ks);
     $("#begin").val(defaultData.ngay_bat_dau);
     $("#end").val(defaultData.ngay_ket_thuc);
     $("#selected-nhom-ks").val(defaultData.nks_id);
+    const defaultNhomKsValue = defaultData.nks_id;
     // xu ly select search nhom khao sat
     const selectNhomKsBox = document.getElementById("select-nhomks-box");
     const nhomKsDropdown = document.getElementById("nhomKsDropdown");
     const nhomKsInput = document.getElementById("nhomKsInput");
     const selectedNhomKs = document.getElementById("selected-nhom-ks");
-    const listNhomKsOption = document.getElementById("list-nhomks-option"); // Get the container
     
-    // Default Value Setup
-    const defaultNhomKsText = "Your Default Group Name"; // Replace with the text you want
-    const defaultNhomKsValue = "your-default-value"; // Replace with the corresponding data-value
+     
     
-    // Create a default option element
-    const defaultOption = document.createElement("div");
-    defaultOption.classList.add("nhomks-option", "p-2", "hover:bg-gray-200", "cursor-pointer"); // Add styling
-    defaultOption.textContent = defaultNhomKsText;
-    defaultOption.dataset.value = defaultNhomKsValue;
+    // Find the existing option and set it as default
+    const existingDefaultOption = document.querySelector(
+      `#list-nhomks-option .nhomks-option[data-value="${defaultNhomKsValue}"]`
+    );
     
-    // Add it to the list container
-    listNhomKsOption.appendChild(defaultOption);
+    if (existingDefaultOption) {
+      selectedNhomKs.textContent = existingDefaultOption.textContent;
+      selectedNhomKs.value = existingDefaultOption.dataset.value;
+    }
     
-    // Set the displayed text and value
-    selectedNhomKs.textContent = defaultNhomKsText;
-    selectedNhomKs.value = defaultNhomKsValue;
-    
-    // Add event listeners after the default is set
-    const nhomOptions = document.querySelectorAll(".nhomks-option"); // Re-query after adding default
+
+    const nhomOptions = document.querySelectorAll(".nhomks-option");
     
     selectNhomKsBox.addEventListener("click", () => {
       nhomKsDropdown.classList.toggle("hidden");
-      nhomKsInput.value = ""; // Clear search input when nhomKsDropdown opens
+      nhomKsInput.value = ""; 
       filterOptions("");
     });
     
@@ -250,8 +246,6 @@ $(function () {
         nhomKsDropdown.classList.add("hidden");
       }
     });
-    // xu li cai gia tri mac dinh
-    
 
     // xua li tao bai noi dung khao sat
     const survey = document.getElementById("survey-container");
