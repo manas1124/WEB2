@@ -201,6 +201,7 @@ $(function () {
       });
     }
     //xu li gia tri mac dinh
+    $("#select-su-dung").val(defaultData.su_dung);
     $("#select-ks-type").val(defaultData.la_ctdt);
     $("#ten-ks").val(defaultData.ten_ks);
     $("#begin").val(defaultData.ngay_bat_dau);
@@ -369,6 +370,7 @@ $(function () {
       const nganh = $("#select-nganh").val();
       const chuKi = $("#select-chu-ki").val();
       const loaiKs = $("#select-ks-type").val();
+      const isSuDung = $("#select-su-dung").val();
 
       sections.forEach((section) => {
         const sectionName = section.querySelector("input").value;
@@ -395,6 +397,7 @@ $(function () {
         "date-end": dateEnd,
         "loai-tra-loi": loaiTraLoi,
         "content": surveyContent,
+        "su-dung": isSuDung
       };
 
       let isValideData = () => {

@@ -33,27 +33,34 @@
                         <input type="date" class="input" id="end" />
                     </div>
                 </div>
+                <div class="w-96">
+                    <label class="label-text" for="select-su-dung">Trạng thái bài khảo sát </label>
+                    <select class="select" id="select-su-dung">
+                        <option selected value="1">Đang thực hiện</option>
+                        <option value="0">Kết thúc</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-body pt-0 mb-4">
-                <div class="w-96">
+                <div class="w-96 mb-2">
                     <label class="label-text" for="select-loai-tra-loi">Loại câu trả lời </label>
                     <select class="select" id="select-loai-tra-loi">
                         <option>Chọn loại</option>
                     </select>
                 </div>
-                <div class="w-96">
+                <div class="w-96 mb-2">
                     <label class="label-text" for="select-nganh">Ngành </label>
                     <select class="select" id="select-nganh">
                         <option value="-1">Chọn ngành</option>
                     </select>
                 </div>
-                <div class="w-96">
+                <div class="w-96 mb-1">
                     <label class="label-text" for="select-chu-ki">Chu kì</label>
                     <select class="select" id="select-chu-ki">
                         <option value="-1">Chọn chu kì</option>
                     </select>
                 </div>
-                <div class="w-96">
+                <div class="w-96 mb-2">
                     <label class="label-text" for="select-ks-type">Loại khảo sát</label>
                     <select class="select" id="select-ks-type">
                         <option value="1">Chương trình đào tạo</option>

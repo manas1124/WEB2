@@ -282,7 +282,8 @@ $(function () {
       const nganh = $("#select-nganh").val();
       const chuKi = $("#select-chu-ki").val();
       const loaiKs = $("#select-ks-type").val();
-
+      const isSuDung = $("#select-su-dung").val();
+      
       sections.forEach((section) => {
         const sectionName = section.querySelector("input").value;
         const questions = [];
@@ -306,7 +307,8 @@ $(function () {
         "date-start": dateStart,
         "date-end": dateEnd,
         "loai-tra-loi": loaiTraLoi,
-        content: surveyContent,
+        "su-dung": isSuDung,
+        "content": surveyContent,
       };
 
       let isValideData = () => {
