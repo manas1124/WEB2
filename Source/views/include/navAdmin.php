@@ -17,6 +17,18 @@ echo '<aside id="default-sidebar"
                     </a>
                 </li>
                 <li>
+                    <a href="" class="nav-item nav-link text-nowrap" data-page="nganh">
+                        <span class="icon-[tabler--user] size-5"></span>
+                        Ngành
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="nav-item nav-link text-nowrap" data-page="chuky">
+                        <span class="icon-[tabler--user] size-5"></span>
+                        Chu kỳ
+                    </a>
+                </li>
+                <li>
                     <a href="#" class="nav-item nav-link" data-page="taiKhoanPage">
                         <span class="icon-[tabler--message] size-5"></span>
                         Tài khoản
@@ -28,7 +40,12 @@ echo '<aside id="default-sidebar"
                         Khảo sát - client
                     </a>
                 </li>
-
+                <li>
+                    <a href="" class="nav-item nav-link text-nowrap" data-page="ketQuaKhaoSat">
+                        <span class="icon-[tabler--message] size-5"></span>
+                        Kết quả khảo sát
+                    </a>
+                </li>
                 <li>
                     <a href="#">
                         <span class="icon-[tabler--logout-2] size-5"></span>

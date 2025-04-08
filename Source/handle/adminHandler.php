@@ -27,6 +27,16 @@ if ($page) {
             require_once("../views/admin/ctdtPage.php");
             $response["html"] = ob_get_clean();
             break;
+        case "nganh":
+            ob_start();
+            require_once("../views/admin/nganh.php");
+            $response["html"] = ob_get_clean();
+            break;
+        case "chuky":
+            ob_start();
+            require_once("../views/admin/chuky.php");
+            $response["html"] = ob_get_clean();
+            break;
         case "taiKhoanPage":
             ob_start();
             require_once("../views/admin/taiKhoanPage.php");
@@ -37,7 +47,11 @@ if ($page) {
             require_once("../views/user/survey.php");
             $response["html"] = ob_get_clean();
             break;
-
+        case "ketQuaKhaoSat":
+            ob_start();
+            require_once("../views/admin/ketQuaKhaoSat.php");
+            $response["html"] = ob_get_clean();
+            break;
         default:
             $response["html"] = `loi trang handle`;
             $response["error"] = "Invalid page requested.";
@@ -56,6 +70,42 @@ if ($act) {
         case "ks-sua":
             ob_start();
             $filePath = "../views/admin/qlKhaoSatPage-edit.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "ctdt-them":
+            ob_start();
+            $filePath = "../views/admin/ctdtPage-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "ctdt-sua":
+            ob_start();
+            $filePath = "../views/admin/ctdtPage-sua.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "nganh-them":
+            ob_start();
+            $filePath = "../views/admin/nganh-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "nganh-sua":
+            ob_start();
+            $filePath = "../views/admin/nganh-sua.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "chuky-them":
+            ob_start();
+            $filePath = "../views/admin/chuky-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "chuky-sua":
+            ob_start();
+            $filePath = "../views/admin/chuky-sua.php";
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;
