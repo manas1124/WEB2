@@ -83,11 +83,23 @@ class KhaoSatModel
         }
     }
 
-    public function update()
+    public function update($ks_id, $ten_ks, $ngay_bat_dau, $ngay_ket_thuc, $su_dung, $nks_id, $ltl_id, $ctdt_id, $status)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("UPDATE khao_sat SET ten_ks = ?, ngay_tao = ?, nhomks_id = ?, kh_id = ?, nks_id = ?, ltl_id = ?, ctdt_id = ?, field_9 = ? WHERE ks_id = ?");
-        // $stmt->bind_param("siiiiiiii", $this->ten_ks, $this->ngay_tao, $this->nhomks_id, $this->kh_id, $this->nks_id, $this->ltl_id, $this->ctdt_id, $this->field_9, $this->ks_id);
+        // (ten_ks, ngay_bat_dau, ngay_ket_thuc, su_dung, nks_id, ltl_id, ctdt_id,status )
+        $stmt = $conn->prepare(
+            "UPDATE khao_sat SET 
+        ten_ks = ?,
+        ngay_bat_dau = ?,
+        ngay_ket_thuc = ?,
+        su_dung = ?,
+        nks_id = ?,
+        ltl_id = ?,
+        ctdt_id = ?,
+        status = ?
+        WHERE ks_id = ?"
+        );
+        $stmt->bind_param("sssiiiiii", $ten_ks, $ngay_bat_dau, $ngay_ket_thuc, $su_dung, $nks_id, $ltl_id, $ctdt_id, $status, $ks_id);
 
         if ($stmt->execute()) {
             return true;
