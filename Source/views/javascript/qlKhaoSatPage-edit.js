@@ -69,18 +69,18 @@ async function getAllTraLoi() {
     return null;
   }
 }
-async function createKhaoSat(data) {
+async function updateKhaoSat(data) {
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "createKhaoSat", data: JSON.stringify(data) },
+      data: { func: "updateKhaoSat", data: JSON.stringify(data) },
       dataType: "json",
     });
     if (response.error) {
       console.log("fect", response.error);
     }
-    console.log("fect", response);
+    console.log("update", response);
     return response;
   } catch (error) {
     console.log(error);
@@ -90,7 +90,7 @@ async function createKhaoSat(data) {
 }
 //return -1:not found || ctdt id
 async function checkExistCtdt(nganh_id, chu_ki_id, is_ctdt_daura) {
-  console.log("check exit input",nganh_id, chu_ki_id, is_ctdt_daura)
+  console.log("check exit input", nganh_id, chu_ki_id, is_ctdt_daura);
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
@@ -106,18 +106,54 @@ async function checkExistCtdt(nganh_id, chu_ki_id, is_ctdt_daura) {
     });
     return response; // return id cdtd tim duoc
   } catch (e) {
-    console.log("loi fetchdata loi kiem tra ctdt",e);
+    console.log("loi fetchdata loi kiem tra ctdt", e);
     return -1;
+  }
+}
+async function getChiTietKsById(id) {
+  try {
+    const response = await $.ajax({
+      url: "./controller/KhaoSatController.php",
+      type: "POST",
+      data: { func: "getChiTietKsById", id: id },
+      dataType: "json",
+    });
+    console.log("fect", response);
+    return response;
+  } catch (e) {
+    console.log(e);
+    console.log("loi fetchdata getAllKhaoSat");
+    return null;
+  }
+}
+async function getSurveryContentQuestion(id) {
+  try {
+    const response = await $.ajax({
+      url: "./controller/KhaoSatController.php",
+      type: "POST",
+      data: { func: "getSurveyFieldAndQuestion", id: id },
+      dataType: "json",
+    });
+    console.log("fect", response);
+    return response;
+  } catch (e) {
+    console.log(e);
+    console.log("loi fetchdata noi dung ks ");
+    return null;
   }
 }
 $(function () {
   window.HSStaticMethods.autoInit();
   (async () => {
-    const searchNhomKsInput = document.getElementById("search-nhom-ks");
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    const currentKsId = urlParams.get('id');
+    const defaultData = await getChiTietKsById(currentKsId);
     const nhomKsList = await getNhomKs();
     const nganhList = await getAllNganh();
     const chuKiList = await getAllChuKi();
     const answerTypeList = await getAllTraLoi();
+    const surveyContent = await getSurveryContentQuestion(currentKsId);
 
     if (nhomKsList != null) {
       nhomKsList.map((item) => {
@@ -130,6 +166,11 @@ $(function () {
     }
     if (nganhList != null) {
       nganhList.map((item) => {
+        if (item.nganh_id == defaultData.nganh_id) {
+          $("#select-nganh").append(
+            `<option value='${item.nganh_id}' selected="selected">${item.ten_nganh}</option>`
+          );
+        }
         $("#select-nganh").append(
           `<option value='${item.nganh_id}'>${item.ten_nganh}</option>`
         );
@@ -137,6 +178,11 @@ $(function () {
     }
     if (chuKiList != null) {
       chuKiList.map((item) => {
+        if (item.ck_id == defaultData.ck_id) {
+          $("#select-chu-ki").append(
+            `<option selected="selected" value='${item.ck_id}'>${item.ten_ck}</option>`
+          );
+        }
         $("#select-chu-ki").append(
           `<option value='${item.ck_id}'>${item.ten_ck}</option>`
         );
@@ -144,23 +190,44 @@ $(function () {
     }
     if (answerTypeList != null) {
       answerTypeList.map((item) => {
+        if (defaultData.ltl_id == item.ltl_id) {
+          $("#select-loai-tra-loi").append(
+            `<option selected="selected" value='${item.ltl_id}'>${item.thang_diem}</option>`
+          );
+        }
         $("#select-loai-tra-loi").append(
           `<option value='${item.ltl_id}'>${item.thang_diem}</option>`
         );
       });
     }
-
+    //xu li gia tri mac dinh
+    $("#select-su-dung").val(defaultData.su_dung);
+    $("#select-ks-type").val(defaultData.la_ctdt);
+    $("#ten-ks").val(defaultData.ten_ks);
+    $("#begin").val(defaultData.ngay_bat_dau);
+    $("#end").val(defaultData.ngay_ket_thuc);
+    $("#selected-nhom-ks").val(defaultData.nks_id);
+    const defaultNhomKsValue = defaultData.nks_id;
     // xu ly select search nhom khao sat
     const selectNhomKsBox = document.getElementById("select-nhomks-box");
     const nhomKsDropdown = document.getElementById("nhomKsDropdown");
     const nhomKsInput = document.getElementById("nhomKsInput");
+    const selectedNhomKs = document.getElementById("selected-nhom-ks");
+
+    const existingDefaultOption = document.querySelector(
+      `#list-nhomks-option .nhomks-option[data-value="${defaultNhomKsValue}"]`
+    );
+
+    if (existingDefaultOption) {
+      selectedNhomKs.textContent = existingDefaultOption.textContent;
+      selectedNhomKs.value = existingDefaultOption.dataset.value;
+    }
+
     const nhomOptions = document.querySelectorAll(".nhomks-option");
-    const selectedNhomKs = document.getElementById("selected-option");
-    selectedNhomKs.value = "-1"; // default value is not select -1
 
     selectNhomKsBox.addEventListener("click", () => {
       nhomKsDropdown.classList.toggle("hidden");
-      nhomKsInput.value = ""; // Clear search input when nhomKsDropdown opens
+      nhomKsInput.value = "";
       filterOptions("");
     });
 
@@ -195,30 +262,30 @@ $(function () {
         nhomKsDropdown.classList.add("hidden");
       }
     });
-
-    // xua li tao bai noi dung khao sat
+    //xu lý thêm nội dung
     const survey = document.getElementById("survey-container");
     const btnAddSection = document.getElementById("btn-add-question");
     const submitSurveyButton = document.getElementById("btn-save-ks");
 
-    btnAddSection.addEventListener("click", () => {
+    function createSection(sectionData) {
       const section = document.createElement("div");
-      section.classList.add("mb-4", "border", "border-gray-300", "p-8");
-      section.classList.add("section");
+      section.classList.add(
+        "mb-4",
+        "border",
+        "border-gray-300",
+        "p-8",
+        "section"
+      );
 
       const sectionTitle = document.createElement("h3");
-      sectionTitle.textContent = "Tên mục:";
+      sectionTitle.textContent =  "Tên mục:";
       section.appendChild(sectionTitle);
 
       const sectionNameInput = document.createElement("input");
       sectionNameInput.placeholder = "Nhập tên mục";
       sectionNameInput.classList.add("input", "mb-4");
+      sectionNameInput.value = sectionData.ten_muc || "";
       section.appendChild(sectionNameInput);
-
-      // sectionNameInput.addEventListener("input", () => {
-      //   sectionTitle.textContent =
-      //     sectionNameInput.value || `Section ${survey.children.length + 1}`;
-      // });
 
       const questionContainer = document.createElement("div");
       questionContainer.classList.add("question-container");
@@ -228,28 +295,7 @@ $(function () {
       btnAddQuestion.textContent = "Thêm câu hỏi";
       btnAddQuestion.classList.add("btn", "btn-primary", "btn-sm");
       btnAddQuestion.addEventListener("click", () => {
-        const question = document.createElement("div");
-        question.classList.add(
-          "question-item",
-          "flex-row",
-          "flex",
-          "items-center",
-          "gap-4",
-          "mb-4"
-        );
-        question.innerHTML = `
-                  <label class="label-text text-nowrap">Câu hỏi:</label>
-                  <input type="text" class="questionInput input w-s"/>
-                  <button class="deleteQuestion btn btn-square btn-outline btn-error">
-                  <span class="icon-[tabler--x]"></span>
-                  </button>
-              `;
-        questionContainer.appendChild(question);
-
-        const deleteQuestionButton = question.querySelector(".deleteQuestion");
-        deleteQuestionButton.addEventListener("click", () => {
-          question.remove();
-        });
+        createQuestion(questionContainer);
       });
       section.appendChild(btnAddQuestion);
 
@@ -266,9 +312,51 @@ $(function () {
       });
       section.appendChild(deleteSectionButton);
 
-      survey.appendChild(section);
+      // Add existing questions if any
+      if (sectionData.cau_hoi && sectionData.cau_hoi.length > 0) {
+        sectionData.cau_hoi.forEach((questionData) => {
+          createQuestion(questionContainer, questionData.noi_dung);
+        });
+      }
+
+      return section;
+    }
+
+    function createQuestion(questionContainer, questionText = "") {
+      const question = document.createElement("div");
+      question.classList.add(
+        "question-item",
+        "flex-row",
+        "flex",
+        "items-center",
+        "gap-4",
+        "mb-4"
+      );
+      question.innerHTML = `
+        <label class="label-text text-nowrap">Câu hỏi:</label>
+        <input type="text" class="questionInput input w-s" value="${questionText}"/>
+        <button class="deleteQuestion btn btn-square btn-outline btn-error">
+          <span class="icon-[tabler--x]"></span>
+        </button>
+      `;  
+      questionContainer.appendChild(question);
+
+      const deleteQuestionButton = question.querySelector(".deleteQuestion");
+      deleteQuestionButton.addEventListener("click", () => {
+        question.remove();
+      });
+    }
+
+    btnAddSection.addEventListener("click", () => {
+      survey.appendChild(createSection({}));
     });
 
+    // Create sections and questions based on the sample data
+    if (surveyContent) {
+      Object.values(surveyContent).forEach((sectionData) => {
+        survey.appendChild(createSection(sectionData));
+      });
+    }
     //xu ly submit
     submitSurveyButton.addEventListener("click", () => {
       const surveyContent = [];
@@ -283,7 +371,7 @@ $(function () {
       const chuKi = $("#select-chu-ki").val();
       const loaiKs = $("#select-ks-type").val();
       const isSuDung = $("#select-su-dung").val();
-      
+
       sections.forEach((section) => {
         const sectionName = section.querySelector("input").value;
         const questions = [];
@@ -301,14 +389,15 @@ $(function () {
         });
       });
 
-      const createSurveyData = {
+      const editSurveyData = {
+        "ks-id": currentKsId,
         "ten-ks": tenKhaoSat,
         "nhomks-id": idNhomKs,
         "date-start": dateStart,
         "date-end": dateEnd,
         "loai-tra-loi": loaiTraLoi,
-        "su-dung": isSuDung,
         "content": surveyContent,
+        "su-dung": isSuDung
       };
 
       let isValideData = () => {
@@ -336,20 +425,20 @@ $(function () {
         }
         return true;
       };
-      console.log(createSurveyData);
-     
+      console.log(editSurveyData);
+
       if (isValideData()) {
         checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {
           if (isExistCtdt == -1) {
             alert("không có chương trình đào đạo thuộc ngành, chu kì này");
             return;
           }
-          createSurveyData["ctdt-id"] = isExistCtdt;
-          createKhaoSat(createSurveyData).then((response) => {
-            if( response) {
-              alert("tạo ks thành công")
+          editSurveyData["ctdt-id"] = isExistCtdt;
+          updateKhaoSat(editSurveyData).then((response) => {
+            if (response) {
+              alert("Cập nhật thành công");
             } else {
-              alert("tạo ks thất bại")
+              alert("Cập nhật thất bại");
             }
           });
         });

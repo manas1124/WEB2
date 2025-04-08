@@ -24,10 +24,36 @@ class CauHoiModel
     public function create($noi_dung, $mks_id)
     {
         $this->conn = $this->db->getConnection();
-        $sql = "INSERT INTO cau_hoi (noi_dung,mks_id) VALUES ('$noi_dung','$mks_id')";
+        $sql = "INSERT INTO cau_hoi (noi_dung,mks_id,status) VALUES ('$noi_dung','$mks_id',1)";
         if ($this->conn->query($sql) === TRUE) {
+            $this->db->closeConnection();
             return true;
         } else {
+            $this->db->closeConnection();
+            return false;
+        }
+    }
+    public function deleteByMksId($mks_id)
+    {
+        $this->conn = $this->db->getConnection();
+        $sql = "update cau_hoi set status = 0 where mks_id = $mks_id";
+        if ($this->conn->query($sql) === TRUE) {
+            $this->db->closeConnection();
+            return true;
+        } else {
+            $this->db->closeConnection();
+            return false;
+        }
+    }
+    public function delete($id)
+    {
+        $this->conn = $this->db->getConnection();
+        $sql = "update cau_hoi set status = 0 where id = $id";
+        if ($this->conn->query($sql) === TRUE) {
+            $this->db->closeConnection();
+            return true;
+        } else {
+            $this->db->closeConnection();
             return false;
         }
     }

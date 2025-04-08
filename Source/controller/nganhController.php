@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/nganhModel.php'; 
+require_once __DIR__ . '/../models/nganhmodel.php'; 
 // header('Content-Type: application/json'); 
 
 if (isset($_GET['func'])) {

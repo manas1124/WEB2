@@ -113,5 +113,22 @@ class NganhModel
         return $stmt->execute();
     }
 
+    public function getAllNganh() {
+        $con = $this->db->getConnection();
+        $sql = "SELECT * FROM nganh where status = 1";
+        $result = $con->query($sql);
+       
+        if ($result) {
+            $data = [];
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            return $data; // Return the result set for further processing
+        } else {
+            die("Query execution failed: " . $con->error);
+        }
+        $this->db->closeConnection();
+    }
 
+    
 }
