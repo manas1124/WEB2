@@ -1,53 +1,53 @@
 <?php
-require_once __DIR__ . '/../models/nganhModel.php';
+require_once __DIR__ . '/../models/chukymodel.php';
 // header('Content-Type: application/json'); 
 
 if (isset($_GET['func'])) {
     $func = $_GET['func'];
     // $data = $_GET['data'];
     // $data = json_decode($data);
-    $nganhModel = new NganhModel();
+    $chukyModel = new ChuKyModel();
     $response = null;
 
     switch ($func) {
         case "getAll":
-            $response = $nganhModel->getAll();
+            $response = $chukyModel->getAll();
             break;
         case "getAllpaging":
             $page = $_GET["page"] ? $_GET["page"] : null;
             $status = $_GET["status"] ? $_GET["status"] : null;
-            $response = $nganhModel->getAllpaging($page, $status);
+            $response = $chukyModel->getAllpaging($page, $status);
             break;
         case "getById":
-            if ($_GET["nganh_id"]) {
-                $nganhId = $_GET["nganh_id"];
-                $response = $nganhModel->getById($nganhId);
+            if ($_GET["ck_id"]) {
+                $ckId = $_GET["ck_id"];
+                $response = $chukyModel->getById($ckId);
             }
             break;
         case "create":
-            if ($_GET["ten_nganh"]) {
-                $ten_nganh = $_GET["ten_nganh"];
+            if ($_GET["ten_ck"]) {
+                $ten_ck = $_GET["ten_ck"];
                 $status = $_GET["status"] ? $_GET["status"] : null;
-                $response = $nganhModel->create($tennganh, $status);
+                $response = $chukyModel->create($tenck, $status);
             }
             break;
         case "update":
-            if ($_GET["nganh_id"] && $_GET["ten_nganh"]) {
-                $nganh_id = $_GET["nganh_id"];
-                $tennganh = $_GET["ten_nganh"];
+            if ($_GET["ck_id"] && $_GET["ten_ck"]) {
+                $ck_id = $_GET["ck_id"];
+                $tenck = $_GET["ten_ck"];
                 $status = $_GET["status"] ? $_GET["status"] : null;
-                $response = $nganhModel->update($nganh_id, $ten_nganh, $status);
+                $response = $chukyModel->update($ck_id, $ten_ck, $status);
             }
             break;
         case "toggleStatus":
-            if ($_GET["nganh_id"]) {
-                $nganh_id = $_GET["nganh_id"];
-                $response = $nganhModel->toggleStatus($nganh_id);
+            if ($_GET["ck_id"]) {
+                $ck_id = $_GET["ck_id"];
+                $response = $chukyModel->toggleStatus($ck_id);
             }
             break;
-        case "nganh-sua":
+        case "chuky-sua":
             ob_start();
-            $filePath = "../views/admin/nganh-sua.php";
+            $filePath = "../views/admin/chuky-sua.php";
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;

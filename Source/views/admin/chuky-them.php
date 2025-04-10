@@ -13,15 +13,15 @@
             <div class="w-96">
                 <label class="label-text" for="select-status">Status</label>
                 <select class="select" id="select-status">
-                    <option value="1">Hoạt động</option>
-                    <option value="0">Không hoạt động</option>
+                    <option value="1">Đang sử dụng</option>
+                    <option value="0">Đã khóa</option>
                 </select>
             </div>
         </div>
     </div>
 
     <div class="modal-footer border-t border-base-content/10">
-        <button id="btn-save-chuky" type="submit" class="btn btn-primary">Thêm</button>
+        <button id="btn-create" type="submit" class="btn btn-primary">Thêm</button>
     </div>
 </div>
 <script src="./views/javascript/chuky.js"></script>
