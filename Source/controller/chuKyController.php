@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/chukymodel.php';
+require_once __DIR__ . '/../models/chuKyModel.php';
 // header('Content-Type: application/json'); 
 
 if (isset($_GET['func'])) {
@@ -14,33 +14,36 @@ if (isset($_GET['func'])) {
             $response = $chukyModel->getAll();
             break;
         case "getAllpaging":
-            $page = $_GET["page"] ? $_GET["page"] : null;
-            $status = $_GET["status"] ? $_GET["status"] : null;
+            $page = isset($_GET["page"]) && $_GET["page"] !== '' ? $_GET["page"] : 1;
+            $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
             $response = $chukyModel->getAllpaging($page, $status);
             break;
         case "getById":
-            if ($_GET["ck_id"]) {
+            if (isset($_GET["ck_id"]) && $_GET["ck_id"] !== '') {
                 $ckId = $_GET["ck_id"];
                 $response = $chukyModel->getById($ckId);
             }
             break;
         case "create":
-            if ($_GET["ten_ck"]) {
+            if (isset($_GET["ten_ck"]) && $_GET["ten_ck"] !== '') {
                 $ten_ck = $_GET["ten_ck"];
-                $status = $_GET["status"] ? $_GET["status"] : null;
-                $response = $chukyModel->create($tenck, $status);
+                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                $response = $chukyModel->create($ten_ck, $status);
             }
             break;
         case "update":
-            if ($_GET["ck_id"] && $_GET["ten_ck"]) {
+            if (
+                isset($_GET["ck_id"]) && $_GET["ck_id"] !== '' &&
+                isset($_GET["ten_ck"]) && $_GET["ten_ck"] !== ''
+            ) {
                 $ck_id = $_GET["ck_id"];
-                $tenck = $_GET["ten_ck"];
-                $status = $_GET["status"] ? $_GET["status"] : null;
+                $ten_ck = $_GET["ten_ck"];
+                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
                 $response = $chukyModel->update($ck_id, $ten_ck, $status);
             }
             break;
         case "toggleStatus":
-            if ($_GET["ck_id"]) {
+            if (isset($_GET["ck_id"]) && $_GET["ck_id"] !== '') {
                 $ck_id = $_GET["ck_id"];
                 $response = $chukyModel->toggleStatus($ck_id);
             }

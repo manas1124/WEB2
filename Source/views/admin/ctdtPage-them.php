@@ -17,16 +17,16 @@
                 </select>
             </div>
             <div class="w-96">
-                <label class="label-text" for="select-chu-ky">Chu kỳ</label>
-                <select class="select" id="select-chu-ky">
+                <label class="label-text" for="select-chuky">Chu kỳ</label>
+                <select class="select" id="select-chuky">
                     <option value="-1">Chọn chu kì</option>
                 </select>
             </div>
             <div class="w-96">
                 <label class="label-text" for="select-loai">Loại</label>
                 <select class="select" id="select-loai">
-                    <option value="0">Chương trình đào tạo</option>
-                    <option value="1">Chuẩn đầu ra</option>
+                    <option value="1">Chương trình đào tạo</option>
+                    <option value="0">Chuẩn đầu ra</option>
                 </select>
             </div>
             <div class="w-96">

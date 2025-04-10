@@ -15,7 +15,7 @@ class ChuKyModel
     public function create($ten_chu_ky, $status)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("INSERT INTO chu_ki (ten_chu_ky, status) VALUES (?, ?)");
+        $stmt = $conn->prepare("INSERT INTO chu_ki (ten_ck, status) VALUES (?, ?)");
         $stmt->bind_param("si", $ten_chu_ky, $status);
 
         if ($stmt->execute()) {
@@ -29,7 +29,7 @@ class ChuKyModel
     {
         $conn = $this->db->getConnection();
         $sql = "SELECT * 
-                FROM chu_ky
+                FROM chu_ki
                 WHERE status = 1";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -104,7 +104,7 @@ class ChuKyModel
     public function getById($ck_id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM chu_ky WHERE ck_id = ?");
+        $stmt = $conn->prepare("SELECT * FROM chu_ki WHERE ck_id = ?");
         $stmt->bind_param("i", $ck_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -120,7 +120,7 @@ class ChuKyModel
     public function update($ck_id, $ten_chu_ky, $status)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("UPDATE chu_ky SET ten_chu_ky = ?, status = ? WHERE ck_id = ?");
+        $stmt = $conn->prepare("UPDATE chu_ki SET ten_ck = ?, status = ? WHERE ck_id = ?");
         $stmt->bind_param("sii", $ten_chu_ky, $status, $ck_id);
 
         if ($stmt->execute()) {
@@ -133,7 +133,7 @@ class ChuKyModel
     public function toggleStatus($ck_id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("UPDATE chu_ky SET status = NOT status WHERE ck_id = ?");
+        $stmt = $conn->prepare("UPDATE chu_ki SET status = NOT status WHERE ck_id = ?");
         $stmt->bind_param("i", $ck_id);
         if ($stmt->execute()) {
             return true;
