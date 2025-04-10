@@ -149,9 +149,11 @@ class CtdtDauraModel
     public function getById($ctdt_id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT *
-                                FROM ctdt_daura
-                                WHERE ctdt_id = ?");
+        $stmt = $conn->prepare("SELECT c.*, n.ten_nganh, ck.ten_ck 
+                                FROM ctdt_daura c
+                                LEFT JOIN nganh n ON c.nganh_id = n.nganh_id
+                                LEFT JOIN chu_ky ck ON c.ck_id = ck.ck_id
+                                WHERE c.ctdt_id = ?");
         $stmt->bind_param("i", $ctdt_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -162,7 +164,9 @@ class CtdtDauraModel
                 "ctdt_id" => $row['ctdt_id'],
                 "file" => $row['file'],
                 "nganh_id" => $row['nganh_id'],
+                "ten_nganh" => $row['ten_nganh'],
                 "ck_id" => $row['ck_id'],
+                "ten_ck" => $row['ten_ck'],
                 "la_ctdt" => $row['la_ctdt'],
                 "status" => $row['status']
             ];
