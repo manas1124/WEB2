@@ -23,16 +23,16 @@
                 <label class="label-text" for="select-loai">Loại </label>
                 <select class="select" id="select-loai">
                     <option value="-1">Chọn loại</option>
-                    <option value="0">Chương trình đào tạo</option>
-                    <option value="1">Chuẩn đầu ra</option>
+                    <option value="1">Chương trình đào tạo</option>
+                    <option value="0">Chuẩn đầu ra</option>
                 </select>
             </div>
             <div>
                 <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
                     <option value="-1">Chọn status</option>
-                    <option value="0">Đang sử dụng</option>
-                    <option value="1">Ngừng sử dụng</option>
+                    <option value="1">Đang sử dụng</option>
+                    <option value="0">Đã khóa</option>
                 </select>
             </div>
             <button class="btn btn-primary" id="btn-loc" data-act="ctdt-loc">Lọc</button>

@@ -14,8 +14,8 @@
                 <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
                     <option value="-1">Chọn status</option>
-                    <option value="0">Đang sử dụng</option>
-                    <option value="1">Ngừng sử dụng</option>
+                    <option value="1">Đang sử dụng</option>
+                    <option value="0">Đã khóa</option>
                 </select>
             </div>
             <button type="button" class="btn btn-primary" id="btn-loc" data-act="nganh-loc">Lọc</button>
