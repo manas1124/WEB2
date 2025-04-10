@@ -47,12 +47,6 @@ if (isset($_GET['func'])) {
                 $response = $nganhModel->toggleStatus($nganh_id);
             }
             break;
-        case "nganh-sua":
-            ob_start();
-            $filePath = "../views/admin/nganh-sua.php";
-            require_once($filePath);
-            $response["html"] = ob_get_clean();
-            break;
         default:
             $response = [
                 'error' => 'Page not found',

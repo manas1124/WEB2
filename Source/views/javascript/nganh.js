@@ -36,12 +36,11 @@ async function loadAllNganh(page = 1, status = null) {
                     : '<span class="badge badge-soft badge-error ">Đã khóa</span>'
                 }</td>
                     <td>
-                        <button class="action-sua btn btn-circle btn-text btn-sm" aria-label="Action button" data-act="update"><span class="icon-[tabler--pencil] size-5"></span></button>
+                        <button class="action-item btn btn-circle btn-text btn-sm" aria-label="Action button" data-act="nganh-sua" data-id="${item.nganh_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
                         <button class="btn btn-circle btn-text btn-sm" aria-label="Action button" onclick=toggleStatus(${item.nganh_id})><span class="icon-[tabler--trash] size-5"></span></button>
                     </td>
                 </tr>
             `);
-            console.log(item.nganh_id);
 
         });
         $("#pagination").append(`<button type="button" class="btn btn-text btn-prev">Previous</button><div class="flex items-center gap-x-1">`);
@@ -82,27 +81,11 @@ function create() {
                     text: 'Tạo không thành công!'
                 });
             }
+            history.back();
         },
         error: function (error) {
             console.error("Error navigate page:", error);
 
-        }
-    });
-}
-
-function updatepage(params) {
-    $.ajax({
-        url: "./controller/nganhController.php",
-        type: "GET",
-        dataType: "json",
-        data: params,
-        success: function (response) {
-            $("#main-content").html(response.html);
-            let queryString = $.param(params);
-            history.pushState(params, "", "admin.php?" + queryString);
-        },
-        error: function (error) {
-            console.error("Error loading form sua:", error);
         }
     });
 }
@@ -122,7 +105,21 @@ function update() {
             status: status
         },
         success: function (response) {
-
+            if (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đã lưu thay đổi!',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Lưu thay đổi thất bại!'
+                });
+            }
+            history.back();
         },
         error: function (error) {
             console.error("Error loading form sua:", error);
@@ -161,14 +158,6 @@ function toggleStatus(nganh_id) {
 $(document).ready(function () {
     loadAllNganh(1);
 
-    $("#nganh-list").on("click", ".action-sua", function (event) {
-        let act = $(this).data("act");
-        let id = $(this).data("id");
-        let currentParams = getUrlParams();
-        let param = { ...currentParams, func: act, id: id };
-        updatepage(param);
-    });
-
     $("#btn-create").on("click", function () {
         if ($("#ten-nganh").val() != "") {
             create();
@@ -181,7 +170,7 @@ $(document).ready(function () {
         }
     });
     $("#btn-save").on("click", function () {
-
+        update();
     });
 
     $("#btn-loc").on("click", function () {
