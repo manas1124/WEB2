@@ -1,20 +1,30 @@
-<h1> day la trang tai khoan</h1>
-<div class="dropdown relative inline-flex">
-  <button id="dropdown-footer" type="button" class="dropdown-toggle btn btn-primary" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-    Dropdown footer
-    <span class="icon-[tabler--chevron-down] dropdown-open:rotate-180 size-4"></span>
-  </button>
-  <ul class="dropdown-menu dropdown-open:opacity-100 hidden min-w-60" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-footer">
-    <li><a class="dropdown-item" href="#">My Profile</a></li>
-    <li><a class="dropdown-item" href="#">Settings</a></li>
-    <li><a class="dropdown-item" href="#">Billing</a></li>
-    <li><a class="dropdown-item" href="#">FAQs</a></li>
-    <li class="dropdown-footer gap-2">
-      <button class="btn btn-error btn-soft btn-block">Sign out</button>
-    </li>
-  </ul>
+<div id="qltk-content" class="container h-full">
+  <div class="flex items-center justify-between mb-4">
+    <h1>Quản lí tài khoản</h1>
+    <button type="button" class="action-item btn btn-primary" data-act="taikhoanPage-them">Thêm tài khoản</button>
+  </div>
 </div>
-<script >
+<div class="w-full overflow-x-auto">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tài khoản ID</th>
+        <th>Username</th>
+        <th>Đối tượng</th>
+        <th>Quyền</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody id= "account-list">
 
-window.HSStaticMethods.autoInit()
+    </tbody>
+  </table>
+  <div id="pagination" class="flex justify-center space-x-2">
+  </div>
+</div>
+<div class="dropdown relative inline-flex">
+</div>
+<script>
+  window.HSStaticMethods.autoInit()
 </script>
+<script src="views/javascript/taiKhoanPage.js"></script>
