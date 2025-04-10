@@ -89,23 +89,6 @@ function create() {
     });
 }
 
-function updatepage(params) {
-    $.ajax({
-        url: "./controller/chuKyController.php",
-        type: "GET",
-        dataType: "json",
-        data: params,
-        success: function (response) {
-            $("#main-content").html(response.html);
-            let queryString = $.param(params);
-            history.pushState(params, "", "admin.php?" + queryString);
-        },
-        error: function (error) {
-            console.error("Error loading form sua:", error);
-        }
-    });
-}
-
 function update() {
     const ck_id = $("#ck_id").val();
     const ten_ck = $("#ten-ck").val();
