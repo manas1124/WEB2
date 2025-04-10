@@ -48,12 +48,6 @@ if (isset($_GET['func'])) {
                 $response = $chukyModel->toggleStatus($ck_id);
             }
             break;
-        case "chuky-sua":
-            ob_start();
-            $filePath = "../views/admin/chuky-sua.php";
-            require_once($filePath);
-            $response["html"] = ob_get_clean();
-            break;
         default:
             $response = [
                 'error' => 'Page not found',

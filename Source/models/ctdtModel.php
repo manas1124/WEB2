@@ -32,7 +32,7 @@ class CtdtDauraModel
         $stmt = $conn->prepare("SELECT c.*, n.ten_nganh, ck.ten_ck 
                                 FROM ctdt_daura c
                                 LEFT JOIN nganh n ON c.nganh_id = n.nganh_id
-                                LEFT JOIN chu_ky ck ON c.ck_id = ck.ck_id
+                                LEFT JOIN chu_ki ck ON c.ck_id = ck.ck_id
                                 WHERE c.status = 1");
         $stmt->execute();
         $result = $stmt->get_result();
@@ -152,7 +152,7 @@ class CtdtDauraModel
         $stmt = $conn->prepare("SELECT c.*, n.ten_nganh, ck.ten_ck 
                                 FROM ctdt_daura c
                                 LEFT JOIN nganh n ON c.nganh_id = n.nganh_id
-                                LEFT JOIN chu_ky ck ON c.ck_id = ck.ck_id
+                                LEFT JOIN chu_ki ck ON c.ck_id = ck.ck_id
                                 WHERE c.ctdt_id = ?");
         $stmt->bind_param("i", $ctdt_id);
         $stmt->execute();

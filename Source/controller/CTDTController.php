@@ -56,12 +56,6 @@ if (isset($_GET['func'])) {
                 $response = $CtdtDauraModel->toggleStatus($ctdt_id);
             }
             break;
-        case "ctdt-sua":
-            ob_start();
-            $filePath = "../views/admin/ctdtPage-sua.php";
-            require_once($filePath);
-            $response["html"] = ob_get_clean();
-            break;
         default:
             $response = [
                 'error' => 'Page not found',
