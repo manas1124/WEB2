@@ -37,7 +37,7 @@ async function loadAllNganh(page = 1, status = null) {
                 }</td>
                     <td>
                         <button class="action-sua btn btn-circle btn-text btn-sm" aria-label="Action button" data-act="update"><span class="icon-[tabler--pencil] size-5"></span></button>
-                        <button class="action-status btn btn-circle btn-text btn-sm" aria-label="Action button" data-act="toggleStatus"><span class="icon-[tabler--trash] size-5"></span></button>
+                        <button class="btn btn-circle btn-text btn-sm" aria-label="Action button" onclick=toggleStatus(${item.nganh_id})><span class="icon-[tabler--trash] size-5"></span></button>
                     </td>
                 </tr>
             `);
@@ -55,15 +55,15 @@ async function loadAllNganh(page = 1, status = null) {
     }
 }
 
-function createNganh() {
+function create() {
     const ten_nganh = $("#ten-nganh").val();
     const status = $("#select-status").val();
     $.ajax({
-        url: "./controller/chuKyController.php",
+        url: "./controller/nganhController.php",
         type: "GET",
         dataType: "json",
         data: {
-            func: createnganh,
+            func: "create",
             ten_nganh: ten_nganh,
             status: status
         },
@@ -98,8 +98,8 @@ function updatepage(params) {
         data: params,
         success: function (response) {
             $("#main-content").html(response.html);
-            let queryString = $.param(newParams);
-            history.pushState(newParams, "", "admin.php?" + queryString);
+            let queryString = $.param(params);
+            history.pushState(params, "", "admin.php?" + queryString);
         },
         error: function (error) {
             console.error("Error loading form sua:", error);
@@ -107,23 +107,53 @@ function updatepage(params) {
     });
 }
 
-function toggelStatus(params) {
+function update() {
+    const nganh_id = $("#nganh_id").val();
+    const ten_nganh = $("#ten-nganh").val();
+    const status = $("#select-status").val();
     $.ajax({
+        url: "./controller/nganhController.php",
         type: "GET",
-        url: "./handle/adminHandler.php",
-        // url: "./handle/test.php",
-        data: params, // Send all parameters
         dataType: "json",
+        data: {
+            func: "update",
+            nganh_id: nganh_id,
+            ten_nganh: ten_nganh,
+            status: status
+        },
         success: function (response) {
-            $("#main-content").html(response.html);
-            // Update the URL
-            let queryString = $.param(params);
-            queryString = cleanQueryString(queryString);
-            history.pushState(params, "", "admin.php?" + queryString);
+
         },
         error: function (error) {
-            console.error("Error navigate page:", error);
+            console.error("Error loading form sua:", error);
+        }
+    });
+}
 
+function toggleStatus(nganh_id) {
+    $.ajax({
+        url: "./controller/nganhController.php",
+        type: "GET",
+        dataType: "json",
+        data: {
+            func: "toggleStatus",
+            nganh_id: nganh_id,
+        },
+        success: function (response) {
+            if (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đổi trạng thái thành công!',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+                loadAllNganh(currentPage);
+            }
+
+        },
+        error: function (error) {
+            console.error("Error loading form sua:", error);
         }
     });
 }
@@ -139,10 +169,18 @@ $(document).ready(function () {
         updatepage(param);
     });
 
-    $().on("click", "#btn-create", function () {
-
+    $("#btn-create").on("click", function () {
+        if ($("#ten-nganh").val() != "") {
+            create();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Tên ngành không được để trống!'
+            });
+        }
     });
-    $().on("click", "#btn-save", function () {
+    $("#btn-save").on("click", function () {
 
     });
 

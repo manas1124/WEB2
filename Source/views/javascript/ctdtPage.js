@@ -55,7 +55,7 @@ async function getAllNganh() {
 }
 
 
-async function loadAllctdt(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null) {
+async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null) {
     const res = await getAllctdt(page, nganh_id, ck_id, la_ctdt, status);
     if (res) {
         console.log(res);
@@ -70,7 +70,7 @@ async function loadAllctdt(page = 1, nganh_id = null, ck_id = null, la_ctdt = nu
                     <td>${item.ctdt_id}</td>
                     <td>${item.ten_nganh}</td>
                     <td>${item.ten_ck}</td>
-                    <td>${item.la_ctdt == 0 ? "Chương trình đào tạo" : "Chuẩn đầu ra"}</td>
+                    <td>${item.la_ctdt == 1 ? "Chương trình đào tạo" : "Chuẩn đầu ra"}</td>
                     <td>${item.file}</td>
                     <td>${item.status == 1
                     ? '<span class="badge badge-soft badge-success ">Đang sử dụng</span>'
@@ -78,7 +78,7 @@ async function loadAllctdt(page = 1, nganh_id = null, ck_id = null, la_ctdt = nu
                 }</td>
                     <td>
                         <button class="action-sua btn btn-circle btn-text btn-sm" aria-label="Action button"><span class="icon-[tabler--pencil] size-5"></span></button>
-                        <button class="action-status btn btn-circle btn-text btn-sm" aria-label="Action button"><span class="icon-[tabler--trash] size-5"></span></button>
+                        <button class="btn btn-circle btn-text btn-sm" aria-label="Action button" onclick="toggleStatus(${item.ctdt_id})"><span class="icon-[tabler--trash] size-5"></span></button>
                     </td>
                 </tr>
             `);
@@ -97,6 +97,7 @@ async function loadAllctdt(page = 1, nganh_id = null, ck_id = null, la_ctdt = nu
 async function loadAllNganh() {
     const response = await getAllNganh();
     $("#select-nganh").empty();
+    $("#select-nganh").append(`<option value="-1">Chọn ngành</option>`);
     if (response) {
         response.forEach(item => {
             $("#select-nganh").append(`<option value="${item.nganh_id}">${item.ten_nganh}</option>`);
@@ -106,7 +107,9 @@ async function loadAllNganh() {
 
 async function loadAllChuky() {
     const response = await getAllChuky();
+    console.log(response);
     $("#select-chuky").empty();
+    $("#select-chuky").append(`<option value="-1">Chọn chu kỳ</option>`);
     if (response) {
         response.forEach(item => {
             $("#select-chuky").append(`<option value="${item.ck_id}">${item.ten_ck}</option>`);
@@ -116,27 +119,48 @@ async function loadAllChuky() {
 }
 
 function create() {
+    const file = $("#file-decuong").val();
+    const nganh_id = $("#select-nganh").val();
+    const ck_id = $("#select-chuky").val();
+    const la_ctdt = $("#select-loai").val();
+    const status = $("#select-status").val();
     $.ajax({
+        url: "./controller/CTDTController.php",
         type: "GET",
-        url: "./controller/chuKyController.php",
-        // url: "./handle/test.php",
-        data: params, // Send all parameters
         dataType: "json",
+        data: {
+            func: "create",
+            file: file,
+            nganh_id: nganh_id,
+            ck_id: ck_id,
+            la_ctdt: la_ctdt,
+            status: status
+        },
         success: function (response) {
-            $("#main-content").html(response.html);
-            // Update the URL
-            let queryString = $.param(params);
-            queryString = cleanQueryString(queryString);
-            history.pushState(params, "", "admin.php?" + queryString);
+            if (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tạo thành công!',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Tạo không thành công!'
+                });
+            }
         },
         error: function (error) {
             console.error("Error navigate page:", error);
-         
+
         }
     });
 }
 
-function update(params) {
+
+function updatepage(params) {
     $.ajax({
         type: "GET",
         url: "./handle/adminHandler.php",
@@ -157,23 +181,54 @@ function update(params) {
     });
 }
 
-function toggelStatus(params) {
+function update() {
+
     $.ajax({
+        url: "./controller/CTDTController.php",
         type: "GET",
-        url: "./handle/adminHandler.php",
-        // url: "./handle/test.php",
-        data: params, // Send all parameters
         dataType: "json",
+        data: {
+            func: "update",
+            ctdt_id: ctdt_id,
+            file: file,
+            nganh_id: nganh_id,
+            ck_id: ck_id,
+            la_ctdt: la_ctdt,
+            status: status
+        },
         success: function (response) {
-            $("#main-content").html(response.html);
-            // Update the URL
-            let queryString = $.param(params);
-            queryString = cleanQueryString(queryString);
-            history.pushState(params, "", "admin.php?" + queryString);
+
         },
         error: function (error) {
-            console.error("Error navigate page:", error);
-         
+            console.error("Error loading form sua:", error);
+        }
+    });
+}
+
+function toggleStatus(ctdt_id) {
+    $.ajax({
+        url: "./controller/CTDTController.php",
+        type: "GET",
+        dataType: "json",
+        data: {
+            func: "toggleStatus",
+            ctdt_id: ctdt_id,
+        },
+        success: function (response) {
+            if (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đổi trạng thái thành công!',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+                loadAllCTDT(currentPage);
+            }
+
+        },
+        error: function (error) {
+            console.error("Error loading form sua:", error);
         }
     });
 }
@@ -181,7 +236,7 @@ function toggelStatus(params) {
 
 
 $(document).ready(function () {
-    loadAllctdt(1);
+    loadAllCTDT(1);
     loadAllNganh();
     loadAllChuky();
 
@@ -200,6 +255,33 @@ $(document).ready(function () {
         updateContent(newParams);
     });
 
+    $("#btn-create").on("click", function () {
+        if ($("#file-decuong").val() == "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'File đề cương không được để trống!'
+            });
+        }
+        else if ($("#select-nganh").val() == -1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Bạn quên chọn ngành rồi kìa!'
+            });
+        }
+        else if ($("#select-chuky").val() == -1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Bạn quên chọn chu kỳ rồi kìa!'
+            });
+        }
+        else {
+            create()
+        }
+    });
+
     $("#btn-loc").on("click", function () {
         const selectedNganh = $("#select-nganh").val();
         const nganh = selectedNganh == -1 ? null : selectedNganh;
@@ -209,8 +291,8 @@ $(document).ready(function () {
         const loai = selectedLoai == -1 ? null : selectedLoai;
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
-
-        loadAllctdt(1, nganh, chuky, loai, status);
+        console.log("nganh: " + nganh + "; chuky: " + chuky + "; loai: " + loai + "; status: " + status);
+        loadAllCTDT(1, nganh, chuky, loai, status);
     });
 
     $("#pagination").on("click", ".btn-page", function () {
@@ -227,7 +309,8 @@ $(document).ready(function () {
         const loai = selectedLoai == -1 ? null : selectedLoai;
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
-        loadAllctdt(selectedPage, nganh, chuky, loai, status);
+        console.log(selectedPage, nganh, chuky, loai, status);
+        loadAllCTDT(selectedPage, nganh, chuky, loai, status);
     });
 
     $("#pagination").on("click", ".btn-prev", function () {
@@ -244,7 +327,8 @@ $(document).ready(function () {
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
         const selectedPage = currentPage + 1;
-        loadAllctdt(currentPage, nganh, chuky, loai, status);
+        console.log(selectedPage, nganh, chuky, loai, status);
+        loadAllCTDT(selectedPage, nganh, chuky, loai, status);
     });
 
     $("#pagination").on("click", ".btn-next", function () {
@@ -261,6 +345,7 @@ $(document).ready(function () {
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
         const selectedPage = currentPage + 1;
-        loadAllctdt(currentPage, nganh, chuky, loai, status);
+        console.log(selectedPage, nganh, chuky, loai, status);
+        loadAllCTDT(selectedPage, nganh, chuky, loai, status);
     });
 });

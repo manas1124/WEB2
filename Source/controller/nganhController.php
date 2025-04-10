@@ -14,33 +14,35 @@ if (isset($_GET['func'])) {
             $response = $nganhModel->getAll();
             break;
         case "getAllpaging":
-            $page = $_GET["page"] ? $_GET["page"] : null;
-            $status = $_GET["status"] ? $_GET["status"] : null;
+            $page = isset($_GET["page"]) && $_GET["page"] !== '' ? $_GET["page"] : 1;
+            $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
             $response = $nganhModel->getAllpaging($page, $status);
             break;
         case "getById":
-            if ($_GET["nganh_id"]) {
+            if (isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '') {
                 $nganhId = $_GET["nganh_id"];
                 $response = $nganhModel->getById($nganhId);
             }
             break;
         case "create":
-            if ($_GET["ten_nganh"]) {
+            if (isset($_GET["ten_nganh"]) && $_GET["ten_nganh"] !== '') {
                 $ten_nganh = $_GET["ten_nganh"];
-                $status = $_GET["status"] ? $_GET["status"] : null;
-                $response = $nganhModel->create($tennganh, $status);
+                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                $response = $nganhModel->create($ten_nganh, $status);
             }
             break;
         case "update":
-            if ($_GET["nganh_id"] && $_GET["ten_nganh"]) {
+            if (
+                isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '' && isset($_GET["ten_nganh"]) && $_GET["ten_nganh"] !== ''
+            ) {
                 $nganh_id = $_GET["nganh_id"];
-                $tennganh = $_GET["ten_nganh"];
-                $status = $_GET["status"] ? $_GET["status"] : null;
+                $ten_nganh = $_GET["ten_nganh"];
+                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
                 $response = $nganhModel->update($nganh_id, $ten_nganh, $status);
             }
             break;
         case "toggleStatus":
-            if ($_GET["nganh_id"]) {
+            if (isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '') {
                 $nganh_id = $_GET["nganh_id"];
                 $response = $nganhModel->toggleStatus($nganh_id);
             }
