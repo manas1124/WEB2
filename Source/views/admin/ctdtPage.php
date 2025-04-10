@@ -23,15 +23,19 @@
                 <label class="label-text" for="select-loai">Loại </label>
                 <select class="select" id="select-loai">
                     <option value="-1">Chọn loại</option>
+                    <option value="0">Chương trình đào tạo</option>
+                    <option value="1">Chuẩn đầu ra</option>
                 </select>
             </div>
             <div>
                 <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
                     <option value="-1">Chọn status</option>
+                    <option value="0">Đang sử dụng</option>
+                    <option value="1">Ngừng sử dụng</option>
                 </select>
             </div>
-            <button class="btn btn-primary" data-act="ctdt-loc">Lọc</button>
+            <button class="btn btn-primary" id="btn-loc" data-act="ctdt-loc">Lọc</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto">
@@ -48,23 +52,11 @@
                 </tr>
             </thead>
             <tbody id="ctdt-list">
-                <tr>
-                    <td>1</td>
-                    <td>công nghệ thông tin</td>
-                    <td>2020-2024</td>
-                    <td>ctdt</td>
-                    <td>1234</td>
-                    <td>1</td>
-                    <td>
-                        <button class="action-item btn btn-primary" data-act="ctdt-sua">Sửa Ctdt</button>
-                        <button class="btn btn-primary" data-act="ctdt-khoa">Khóa</button>
-                    </td>
-                </tr>
 
             </tbody>
         </table>
-        <div id="pagination"></div>
+        <div id="pagination" class="flex justify-center space-x-2">
+        </div>
     </div>
 </div>
 <script src="./views/javascript/ctdtPage.js"></script>
-<script src="../node_modules/flyonui/flyonui.js"></script>

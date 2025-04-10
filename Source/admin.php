@@ -5,6 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./assets/css/output.css" rel="stylesheet">
+    <style>
+        button[aria-current="page"] {
+            background-color: var(--color-primary);
+            /* Màu nền khi là trang hiện tại */
+            color: white;
+            /* Màu chữ */
+        }
+
+        button[aria-current="page"]:hover {
+            background-color: #0056b3;
+            /* Màu nền khi hover */
+        }
+    </style>
 </head>
 
 <body>
@@ -37,7 +50,7 @@
             </div>
         </div>
     </nav>
-    <?php include( "views/include/navAdmin.php") ?>
+    <?php include("views/include/navAdmin.php") ?>
     <!--  
     <aside id="default-sidebar"
         class="overlay sm:shadow-none overlay-open:translate-x-0 drawer drawer-start hidden max-w-64 sm:absolute sm:z-0 sm:flex sm:translate-x-0 pt-16"
@@ -79,14 +92,14 @@
 
     </div>
     <script>
-    // active nav link
-    // $.noConflict();
-    // jQuery( document ).ready(function() {
-    //     $(".nav-link").click(function () {
-    //         $(".nav-link").removeClass("bg-primary");
-    //         $(this).addClass("bg-primary");   
-    //     });
-    // });
+        // active nav link
+        // $.noConflict();
+        // jQuery( document ).ready(function() {
+        //     $(".nav-link").click(function () {
+        //         $(".nav-link").removeClass("bg-primary");
+        //         $(this).addClass("bg-primary");   
+        //     });
+        // });
     </script>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/flyonui/flyonui.js"></script>
@@ -94,6 +107,8 @@
     <!-- <script src="./views/javascript/indexAdmin.js"></script> -->
     <script src="./views/javascript/indexAdmin.js"></script>
     <script src="./views/javascript/survey.js"></script>
+    <script src="./views/javascript/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

@@ -15,7 +15,7 @@ class ChuKyModel
     public function create($ten_chu_ky, $status)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("INSERT INTO chu_ky (ten_chu_ky, status) VALUES (?, ?)");
+        $stmt = $conn->prepare("INSERT INTO chu_ki (ten_chu_ky, status) VALUES (?, ?)");
         $stmt->bind_param("si", $ten_chu_ky, $status);
 
         if ($stmt->execute()) {
@@ -40,41 +40,62 @@ class ChuKyModel
                 $data[] = $row;
             }
         }
-        return json_encode($data);
+        return $data;
     }
 
-    // Lấy tất cả chu kỳ
-    public function getAllpaging($page, $status = null)
+    public function getAllpaging($page = 1, $status = null)
     {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $conn = $this->db->getConnection();
-        $sql = "SELECT * 
-                                        FROM chu_ky
-                                        WHERE 1=1";
+
+        $sql = "SELECT * FROM chu_ki WHERE 1=1";
+
+        // Đếm tổng số dòng (để tính tổng số trang)
+        $countSql = "SELECT COUNT(*) as total FROM chu_ki WHERE 1=1";
         $params = [];
         $types = "";
         if ($status !== null) {
             $sql .= " AND status = ?";
+
+            $countSql .= " AND status = ?";
             $params[] = $status;
             $types .= "i";
         }
+
+        $countStmt = $conn->prepare($countSql);
+        if (!empty($params)) {
+            $countStmt->bind_param($types, ...$params);
+        }
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $totalRow = $countResult->fetch_assoc()['total'];
+        $totalPages = ceil($totalRow / $limit);
+        $page = max(1, $page);
+        $offset = ($page - 1) * $limit;
+
+        // Truy vấn dữ liệu trang hiện tại
+
         $sql .= " LIMIT ?, ?";
         $params[] = $offset;
         $params[] = $limit;
         $types .= "ii";
+
         $stmt = $conn->prepare($sql);
         $stmt->bind_param($types, ...$params);
         $stmt->execute();
         $result = $stmt->get_result();
 
         $data = [];
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
         }
-        return json_encode($data);
+        $finaldata = [
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'data' => $data
+        ];
+        return $finaldata;
     }
 
 
@@ -89,7 +110,7 @@ class ChuKyModel
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            return json_encode($result->fetch_assoc());
+            return $result->fetch_assoc();
         } else {
             return false;
         }
@@ -114,7 +135,10 @@ class ChuKyModel
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("UPDATE chu_ky SET status = NOT status WHERE ck_id = ?");
         $stmt->bind_param("i", $ck_id);
-
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -19,7 +19,7 @@ async function getAllNganh() {
     const response = await $.ajax({
       url: "./controller/nganhController.php",
       type: "GET",
-      data: { func: "getAllNganh" },
+      data: { func: "getAll" },
       dataType: "json",
     });
     if (response.error) {
