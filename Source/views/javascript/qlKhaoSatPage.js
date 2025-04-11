@@ -19,18 +19,40 @@ async function getAllKhaoSat() {
     return null;
   }
 }
-
-async function getAllNhomKs() {
+async function getAllKhaoSat() {
   try {
     const response = await $.ajax({
-      url: "./controller/nhomKsController.php",
+      url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "getAllNhomKs"},
+      data: { func: "getAllKhaoSat"},
       dataType: "json",
     });
+    // console.log("fect",response)
+    return response;
+  } catch (e) {
+    console.log(e)
+    console.log("loi fetchdata getAllKhaoSat")
+    return null;
+  }
+}
+async function deleteKs(id) {
+  console.log("de",id)
+  try {
+    const response = await $.ajax({
+      url: "./controller/KhaoSatController.php",
+      type: "POST",
+      data: { func: "deleteKs", id: id},
+      dataType: "json",
+    });
+    if (response) {
+      alert ("xóa khảo sát thành công")
+      $("#khao-sat-page").trigger("click");
+    } else {
+      alert ("xóa khảo sát thất bại")
+    }
     return response;
   } catch (error) {
-    console.log("loi fetchdata allnhomks ")
+    console.log("loi xoa khao sat ")
     return null;
   }
 }
@@ -79,9 +101,8 @@ $(function () {
               }
               </td>
               <td>
-                <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-sua" data-id="${item.ks_id}" aria-label="Action button"><span class="icon-[tabler--pencil] size-5"></span></button>
-                <button class="btn btn-circle btn-text btn-sm" aria-label="Action button"><span class="icon-[tabler--trash] size-5"></span></button>
-                <button class="btn btn-circle btn-text btn-sm" aria-label="Action button"><span class="icon-[tabler--dots-vertical] size-5"></span></button>
+                <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-sua" data-id="${item.ks_id}" aria-label="sua khao sat"><span class="icon-[tabler--pencil] size-5"></span></button>
+                <button onclick="deleteKs(${item.ks_id})" class="btn btn-circle btn-text btn-sm" aria-label="xoa khao sat"><span class="icon-[tabler--trash] size-5"></span></button>
               </td>
           </tr>
   

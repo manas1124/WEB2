@@ -60,6 +60,10 @@ if (isset($_POST['func'])) {
             $response = $arr[0]["ctdt_id"]; // tra ve ctdt tim duoc
 
             break;
+        case "deleteKs" : 
+            $id = $_POST['id'];
+            $response = $ksModel->delete($id);
+            break;
         case "getSurveyFieldAndQuestion":
             $id = $_POST['id'];
             $response = json_decode($surveyModel->getsurveyFieldAndQuestion($id));

@@ -5,7 +5,7 @@ echo '<aside id="default-sidebar"
         <div class="drawer-body px-2 pt-4">
             <ul class=" menu  p-0">
                 <li>
-                    <a href="" class="nav-item nav-link" data-page="qlKhaoSatPage">
+                    <a id="khao-sat-page" href="" class="nav-item nav-link" data-page="qlKhaoSatPage">
                         <span class="icon-[tabler--home] size-5"></span>
                         Khảo sát
                     </a>

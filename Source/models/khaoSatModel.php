@@ -36,7 +36,7 @@ class KhaoSatModel
     public function getAllKhaoSat()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM khao_sat ");
+        $stmt = $conn->prepare("SELECT * FROM khao_sat where status = 1 ");
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -111,7 +111,7 @@ class KhaoSatModel
     public function delete($ks_id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("DELETE FROM khao_sat WHERE ks_id = ?");
+        $stmt = $conn->prepare("UPDATE khao_sat SET status = 0 WHERE ks_id = ?");
         $stmt->bind_param("i", $ks_id);
 
         if ($stmt->execute()) {

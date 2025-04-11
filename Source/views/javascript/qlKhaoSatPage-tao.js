@@ -348,6 +348,7 @@ $(function () {
           createKhaoSat(createSurveyData).then((response) => {
             if( response) {
               alert("tạo ks thành công")
+              $("#khao-sat-page").trigger("click");
             } else {
               alert("tạo ks thất bại")
             }

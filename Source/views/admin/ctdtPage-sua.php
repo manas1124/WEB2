@@ -46,5 +46,6 @@
     <div class="modal-footer border-t border-base-content/10">
         <button id="btn-save-ctdt" type="submit" class="btn btn-primary">Thêm</button>
     </div>
+    <a id="return-link" class="nav-item nav-link" data-page="qlKhaoSatPage">
 </div>
 <script src="./views/javascript/ctdtPage.js"></script>
