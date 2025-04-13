@@ -33,8 +33,9 @@
                     </td>
                 </tr> -->
 
-            </tbody>        </table>
-    </div>   
-   
+            </tbody>
+        </table>
+    </div>
+
 </div>
- <script src="views/javascript/qlKhaoSatPage.js"></script>
+<script src="views/javascript/qlKhaoSatPage.js"></script>
