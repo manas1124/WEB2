@@ -79,7 +79,7 @@ async function createKhaoSat(formData) {
       processData: false,
       dataType: "json",
     });
-    console.log("create: ",response)
+    console.log("create: ", response);
     return response;
   } catch (error) {
     console.log("Lỗi khi tạo khảo sát:", error);
@@ -89,7 +89,7 @@ async function createKhaoSat(formData) {
 
 //return -1:not found || ctdt id
 async function checkExistCtdt(nganh_id, chu_ki_id, is_ctdt_daura) {
-  console.log("check exit input",nganh_id, chu_ki_id, is_ctdt_daura)
+  console.log("check exit input", nganh_id, chu_ki_id, is_ctdt_daura);
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
@@ -105,12 +105,26 @@ async function checkExistCtdt(nganh_id, chu_ki_id, is_ctdt_daura) {
     });
     return response; // return id cdtd tim duoc
   } catch (e) {
-    console.log("loi fetchdata loi kiem tra ctdt",e);
+    console.log("loi fetchdata loi kiem tra ctdt", e);
     return -1;
   }
 }
 $(function () {
   window.HSStaticMethods.autoInit();
+
+  $("#surveyContentFormat").on("click", function () {
+    // Replace 'path/to/your/excel/file.xlsx' with the actual path to your Excel file
+    const excelFilePath = "./assets/sample_questions.xlsx";
+
+    // Create a temporary link element
+    const link = document.createElement("a");
+    link.href = excelFilePath;
+    link.download = "example_survey_format.xlsx"; // Specify the downloaded filename
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Clean up
+  });
   (async () => {
     const searchNhomKsInput = document.getElementById("search-nhom-ks");
     const nhomKsList = await getNhomKs();
@@ -214,11 +228,6 @@ $(function () {
       sectionNameInput.classList.add("input", "mb-4");
       section.appendChild(sectionNameInput);
 
-      // sectionNameInput.addEventListener("input", () => {
-      //   sectionTitle.textContent =
-      //     sectionNameInput.value || `Section ${survey.children.length + 1}`;
-      // });
-
       const questionContainer = document.createElement("div");
       questionContainer.classList.add("question-container");
       section.appendChild(questionContainer);
@@ -272,7 +281,7 @@ $(function () {
     submitSurveyButton.addEventListener("click", () => {
       const surveyContent = [];
       const sections = survey.querySelectorAll(".section");
-    
+
       const tenKhaoSat = $("#ten-ks").val();
       const idNhomKs = selectedNhomKs.value;
       const dateStart = $("#begin").val();
@@ -284,24 +293,25 @@ $(function () {
       const isSuDung = $("#select-su-dung").val();
       const fileInput = document.getElementById("input-file-survery-content");
       const file = fileInput.files[0];
-      
+
       sections.forEach((section) => {
         const sectionName = section.querySelector("input").value;
         const questions = [];
         const questionElements = section.querySelectorAll(".question-item");
-    
+
         questionElements.forEach((questionElement) => {
-          const questionInput = questionElement.querySelector(".questionInput").value;
+          const questionInput =
+            questionElement.querySelector(".questionInput").value;
           questions.push(questionInput);
         });
-    
+
         surveyContent.push({
           sectionName: sectionName,
           questions: questions,
         });
       });
-    
-      let isValideData = () => {       
+
+      let isValideData = () => {
         if (tenKhaoSat == "") {
           alert("Vui lòng nhập tên bài khảo sát");
           return false;
@@ -323,17 +333,17 @@ $(function () {
         } else if (chuKi == "-1") {
           alert("Vui lòng chọn chu kì");
           return false;
-        }      
+        }
         return true;
       };
-    
+
       if (isValideData()) {
         checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {
           if (isExistCtdt == -1) {
             alert("Không có chương trình đào tạo thuộc ngành, chu kì này");
             return;
           }
-    
+
           const formData = new FormData();
           formData.append("func", "createKhaoSat"); //ten ham dung
           formData.append("ten-ks", tenKhaoSat);
@@ -343,15 +353,15 @@ $(function () {
           formData.append("loai-tra-loi", loaiTraLoi);
           formData.append("su-dung", isSuDung);
           formData.append("ctdt-id", isExistCtdt);
-           
+
           if (file) {
             formData.append("excelFile", file);
           } else {
-            formData.append("content", surveyContent)
-            console.log("không có import file excel!")
+            formData.append("content", surveyContent);
+            console.log("không có import file excel!");
             formData.append("content", JSON.stringify(surveyContent));
           }
-          
+
           createKhaoSat(formData).then((response) => {
             if (response) {
               alert("Tạo khảo sát thành công");
