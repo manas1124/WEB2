@@ -25,23 +25,38 @@ if (isset($_POST['func'])) {
             // $response = $ksModel->getAllKhaoSat();
             break;
         case 'createKhaoSat':
-            $data = $_POST['data'];
-            $data = json_decode($data, true);
-
+            
+            $tenKhaoSat = $_POST['ten-ks'];
+            $nhomKsId = $_POST['nhomks-id'];
+            $dateStart = $_POST['date-start'];
+            $dateEnd = $_POST['date-end'];
+            $loaiTraLoi = $_POST['loai-tra-loi'];
+            $isSuDung = $_POST['su-dung'];
+            $ctdtId = $_POST['ctdt-id'];
+            
+            //xử lý tạo khảo sát thủ công hoặc nhập file
+            if (isset($_FILES['excelFile']) ) {
+                $tmpExcelPath =$_FILES['excelFile']['tmp_name'];
+                require 'xuly_import.php';
+                $content = survey_content_excel_to_json($tmpExcelPath);
+            } else {
+                $content = json_decode($_POST['content'], true);
+            }
+            
             $idNewKs = $ksModel->create(
-                $data["ten-ks"],
-                $data["date-start"],
-                $data["date-end"],
-                $data["su-dung"],
-                $data["nhomks-id"],
-                $data["loai-tra-loi"],
-                $data["ctdt-id"],
+                $tenKhaoSat,
+                $dateStart,
+                $dateEnd,
+                $isSuDung,
+                $nhomKsId,
+                $loaiTraLoi,
+                $ctdtId,
                 1
             );
 
             // tao ra bai khao sat moi thanh cong thi moi tao nội dung
             if ($idNewKs >= 0) {
-                $mucArray = $data["content"];
+                $mucArray = $content;
                 foreach ($mucArray as $mucItem) {
                     $newMucId = $mucKhaoSatModel->create($mucItem["sectionName"], $idNewKs);
                     $cauHoiArray = $mucItem["questions"];
@@ -49,8 +64,8 @@ if (isset($_POST['func'])) {
                         $cauHoiModel->create($cauHoiItem, $newMucId);
                     }
                 }
-            }
-
+            }        
+            
             $response = true;
             break;
         case "checkExistCtdt":

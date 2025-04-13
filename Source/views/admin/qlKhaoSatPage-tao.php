@@ -68,6 +68,12 @@
                     </select>
                 </div>
             </div>
+            <div class="modal-body pt-0 mb-4">
+                <div class="max-w-sm">
+                    <label class="label-text" for="input-file-survery-content"> Nhập file excel </label>
+                    <input type="file" class="input" id="input-file-survery-content" accept=".xlsx, .xls" />
+                </div>
+            </div>
         </div>
         <!-- cau hoi -->
         <div class="modal-body pt-0 mb-4">
