@@ -66,20 +66,30 @@ function create() {
             status: status
         },
         success: function (response) {
-            if (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Tạo thành công!',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            } else {
+            if (!response.status) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Tạo không thành công!'
+                    text: response.message
                 });
             }
+            else {
+                if (response.data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Tạo thành công!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Tạo không thành công!'
+                    });
+                }
+            }
+
             history.back();
         },
         error: function (error) {
@@ -104,19 +114,28 @@ function update() {
             status: status
         },
         success: function (response) {
-            if (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Đã lưu thay đổi!',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            } else {
+            if (!response.status) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Lưu thay đổi thất bại!'
+                    text: response.message
                 });
+            }
+            else {
+                if (response.data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Lưu thay đổi thành công!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Lưu thay đổi thất bại!'
+                    });
+                }
             }
             history.back();
         },

@@ -138,6 +138,23 @@ class KhaoSatModel
         $stmt->close();
         return $data;
     }
+
+    public function isCTDTInUse($ctdt_id)
+    {
+        $conn = $this->db->getConnection();
+        $query = "SELECT ks_id FROM khao_sat WHERE ctdt_id = ? AND status = 1";
+        $stmt = $conn->prepare( $query);
+        $stmt->bind_param("i", $ctdt_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 // $m = new KhaoSatModel();

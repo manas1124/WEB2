@@ -138,4 +138,15 @@ class NganhModel
             return false;
         }
     }
+
+    public function isExist($ten_nganh)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT 1 FROM nganh WHERE ten_nganh = ?");
+        $stmt->bind_param("s", $ten_nganh);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows > 0;
+    }
 }
