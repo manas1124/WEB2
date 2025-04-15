@@ -436,6 +436,7 @@ $(function () {
           editSurveyData["ctdt-id"] = isExistCtdt;
           updateKhaoSat(editSurveyData).then((response) => {
             if (response) {
+              $("#khao-sat-page").trigger("click");
               alert("Cập nhật thành công");
             } else {
               alert("Cập nhật thất bại");

@@ -46,6 +46,7 @@
     <div class="modal-footer border-t border-base-content/10">
         <button id="btn-save" type="submit" class="btn btn-primary">Lưu</button>
     </div>
+    <a id="return-link" class="nav-item nav-link" data-page="qlKhaoSatPage">
 </div>
 <script>
     async function waitForOptionAndSetValue(selectId, value) {
