@@ -30,7 +30,7 @@ class NganhModel
         return $data;
     }
 
-    public function getAllpaging($page, $status = null)
+    public function getAllpaging($page = 1, $status = null)
     {
         $limit = 10;
 

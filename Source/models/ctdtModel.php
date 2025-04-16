@@ -55,7 +55,7 @@ class CtdtDauraModel
         return $data;
     }
 
-    public function getAllpaging($page, $nganh_id = null, $ck_id = null, $la_ctdt = null, $status = null)
+    public function getAllpaging($page = 1, $nganh_id = null, $ck_id = null, $la_ctdt = null, $status = null)
     {
         $limit = 10;
         $offset = ($page - 1) * $limit;

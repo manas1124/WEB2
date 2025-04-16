@@ -117,6 +117,21 @@ if (isset($_POST['func'])) {
             }
             $response = $isUpdateSuccess;
             break;
+        case "getAllKhaoSatFilter":
+            $filters = [
+                'ten_ks' => $_GET['ten_ks'] ?? null,
+                'ngay_bat_dau' => $_GET['ngay_bat_dau'] ?? null,
+                'ngay_ket_thuc' => $_GET['ngay_ket_thuc'] ?? null,
+                'su_dung' => isset($_GET['su_dung']) ? (int)$_GET['su_dung'] : null,
+                'nks_id' => isset($_GET['nks_id']) ? (int)$_GET['nks_id'] : null,
+                'ltl_id' => isset($_GET['ltl_id']) ? (int)$_GET['ltl_id'] : null,
+                'ctdt_id' => isset($_GET['ctdt_id']) ? (int)$_GET['ctdt_id'] : null,
+                'status' => isset($_GET['status']) ? (int)$_GET['status'] : 1 // mặc định = 1
+            ];
+            
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $response = $khaoSatModel->getAllKhaoSatFilter($filters, $page);
+            break;
         default:
             $response = [
                 'error' => 'Page not found',
