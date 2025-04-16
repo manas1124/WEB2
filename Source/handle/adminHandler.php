@@ -109,6 +109,12 @@ if ($act) {
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;
+        case "tk-them":
+            ob_start();
+            $filePath = "../views/admin/taikhoanPage-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
         default:
             $response["html"] = "load trang bi";
             $response["error"] = "Invalid action requested.";

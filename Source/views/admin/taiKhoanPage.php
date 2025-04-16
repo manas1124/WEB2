@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between mb-4">
     <h1>Quản lí tài khoản</h1>
     <div class="flex items-center gap-4">
-      <button type="button" class="action-item btn btn-primary" data-act="taikhoanPage-them">Thêm tài khoản</button>
+      <button type="button" class="action-item btn btn-primary" data-act="tk-them">Thêm tài khoản</button>
     </div>
   </div>
   <div class="w-full overflow-x-auto">
@@ -11,7 +11,6 @@
         <tr>
           <th>Tài khoản ID</th>
           <th>Username</th>
-          <th>Đối tượng</th>
           <th>Quyền</th>
           <th>Trạng thái</th>
           <th>Action</th>

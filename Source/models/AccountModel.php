@@ -8,29 +8,25 @@ class AccountModel
         $this->db = new MyConnection();
     }
     // Database operations
-    public function create($tk_id, $username, $password, $dt_id, $quyen_id, $status)
+    public function create($username, $password, $dt_id, $quyen_id, $status)
     {
         $conn = $this->db->getConnection();
-
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        $stmt = $conn->prepare("INSERT INTO tai_khoan(tk_id, username, password, dt_id, quyen_id, status) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssiii", $tk_id, $username, $hashedPassword, $dt_id, $quyen_id, $status);
+        $stmt = $conn->prepare("INSERT INTO tai_khoan (username, password, dt_id, quyen_id, status) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssiii", $username, $hashedPassword, $dt_id, $quyen_id, $status);
 
         if ($stmt->execute()) {
-            $id = $stmt->insert_id;
-            $stmt->close();
-            return $id;
+            return true;
         } else {
-            error_log("Insert failed: " . $stmt->error);
-            $stmt->close();
             return false;
         }
     }
     public function getAllTaiKhoan()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM tai_khoan");
+        $stmt = $conn->prepare("SELECT *
+                                FROM tai_khoan
+                                JOIN quyen ON tai_khoan.quyen_id = quyen.quyen_id;");
 
         if (!$stmt) {
             error_log("Prepare failed: " . $conn->error);
