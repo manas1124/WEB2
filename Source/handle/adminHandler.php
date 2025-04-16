@@ -115,6 +115,18 @@ if ($act) {
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;
+        case "tk-edit":
+            ob_start();
+            $filePath = "../views/admin/taikhoanPage-edit.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "tk-xoa":
+            ob_start();
+            $filePath = "../views/admin/taikhoanPage.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
         default:
             $response["html"] = "load trang bi";
             $response["error"] = "Invalid action requested.";

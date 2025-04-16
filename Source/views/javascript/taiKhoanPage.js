@@ -47,76 +47,32 @@ async function getAllQuyen() {
     return null;
   }
 }
-// $(function () {
-//   (async () => {
-//     let tkList = await getAllTaiKhoan();
-//     if (tkList != null) {
-//       tkList.forEach((item) => {
-//         $("#account-list").append(`
-//             <tr>
-//               <td>${item.tk_id}</td>
-//               <td>${item.username}</td>
-//               <td>${item.ten_quyen}</td>
-//               <td class="text-center">
-//                 ${
-//                   item.status == 1
-//                     ? '<span class="badge badge-soft badge-success " style="margin-left: -120px">Đang hoạt động</span>'
-//                     : '<span class="badge badge-soft badge-error" style="margin-left: -120px">Ngừng hoạt động</span>'
-//                 }
-//               </td>
-//               <td>
-//                 <button class="btn btn-circle btn-text btn-sm action-item" data-act="tk-sua" data-id="${
-//                   item.tk_id
-//                 }" aria-label="Sửa tài khoản">
-//                   <span class="icon-[tabler--pencil] size-5"></span>
-//                 </button>
-//                 <button class="btn btn-circle btn-text btn-sm action-item" data-act="tk-xoa" data-id="${
-//                   item.tk_id
-//                 }" aria-label="Xoá tài khoản">
-//                   <span class="icon-[tabler--trash] size-5"></span>
-//                 </button>
-//               </td>
-//             </tr>
-//           `);
-//       });
-//     }
-//   })();
-
-//   $(".main-content").on("click", ".action-item", function (e) {
-//     e.preventDefault();
-//     const action = $(this).data("act");
-//     const id = $(this).data("id");
-//     console.log("Action:", action, "ID:", id);
-//     // TODO: Load trang sửa hoặc xác nhận xoá dựa trên action
-//   });
-// });
 async function loadAllTaiKhoan() {
   const tkList = await getAllTaiKhoan();
   if (tkList) {
     console.log(tkList);
     $("#account-list").empty();
     tkList.forEach((item) => {
+      console.log(`Account ${item.tk_id} status:`, item.status);
+      const isActive = Number(item.status) === 1;
+      const statusBadge =
+        Number(item.status) === 0
+          ? '<span class="badge badge-soft badge-success" style="margin-left: -120px">Đang hoạt động</span>'
+          : '<span class="badge badge-soft badge-error" style="margin-left: -120px">Đã khóa</span>';
+
       $("#account-list").append(`
         <tr>
           <td>${item.tk_id}</td>
           <td>${item.username}</td>
           <td>${item.ten_quyen}</td>
           <td class="text-center">
-            ${
-              item.status == 1
-                ? '<span class="badge badge-soft badge-success" style="margin-left: -120px">Đang hoạt động</span>'
-                : '<span class="badge badge-soft badge-error" style="margin-left: -120px">Ngừng hoạt động</span>'
-            }
+            ${statusBadge}
           </td>
           <td>
-            <button class="btn btn-circle btn-text btn-sm action-item" data-act="tk-sua" data-id="${
-              item.tk_id
-            }" aria-label="Sửa tài khoản">
+            <button class="btn btn-circle btn-text btn-sm action-item" data-act="tk-edit" data-id="${item.tk_id}" aria-label="Sửa tài khoản">
               <span class="icon-[tabler--pencil] size-5"></span>
             </button>
-            <button class="btn btn-circle btn-text btn-sm action-item" data-act="tk-xoa" data-id="${
-              item.tk_id
-            }" aria-label="Xoá tài khoản">
+            <button class="btn btn-circle btn-text btn-sm action-item" id="tk-xoa" data-id="${item.tk_id}" aria-label="Xoá tài khoản">
               <span class="icon-[tabler--trash] size-5"></span>
             </button>
           </td>
@@ -285,6 +241,54 @@ $(document).ready(function () {
       });
     } else {
       create();
+    }
+  });
+});
+$(document).on("click", '[id="tk-xoa"]', function () {
+  const tk_id = $(this).data("id");
+
+  Swal.fire({
+    title: "Bạn có chắc chắn muốn xóa tài khoản?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Xóa",
+    cancelButtonText: "Hủy",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: "./controller/accountController.php",
+        type: "POST",
+        dataType: "json",
+        data: {
+          func: "softDeleteAccount",
+          tk_id: tk_id,
+        },
+        success: function (response) {
+          if (response.status) {
+            Swal.fire({
+              title: "Đã xóa!",
+              text: response.message || "Xóa thành công!",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            }).then(() => {
+              // ✅ Tải lại trang sau khi xóa
+              location.reload();
+            });
+          } else {
+            Swal.fire(
+              "Thất bại!",
+              response.message || "Không thể xóa tài khoản",
+              "error"
+            );
+          }
+        },
+        error: function (xhr) {
+          console.error("AJAX Error:", xhr);
+          console.error("Response Text:", xhr.responseText);
+          Swal.fire("Lỗi hệ thống", "Không thể kết nối đến server", "error");
+        },
+      });
     }
   });
 });
