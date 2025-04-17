@@ -31,7 +31,7 @@
             <div class="w-96">
                 <label class="label-text" for="select-status">Status</label>
                 <select class="select" id="select-status">
-                    <option value="1">Đang sử dụng</option>
+                    <option value="1">Đang hoạt động</option>
                     <option value="0">Đã khóa</option>
                 </select>
             </div>
