@@ -1,4 +1,8 @@
 <?php
+ $conn  = mysqli_connect("localhost" , "root" , "" , "student_survey_management");
+ if(!($conn)){
+     echo "ket noi that bai " ;
+ }
 class MyConnection
 {
     private $connection;
