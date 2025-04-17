@@ -143,7 +143,7 @@ class KhaoSatModel
     {
         $conn = $this->db->getConnection();
         $query = "SELECT ks_id FROM khao_sat WHERE ctdt_id = ? AND status = 1";
-        $stmt = $conn->prepare( $query);
+        $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $ctdt_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -156,15 +156,18 @@ class KhaoSatModel
         }
     }
 
-    public function getAllKhaoSatFilter($filters = [], $page = 1)
+    public function getAllKhaoSatFilter($filters = [], $page = 1, $ks_ids)
     {
         $limit = 10;
         $conn = $this->db->getConnection();
-        $condition = "WHERE 1=1";
-        $params = [];
-        $types = "";
+        $placeholders = implode(',', array_fill(0, count($ks_ids), '?'));
+        $condition = "WHERE khao_sat.ks_id IN ($placeholders)";
+        $params = $ks_ids;
+        $types = str_repeat('i', count($ks_ids));
+
 
         // Xử lý điều kiện lọc
+        
 
         if (!empty($filters['ten_ks'])) {
             $condition .= " AND ten_ks LIKE ?";
@@ -227,7 +230,20 @@ class KhaoSatModel
         $countStmt->close();
 
         // chính
-        $sql = "SELECT * FROM khao_sat" . $condition . " ORDER BY ks_id DESC LIMIT ? OFFSET ?";
+        $sql = "SELECT 
+                    khao_sat.ks_id, khao_sat.ten_ks, khao_sat.ngay_bat_dau, khao_sat.ngay_ket_thuc, 
+                    khao_sat.su_dung, khao_sat.status,
+                    loai_tra_loi.ltl_id, loai_tra_loi.thang_diem,
+                    nhom_khao_sat.nks_id, nhom_khao_sat.ten_nks,
+                    chu_ki.ck_id, chu_ki.ten_ck,
+                    nganh.nganh_id, nganh.ten_nganh,
+                    ctdt_daura.la_ctdt
+                FROM khao_sat
+                JOIN loai_tra_loi ON khao_sat.ltl_id = loai_tra_loi.ltl_id
+                JOIN nhom_khao_sat ON khao_sat.nks_id = nhom_khao_sat.nks_id
+                JOIN ctdt_daura ON khao_sat.ctdt_id = ctdt_daura.ctdt_id
+                JOIN chu_ki ON ctdt_daura.ck_id = chu_ki.ck_id 
+                JOIN nganh ON ctdt_daura.nganh_id = nganh.nganh_id" . $condition . " ORDER BY ks_id DESC LIMIT ? OFFSET ?";
         $offset = ($page - 1) * $limit;
         $params[] = $limit;
         $params[] = $offset;
@@ -259,5 +275,3 @@ class KhaoSatModel
 // $m = new KhaoSatModel();
 // $r = $m->getKhaoSatById(2);
 // echo json_encode($r);
-
-?>

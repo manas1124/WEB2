@@ -130,7 +130,8 @@ if (isset($_POST['func'])) {
             ];
             
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-            $response = $khaoSatModel->getAllKhaoSatFilter($filters, $page);
+            $ks_ids = isset($_GET['ks_ids']) ?? null;
+            $response = $khaoSatModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
             break;
         default:
             $response = [

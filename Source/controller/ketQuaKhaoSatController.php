@@ -44,6 +44,9 @@ if (isset($_GET['func'])) {
                 $response = $success ? ['success' => true] : ['error' => 'Tạo kết quả khảo sát thất bại'];
             }
             break;
+        case "getIdKhaoSat":
+            $response = $KqKhaoSatModel->getIdKhaoSat();
+            break;
 
         default:
             $response = [

@@ -3,7 +3,41 @@
         <h1>Kết quả khảo sát</h1>
     </div>
     <div class="flex items-center justify-between mb-4">
+        <div>
+            <label class="label-text" for="select-status">Status </label>
+            <input type="text">
+        </div>
+    </div>
+    <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
+            <div>
+                <label class="label-text" for="select-status">Status </label>
+                <select class="select" id="select-status">
+                    <option value="-1">Chọn status</option>
+                </select>
+            </div>
+            <div>
+                <label class="label-text" for="select-status">Status </label>
+                <select class="select" id="select-status">
+                    <option value="-1">Chọn status</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-4">
+            <div>
+                <label class="label-text" for="select-status">Status </label>
+                <select class="select" id="select-status">
+                    <option value="-1">Chọn status</option>
+                </select>
+            </div>
+            <div>
+                <label class="label-text" for="select-status">Status </label>
+                <select class="select" id="select-status">
+                    <option value="-1">Chọn status</option>
+                </select>
+            </div>
             <div>
                 <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
@@ -36,7 +70,6 @@
                     <th>Nhóm ksss</th>
                     <th>NNA</th>
                     <th>HD</th>
-                    <td>1</td>
                     <td>
                         <button class="btn btn-primary" data-act="kqks-chitiet">Xem chi tiết</button>
                     </td>
@@ -46,4 +79,5 @@
         </table>
     </div>
 </div>
-<script src="../node_modules/flyonui/flyonui.js"></script>
+
+<script src="./views/javascript/ketquakhaosat.js"></script>
