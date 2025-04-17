@@ -1896,3 +1896,1141 @@ Array
 (
     [func] => getAllTaiKhoan
 )
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 8
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => softDeleteAccount
+    [tk_id] => 8
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => create
+    [username] => nguyenvanteo
+    [password] => 123
+    [dt_id] => 1
+    [quyen_id] => 3
+    [status] => 1
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 9
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 3
+    [username] => tanlatui112
+    [password] => $2y$10$AJakj9fQnNETiiuDdhTdx.sYSDIKRoGYpLlEUX4VYXR77iPvJOpOq
+    [dt_id] => 1
+    [quyen_id] => 1
+    [status] => 1
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 3
+    [username] => tanlatui112
+    [password] => $2y$10$AJakj9fQnNETiiuDdhTdx.sYSDIKRoGYpLlEUX4VYXR77iPvJOpOq
+    [dt_id] => 1
+    [quyen_id] => 1
+    [status] => 0
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 3
+    [username] => tanlatui112
+    [password] => $2y$10$JFnrUlysm1ufCqOvNO4KzOKeJYpIx/GvaLSxLIXpbCrQIHv41qnD2
+    [dt_id] => 1
+    [quyen_id] => 1
+    [status] => 0
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 9
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 9
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 3
+    [username] => tanlatui112
+    [password] => $2y$10$VBS4orsnChaOUIUJwdYGiOBmWr28gC4SVW993Kwo/eB5Y4H6pjwpS
+    [dt_id] => 1
+    [quyen_id] => 1
+    [status] => 1
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 3
+    [username] => tanlatui112
+    [password] => $2y$10$MzIe4HUkAfMaMMmhpCx9x.TVtPE6lMZK4ThYVyfQ7lgOe2VU0D7uy
+    [dt_id] => 1
+    [quyen_id] => 1
+    [status] => 0
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 3
+    [username] => tanlatui112
+    [password] => $2y$10$hr07Z5J.xNbQ7l5npZwLCujjo6HH2/KlqwBnF.CHwzpKnU8uSwkBm
+    [dt_id] => 1
+    [quyen_id] => 1
+    [status] => 1
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => undefined
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 3
+    [username] => tanlatui112
+    [password] => $2y$10$R/MoAvCozmPP9ezSz08hbOf2WWPFjXjjYdc9VTOubJuCCuDbhUdiy
+    [dt_id] => 1
+    [quyen_id] => 1
+    [status] => 0
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 9
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 9
+    [username] => nguyenvanteo
+    [password] => $2y$10$WMpF/ta3W2jX789vaYc7bONkJk474wNMKWuY6rjFOWsTCZB..hzL6
+    [dt_id] => 1
+    [quyen_id] => 3
+    [status] => 0
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 9
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 9
+    [username] => nguyenvanteo
+    [password] => $2y$10$uW6DIYoE.wfDlyBAgL39feKwVx6aBwfUY6x0d5zKh/k3BEDu8oCkC
+    [dt_id] => 1
+    [quyen_id] => 3
+    [status] => 1
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => updateAccount
+    [tk_id] => 3
+    [username] => tanlatui112
+    [password] => $2y$10$a1YkpqNWBt/CouxAPnQ.MelHcWzWcBbwVpQJraWlWIx0mvYmhhFqy
+    [dt_id] => 1
+    [quyen_id] => 1
+    [status] => 1
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => create
+    [username] => tanlatui1111111
+    [password] => 123
+    [dt_id] => 1
+    [quyen_id] => 3
+    [status] => 1
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
