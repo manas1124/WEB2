@@ -3034,3 +3034,167 @@ Array
 (
     [func] => getAllTaiKhoan
 )
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 3
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 1
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getChiTietAccountById
+    [id] => 1
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => softDeleteAccount
+    [tk_id] => 10
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
