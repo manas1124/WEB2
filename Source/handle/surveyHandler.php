@@ -1,9 +1,26 @@
 <?php
-
+    require_once '../utils/JwtUtil.php';
+    session_start();
 if(isset($_GET['act']) && $_GET['act']) {
     $act = $_GET['act'];
         if($act == 'do-survey') {
-            require_once '../views/user/doSurvey.php';
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    require_once '../views/user/doSurvey.php';
+                }
+                else {
+                    echo 'Ko có quyền truy cập!';
+                    exit;
+                }
+            }
+            else {
+                echo 'hihi!';
+                exit;
+            }
+            
+            
         }
        
 }
