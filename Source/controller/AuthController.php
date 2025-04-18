@@ -22,21 +22,16 @@
             exit;
         }
         // var_dump($account);
+        $isSuccess = false;
         if(isValidAccount($account, $password)) {
             $accessToken = generateToken($account);
             $_SESSION['accessToken'] = $accessToken;
-            echo json_encode([
-                'status' => 'success',
-                'accessToken' => $accessToken,
-            ]);
-
+            $isSuccess = true;
         }
-        else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Mật khẩu không đúng'
-            ]);
-        }
+        echo json_encode([
+            'status' => $isSuccess ? 'success' : 'error',
+            'message' => $isSuccess ? 'Đăng nhập thành công!' : 'Mật khẩu không đúng!',
+        ]);
     }
 
 

@@ -56,13 +56,7 @@ $('#loginForm').on('submit', function(e){
             // console.log(response);
 
             var data = JSON.parse(response);
-            if(data['status'] == 'success'){
-                console.log(data['accessToken']);
-                
-            }
-            else {
-                console.log(data['message']);
-            }
+            alert(data['message']); // Show the message from the server
 
 
         },
