@@ -26,7 +26,7 @@ class AccountModel
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("SELECT *
                                 FROM tai_khoan
-                                JOIN quyen ON tai_khoan.quyen_id = quyen.quyen_id;");
+                                ");
 
         if (!$stmt) {
             error_log("Prepare failed: " . $conn->error);

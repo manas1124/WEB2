@@ -100,10 +100,26 @@ class QuyenModel
         $sql = "INSERT INTO quyen (ten_quyen, status) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("si", $ten_quyen, $status);
+        $success = $stmt->execute();
+        $stmt->close();
+        $this->db->closeConnection();
 
-        return $stmt->execute();
+        return [
+            "status" => $success,
+            "message" => $success ? "Thêm quyền thành công" : "Thêm quyền thất bại"
+        ];
     }
-
+    public function delete($quyen_id)
+    {
+        $conn = $this->db->getConnection();
+        $sql = "DELETE FROM quyen WHERE quyen_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $quyen_id);
+        $result = $stmt->execute();
+        $stmt->close();
+        $this->db->closeConnection();
+        return $result;
+    }
     public function update($quyen_id, $ten_quyen, $status)
     {
         $conn = $this->db->getConnection();

@@ -42,6 +42,11 @@ if ($page) {
             require_once("../views/admin/taiKhoanPage.php");
             $response["html"] = ob_get_clean();
             break;
+        case "quyenPage":
+            ob_start();
+            require_once("../views/admin/quyenPage.php");
+            $response["html"] = ob_get_clean();
+            break;
         case "surveyPage":
             ob_start();
             require_once("../views/user/survey.php");
@@ -124,6 +129,12 @@ if ($act) {
         case "tk-xoa":
             ob_start();
             $filePath = "../views/admin/taikhoanPage.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "quyen-them":
+            ob_start();
+            $filePath = "../views/admin/quyenPage-them.php";
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;

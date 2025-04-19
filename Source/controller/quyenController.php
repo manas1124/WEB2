@@ -1,4 +1,7 @@
 <?php
+header('Content-Type: application/json');
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/../models/quyenModel.php';
 
 if (isset($_GET['func'])) {
@@ -25,12 +28,21 @@ if (isset($_GET['func'])) {
             break;
 
         case "create":
-            if (isset($_GET["ten_quyen"]) && $_GET["ten_quyen"] !== '') {
-                $ten_quyen = $_GET["ten_quyen"];
-                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+            if (isset($_POST["ten_quyen"]) && $_POST["ten_quyen"] !== '') {
+                $ten_quyen = $_POST["ten_quyen"];
+                $status = isset($_POST["status"]) && $_POST["status"] !== '' ? $_POST["status"] : null;
+
                 $response = $quyenModel->create($ten_quyen, $status);
+            } else {
+                $response = [
+                    "status" => false,
+                    "message" => "Thiếu dữ liệu đầu vào"
+                ];
             }
-            break;
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit;
 
         case "update":
             if (
@@ -43,13 +55,21 @@ if (isset($_GET['func'])) {
                 $response = $quyenModel->update($quyen_id, $ten_quyen, $status);
             }
             break;
-        case "quyen-sua":
-            ob_start();
-            $filePath = "../views/admin/quyen-sua.php";
-            require_once($filePath);
-            $response["html"] = ob_get_clean();
-            break;
-
+        case "delete":
+            $quyen_id = $_POST['quyen_id'] ?? null;
+            if (!$quyen_id) {
+                echo json_encode([
+                    'status' => false,
+                    'message' => 'Thiếu quyen_id'
+                ]);
+                exit;
+            }
+            $result = $quyenModel->delete($quyen_id);
+            echo json_encode([
+                'status' => $result,
+                'message' => $result ? "Xóa thành công" : "Xóa thất bại"
+            ]);
+            exit;
         default:
             $response = [
                 'error' => 'Page not found',
