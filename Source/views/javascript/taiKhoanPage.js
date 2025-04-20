@@ -36,7 +36,7 @@ async function getAllQuyen() {
   try {
     const response = await $.ajax({
       url: "./controller/quyenController.php",
-      type: "GET",
+      type: "POST",
       dataType: "json",
       data: {
         func: "getAll",
