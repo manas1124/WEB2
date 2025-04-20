@@ -141,4 +141,15 @@ class ChuKyModel
             return false;
         }
     }
+
+    public function isExist($ten_ck)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT 1 FROM chu_ki WHERE ten_ck = ?");
+        $stmt->bind_param("s", $ten_ck);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows > 0;
+    }
 }

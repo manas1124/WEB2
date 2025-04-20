@@ -77,7 +77,7 @@ async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = nu
                     : '<span class="badge badge-soft badge-error ">Đã khóa</span>'
                 }</td>
                     <td>
-                        <button class="action-sua btn btn-circle btn-text btn-sm" aria-label="Action button"><span class="icon-[tabler--pencil] size-5"></span></button>
+                        <button class="action-item btn btn-circle btn-text btn-sm" aria-label="Action button" data-act="ctdt-sua" data-id="${item.ctdt_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
                         <button class="btn btn-circle btn-text btn-sm" aria-label="Action button" onclick="toggleStatus(${item.ctdt_id})"><span class="icon-[tabler--trash] size-5"></span></button>
                     </td>
                 </tr>
@@ -137,42 +137,31 @@ function create() {
             status: status
         },
         success: function (response) {
-            if (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Tạo thành công!',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            } else {
+            if (!response.status) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Tạo không thành công!'
+                    text: 'CTDT_CDR đã tồn tại!'
                 });
             }
-        },
-        error: function (error) {
-            console.error("Error navigate page:", error);
+            else {
+                if (response.data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Tạo thành công!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Tạo không thành công!'
+                    });
+                }
+            }
 
-        }
-    });
-}
-
-
-function updatepage(params) {
-    $.ajax({
-        type: "GET",
-        url: "./handle/adminHandler.php",
-        // url: "./handle/test.php",
-        data: params, // Send all parameters
-        dataType: "json",
-        success: function (response) {
-            $("#main-content").html(response.html);
-            // Update the URL
-            let queryString = $.param(params);
-            queryString = cleanQueryString(queryString);
-            history.pushState(params, "", "admin.php?" + queryString);
+            history.back();
         },
         error: function (error) {
             console.error("Error navigate page:", error);
@@ -182,7 +171,12 @@ function updatepage(params) {
 }
 
 function update() {
-
+    const ctdt_id = $("#ctdt_id").val();
+    const file = $("#file-decuong").val();
+    const nganh_id = $("#select-nganh").val();
+    const ck_id = $("#select-chuky").val();
+    const la_ctdt = $("#select-loai").val();
+    const status = $("#select-status").val();
     $.ajax({
         url: "./controller/CTDTController.php",
         type: "GET",
@@ -197,7 +191,32 @@ function update() {
             status: status
         },
         success: function (response) {
+            if (!response.status) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: response.message,
+                    timer: 2000
+                });
+            }
+            else {
+                if (response.data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã lưu thay đổi!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Lưu thay đổi thất bại!'
+                    });
+                }
+            }
 
+            history.back();
         },
         error: function (error) {
             console.error("Error loading form sua:", error);
@@ -215,15 +234,31 @@ function toggleStatus(ctdt_id) {
             ctdt_id: ctdt_id,
         },
         success: function (response) {
-            if (response) {
+            if (!response.status) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Đổi trạng thái thành công!',
-                    showConfirmButton: false,
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: response.message,
                     timer: 2000
                 });
-                const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
-                loadAllCTDT(currentPage);
+            }
+            else {
+                if (response.data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã lưu thay đổi!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+                    loadAllCTDT(currentPage);
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Lưu thay đổi thất bại!'
+                    });
+                }
             }
 
         },
@@ -235,25 +270,10 @@ function toggleStatus(ctdt_id) {
 
 
 
-$(document).ready(function () {
+$(document).ready(async function () {
     loadAllCTDT(1);
     loadAllNganh();
     loadAllChuky();
-
-    $("#ctdt-list").on("click", ".action-sua", function (event) {
-        event.preventDefault();
-        let act = $(this).data("act");
-        let currentParams = getUrlParams();
-        let newParams = { ...currentParams, act: act };
-
-        // xử lí này sẽ truyền param lên url vd: ..act="them"&id=3
-        let id = $(this).data("id");
-        if (id) {
-            // let newParams = { ...currentParams, act: act, id: 3 };
-        }
-
-        updateContent(newParams);
-    });
 
     $("#btn-create").on("click", function () {
         if ($("#file-decuong").val() == "") {
@@ -279,6 +299,33 @@ $(document).ready(function () {
         }
         else {
             create()
+        }
+    });
+
+    $("#btn-save").on("click", function () {
+        if ($("#file-decuong").val() == "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'File đề cương không được để trống!'
+            });
+        }
+        else if ($("#select-nganh").val() == -1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Bạn quên chọn ngành rồi kìa!'
+            });
+        }
+        else if ($("#select-chuky").val() == -1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Bạn quên chọn chu kỳ rồi kìa!'
+            });
+        }
+        else {
+            update();
         }
     });
 

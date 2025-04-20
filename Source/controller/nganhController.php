@@ -27,8 +27,19 @@ if (isset($_GET['func'])) {
         case "create":
             if (isset($_GET["ten_nganh"]) && $_GET["ten_nganh"] !== '') {
                 $ten_nganh = $_GET["ten_nganh"];
-                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-                $response = $nganhModel->create($ten_nganh, $status);
+                if ($nganhModel->isExist($ten_nganh)) {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Ngành đã tồn tại'
+                    ];
+                } else {
+                    $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                    $data = $nganhModel->create($ten_nganh, $status);
+                    $response = [
+                        'status' => true,
+                        'data' => $data
+                    ];
+                }
             }
             break;
         case "update":
@@ -37,8 +48,19 @@ if (isset($_GET['func'])) {
             ) {
                 $nganh_id = $_GET["nganh_id"];
                 $ten_nganh = $_GET["ten_nganh"];
-                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-                $response = $nganhModel->update($nganh_id, $ten_nganh, $status);
+                if ($nganhModel->isExist($ten_nganh)) {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Ngành đã tồn tại'
+                    ];
+                } else {
+                    $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                    $data = $nganhModel->update($nganh_id, $ten_nganh, $status);
+                    $response = [
+                        'status' => true,
+                        'data' => $data
+                    ];
+                }
             }
             break;
         case "toggleStatus":
@@ -46,12 +68,6 @@ if (isset($_GET['func'])) {
                 $nganh_id = $_GET["nganh_id"];
                 $response = $nganhModel->toggleStatus($nganh_id);
             }
-            break;
-        case "nganh-sua":
-            ob_start();
-            $filePath = "../views/admin/nganh-sua.php";
-            require_once($filePath);
-            $response["html"] = ob_get_clean();
             break;
         default:
             $response = [

@@ -32,7 +32,7 @@ class CtdtDauraModel
         $stmt = $conn->prepare("SELECT c.*, n.ten_nganh, ck.ten_ck 
                                 FROM ctdt_daura c
                                 LEFT JOIN nganh n ON c.nganh_id = n.nganh_id
-                                LEFT JOIN chu_ky ck ON c.ck_id = ck.ck_id
+                                LEFT JOIN chu_ki ck ON c.ck_id = ck.ck_id
                                 WHERE c.status = 1");
         $stmt->execute();
         $result = $stmt->get_result();
@@ -55,94 +55,94 @@ class CtdtDauraModel
         return $data;
     }
 
-    public function getAllpaging($page, $nganh_id = null, $ck_id = null, $la_ctdt = null, $status = null)
-{
-    $limit = 10;
-    $offset = ($page - 1) * $limit;
-    $conn = $this->db->getConnection();
+    public function getAllpaging($page = 1, $nganh_id = null, $ck_id = null, $la_ctdt = null, $status = null)
+    {
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+        $conn = $this->db->getConnection();
 
-    // 1. Query chính
-    $sql = "SELECT c.*, n.ten_nganh, ck.ten_ck 
+        // 1. Query chính
+        $sql = "SELECT c.*, n.ten_nganh, ck.ten_ck 
             FROM ctdt_daura c
             LEFT JOIN nganh n ON c.nganh_id = n.nganh_id
             LEFT JOIN chu_ki ck ON c.ck_id = ck.ck_id
             WHERE 1=1";
 
-    // 2. Điều kiện lọc
-    $conditions = "";
-    $params = [];
-    $types = "";
+        // 2. Điều kiện lọc
+        $conditions = "";
+        $params = [];
+        $types = "";
 
-    if ($nganh_id !== null) {
-        $conditions .= " AND c.nganh_id = ?";
-        $params[] = $nganh_id;
-        $types .= "i";
-    }
-
-    if ($ck_id !== null) {
-        $conditions .= " AND c.ck_id = ?";
-        $params[] = $ck_id;
-        $types .= "i";
-    }
-
-    if ($la_ctdt !== null) {
-        $conditions .= " AND c.la_ctdt = ?";
-        $params[] = $la_ctdt;
-        $types .= "i";
-    }
-
-    if ($status !== null) {
-        $conditions .= " AND c.status = ?";
-        $params[] = $status;
-        $types .= "i";
-    }
-
-    // 3. Tổng số bản ghi
-    $countSql = "SELECT COUNT(*) AS total FROM ctdt_daura c WHERE 1=1" . $conditions;
-    $countStmt = $conn->prepare($countSql);
-    if (!empty($params)) {
-        $countStmt->bind_param($types, ...$params);
-    }
-    $countStmt->execute();
-    $countResult = $countStmt->get_result();
-    $totalRecord = $countResult->fetch_assoc()['total'];
-    $totalPage = ceil($totalRecord / $limit);
-    $page = max(1, $page);
-    $offset = ($page - 1) * $limit;
-
-    // 4. Truy vấn chính có phân trang
-    $sql .= $conditions . " LIMIT ?, ?";
-    $params[] = $offset;
-    $params[] = $limit;
-    $types .= "ii";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param($types, ...$params);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $data = [];
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $data[] = [
-                "ctdt_id" => $row['ctdt_id'],
-                "file" => $row['file'],
-                "nganh_id" => $row['nganh_id'],
-                "ten_nganh" => $row['ten_nganh'],
-                "ck_id" => $row['ck_id'],
-                "ten_ck" => $row['ten_ck'],
-                "la_ctdt" => $row['la_ctdt'],
-                "status" => $row['status']
-            ];
+        if ($nganh_id !== null) {
+            $conditions .= " AND c.nganh_id = ?";
+            $params[] = $nganh_id;
+            $types .= "i";
         }
-    }
 
-    return [
-        "data" => $data,
-        "currentPage" => $page,
-        "totalPages" => $totalPage
-    ];
-}
+        if ($ck_id !== null) {
+            $conditions .= " AND c.ck_id = ?";
+            $params[] = $ck_id;
+            $types .= "i";
+        }
+
+        if ($la_ctdt !== null) {
+            $conditions .= " AND c.la_ctdt = ?";
+            $params[] = $la_ctdt;
+            $types .= "i";
+        }
+
+        if ($status !== null) {
+            $conditions .= " AND c.status = ?";
+            $params[] = $status;
+            $types .= "i";
+        }
+
+        // 3. Tổng số bản ghi
+        $countSql = "SELECT COUNT(*) AS total FROM ctdt_daura c WHERE 1=1" . $conditions;
+        $countStmt = $conn->prepare($countSql);
+        if (!empty($params)) {
+            $countStmt->bind_param($types, ...$params);
+        }
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $totalRecord = $countResult->fetch_assoc()['total'];
+        $totalPage = ceil($totalRecord / $limit);
+        $page = max(1, $page);
+        $offset = ($page - 1) * $limit;
+
+        // 4. Truy vấn chính có phân trang
+        $sql .= $conditions . " LIMIT ?, ?";
+        $params[] = $offset;
+        $params[] = $limit;
+        $types .= "ii";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = [
+                    "ctdt_id" => $row['ctdt_id'],
+                    "file" => $row['file'],
+                    "nganh_id" => $row['nganh_id'],
+                    "ten_nganh" => $row['ten_nganh'],
+                    "ck_id" => $row['ck_id'],
+                    "ten_ck" => $row['ten_ck'],
+                    "la_ctdt" => $row['la_ctdt'],
+                    "status" => $row['status']
+                ];
+            }
+        }
+
+        return [
+            "data" => $data,
+            "currentPage" => $page,
+            "totalPages" => $totalPage
+        ];
+    }
 
 
     // Lấy dữ liệu theo ID
@@ -152,7 +152,7 @@ class CtdtDauraModel
         $stmt = $conn->prepare("SELECT c.*, n.ten_nganh, ck.ten_ck 
                                 FROM ctdt_daura c
                                 LEFT JOIN nganh n ON c.nganh_id = n.nganh_id
-                                LEFT JOIN chu_ky ck ON c.ck_id = ck.ck_id
+                                LEFT JOIN chu_ki ck ON c.ck_id = ck.ck_id
                                 WHERE c.ctdt_id = ?");
         $stmt->bind_param("i", $ctdt_id);
         $stmt->execute();
@@ -192,7 +192,6 @@ class CtdtDauraModel
         }
     }
 
-    // Xóa dữ liệu
     public function toggleStatus($ctdt_id)
     {
         $conn = $this->db->getConnection();
@@ -204,5 +203,16 @@ class CtdtDauraModel
         } else {
             return false;
         }
+    }
+
+    public function isExist($nganh_id, $ck_id, $la_ctdt)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT 1 FROM ctdt_daura WHERE nganh_id = ? AND ck_id = ? AND la_ctdt = ?");
+        $stmt->bind_param("iii", $nganh_id, $ck_id, $la_ctdt);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows > 0;
     }
 }

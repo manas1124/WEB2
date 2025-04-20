@@ -69,28 +69,27 @@ async function getAllTraLoi() {
     return null;
   }
 }
-async function createKhaoSat(data) {
+async function createKhaoSat(formData) {
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "createKhaoSat", data: JSON.stringify(data) },
+      data: formData,
+      contentType: false,
+      processData: false,
       dataType: "json",
     });
-    if (response.error) {
-      console.log("fect", response.error);
-    }
-    console.log("fect", response);
+    console.log("create: ", response);
     return response;
   } catch (error) {
-    console.log(error);
-    console.log("loi  tao khao sat");
+    console.log("Lỗi khi tạo khảo sát:", error);
     return false;
   }
 }
+
 //return -1:not found || ctdt id
 async function checkExistCtdt(nganh_id, chu_ki_id, is_ctdt_daura) {
-  console.log("check exit input",nganh_id, chu_ki_id, is_ctdt_daura)
+  console.log("check exit input", nganh_id, chu_ki_id, is_ctdt_daura);
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
@@ -106,12 +105,26 @@ async function checkExistCtdt(nganh_id, chu_ki_id, is_ctdt_daura) {
     });
     return response; // return id cdtd tim duoc
   } catch (e) {
-    console.log("loi fetchdata loi kiem tra ctdt",e);
+    console.log("loi fetchdata loi kiem tra ctdt", e);
     return -1;
   }
 }
 $(function () {
   window.HSStaticMethods.autoInit();
+
+  $("#surveyContentFormat").on("click", function () {
+    // Replace 'path/to/your/excel/file.xlsx' with the actual path to your Excel file
+    const excelFilePath = "./assets/sample_questions.xlsx";
+
+    // Create a temporary link element
+    const link = document.createElement("a");
+    link.href = excelFilePath;
+    link.download = "example_survey_format.xlsx"; // Specify the downloaded filename
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Clean up
+  });
   (async () => {
     const searchNhomKsInput = document.getElementById("search-nhom-ks");
     const nhomKsList = await getNhomKs();
@@ -215,11 +228,6 @@ $(function () {
       sectionNameInput.classList.add("input", "mb-4");
       section.appendChild(sectionNameInput);
 
-      // sectionNameInput.addEventListener("input", () => {
-      //   sectionTitle.textContent =
-      //     sectionNameInput.value || `Section ${survey.children.length + 1}`;
-      // });
-
       const questionContainer = document.createElement("div");
       questionContainer.classList.add("question-container");
       section.appendChild(questionContainer);
@@ -283,7 +291,9 @@ $(function () {
       const chuKi = $("#select-chu-ki").val();
       const loaiKs = $("#select-ks-type").val();
       const isSuDung = $("#select-su-dung").val();
-      
+      const fileInput = document.getElementById("input-file-survery-content");
+      const file = fileInput.files[0];
+
       sections.forEach((section) => {
         const sectionName = section.querySelector("input").value;
         const questions = [];
@@ -300,16 +310,6 @@ $(function () {
           questions: questions,
         });
       });
-
-      const createSurveyData = {
-        "ten-ks": tenKhaoSat,
-        "nhomks-id": idNhomKs,
-        "date-start": dateStart,
-        "date-end": dateEnd,
-        "loai-tra-loi": loaiTraLoi,
-        "su-dung": isSuDung,
-        "content": surveyContent,
-      };
 
       let isValideData = () => {
         if (tenKhaoSat == "") {
@@ -336,20 +336,38 @@ $(function () {
         }
         return true;
       };
-      console.log(createSurveyData);
-     
+
       if (isValideData()) {
         checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {
           if (isExistCtdt == -1) {
-            alert("không có chương trình đào đạo thuộc ngành, chu kì này");
+            alert("Không có chương trình đào tạo thuộc ngành, chu kì này");
             return;
           }
-          createSurveyData["ctdt-id"] = isExistCtdt;
-          createKhaoSat(createSurveyData).then((response) => {
-            if( response) {
-              alert("tạo ks thành công")
+
+          const formData = new FormData();
+          formData.append("func", "createKhaoSat"); //ten ham dung
+          formData.append("ten-ks", tenKhaoSat);
+          formData.append("nhomks-id", idNhomKs);
+          formData.append("date-start", dateStart);
+          formData.append("date-end", dateEnd);
+          formData.append("loai-tra-loi", loaiTraLoi);
+          formData.append("su-dung", isSuDung);
+          formData.append("ctdt-id", isExistCtdt);
+
+          if (file) {
+            formData.append("excelFile", file);
+          } else {
+            formData.append("content", surveyContent);
+            console.log("không có import file excel!");
+            formData.append("content", JSON.stringify(surveyContent));
+          }
+
+          createKhaoSat(formData).then((response) => {
+            if (response) {
+              alert("Tạo khảo sát thành công");
+              $("#khao-sat-page").trigger("click");
             } else {
-              alert("tạo ks thất bại")
+              alert("Tạo khảo sát thất bại");
             }
           });
         });

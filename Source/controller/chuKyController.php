@@ -27,8 +27,19 @@ if (isset($_GET['func'])) {
         case "create":
             if (isset($_GET["ten_ck"]) && $_GET["ten_ck"] !== '') {
                 $ten_ck = $_GET["ten_ck"];
-                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-                $response = $chukyModel->create($ten_ck, $status);
+                if ($chukyModel->isExist($ten_ck)) {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Chu kỳ đã tồn tại'
+                    ];
+                } else {
+                    $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                    $data = $chukyModel->create($ten_ck, $status);
+                    $response = [
+                        'status' => true,
+                        'data' => $data
+                    ];
+                }
             }
             break;
         case "update":
@@ -38,8 +49,19 @@ if (isset($_GET['func'])) {
             ) {
                 $ck_id = $_GET["ck_id"];
                 $ten_ck = $_GET["ten_ck"];
-                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-                $response = $chukyModel->update($ck_id, $ten_ck, $status);
+                if ($chukyModel->isExist($ten_ck)) {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Chu kỳ đã tồn tại'
+                    ];
+                } else {
+                    $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                    $data = $chukyModel->update($ck_id, $ten_ck, $status);
+                    $response = [
+                        'status' => true,
+                        'data' => $data
+                    ];
+                }
             }
             break;
         case "toggleStatus":
@@ -47,12 +69,6 @@ if (isset($_GET['func'])) {
                 $ck_id = $_GET["ck_id"];
                 $response = $chukyModel->toggleStatus($ck_id);
             }
-            break;
-        case "chuky-sua":
-            ob_start();
-            $filePath = "../views/admin/chuky-sua.php";
-            require_once($filePath);
-            $response["html"] = ob_get_clean();
             break;
         default:
             $response = [
