@@ -14,18 +14,25 @@ class QuyenModel
     public function getAll()
     {
         $conn = $this->db->getConnection();
-        $sql = "SELECT * FROM quyen WHERE status = 1";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
+        $stmt = $conn->prepare("SELECT * FROM quyen");
+        if (!$stmt) {
+            error_log("Prepare failed: " . $conn->error);
+            return false;
+        }
+
+        if (!$stmt->execute()) {
+            error_log("Execute failed: " . $stmt->error);
+            return false;
+        }
+
         $result = $stmt->get_result();
         $data = [];
 
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
         }
 
+        $stmt->close();
         return $data;
     }
 
