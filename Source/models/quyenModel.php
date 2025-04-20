@@ -14,7 +14,7 @@ class QuyenModel
     public function getAll()
     {
         $conn = $this->db->getConnection();
-        $sql = "SELECT * FROM quyen WHERE status = 1";
+        $sql = "SELECT * FROM quyen ";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
