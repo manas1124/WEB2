@@ -155,6 +155,105 @@ class KhaoSatModel
             return false;
         }
     }
+
+    public function getAllKhaoSatFilter($filters = [], $page = 1)
+    {
+        $limit = 10;
+        $conn = $this->db->getConnection();
+        $condition = "WHERE 1=1";
+        $params = [];
+        $types = "";
+
+        // Xử lý điều kiện lọc
+
+        if (!empty($filters['ten_ks'])) {
+            $condition .= " AND ten_ks LIKE ?";
+            $params[] = '%' . $filters['ten_ks'] . '%';
+            $types .= "s";
+        }
+
+        if (!empty($filters['ngay_bat_dau'])) {
+            $condition .= " AND ngay_bat_dau >= ?";
+            $params[] = $filters['ngay_bat_dau'];
+            $types .= "s";
+        }
+
+        if (!empty($filters['ngay_ket_thuc'])) {
+            $condition .= " AND ngay_ket_thuc <= ?";
+            $params[] = $filters['ngay_ket_thuc'];
+            $types .= "s";
+        }
+
+        if (isset($filters['su_dung'])) {
+            $condition .= " AND su_dung = ?";
+            $params[] = $filters['su_dung'];
+            $types .= "i";
+        }
+
+        if (isset($filters['nks_id'])) {
+            $condition .= " AND nks_id = ?";
+            $params[] = $filters['nks_id'];
+            $types .= "i";
+        }
+
+        if (isset($filters['ltl_id'])) {
+            $condition .= " AND ltl_id = ?";
+            $params[] = $filters['ltl_id'];
+            $types .= "i";
+        }
+
+        if (isset($filters['ctdt_id'])) {
+            $condition .= " AND ctdt_id = ?";
+            $params[] = $filters['ctdt_id'];
+            $types .= "i";
+        }
+
+        if (isset($filters['status'])) {
+            $condition .= " AND status = ?";
+            $params[] = $filters['status'];
+            $types .= "i";
+        }
+
+        //tổng số trang
+        $countSql = "SELECT COUNT(*) as total FROM khao_sat" . $condition;
+        $countStmt = $conn->prepare($countSql);
+        if (!empty($params)) {
+            $countStmt->bind_param($types, ...$params);
+        }
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $totalRecords = $countResult->fetch_assoc()['total'];
+        $totalPages = ceil($totalRecords / $limit);
+        $countStmt->close();
+
+        // chính
+        $sql = "SELECT * FROM khao_sat" . $condition . " ORDER BY ks_id DESC LIMIT ? OFFSET ?";
+        $offset = ($page - 1) * $limit;
+        $params[] = $limit;
+        $params[] = $offset;
+        $types .= "ii";
+
+        $stmt = $conn->prepare($sql);
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $stmt->close();
+
+        return [
+            'data' => $data,
+            'totalPages' => $totalPages,
+            'currentPage' => $page
+        ];
+    }
+
 }
 
 // $m = new KhaoSatModel();
