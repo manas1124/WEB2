@@ -11,7 +11,7 @@
         $payload = [
             'sub' => $account['username'],
             'iat' => time(), 
-            'exp' => time() + (60 * 1),  // 1 min
+            'exp' => time() + (60 * 15),  // 1 min
             'permission' => $account['keys'] 
         ];
         return JWT::encode($payload, KEY, 'HS256');

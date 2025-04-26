@@ -137,7 +137,7 @@ class AccountModel
     public function getAccount($username)
     {
     $conn = $this->db->getConnection();
-    $stmt = $conn->prepare("SELECT username, password, qcn.key 
+    $stmt = $conn->prepare("SELECT username, password, dt_id, qcn.key 
                             FROM tai_khoan tk
                             JOIN quyen_chucnang qcn ON tk.quyen_id = qcn.quyen_id 
                             WHERE username = ?");
@@ -165,6 +165,7 @@ class AccountModel
             $data = [
                 'username' => $row['username'],
                 'password' => $row['password'],
+                'dt_id' => $row['dt_id'],
                 'keys' => []
             ];
         }

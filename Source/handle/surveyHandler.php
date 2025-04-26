@@ -64,8 +64,7 @@ else if (isset($_POST['act']) && $_POST['act']) {
         $surveyId = $_POST['surveyId'];
         $username = $_POST['username'];
         $accountModel = new AccountModel();
-        $account = json_decode($accountModel->getAccount($username), true);
-        
+        $account = $accountModel->getAccount($username);
 
         $surveyReulstModel = new SurveyResultModel();
         $data = [

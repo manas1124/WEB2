@@ -49,8 +49,8 @@ $('#loginForm').on('submit', function(e){
         url: '/Source/controller/AuthController.php', 
         data: {
             action: 'login',
-            username: $('#username').val(), 
-            password: $('#password').val()
+            username: $('#txtUsername').val(), 
+            password: $('#txtPassword').val()
         }, 
         success: function (response) {
             // console.log(response);
