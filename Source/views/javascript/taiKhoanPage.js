@@ -8,6 +8,7 @@ async function getAllTaiKhoan() {
       data: { func: "getAllTaiKhoan" },
       dataType: "json",
     });
+    console.log("fetch",response)
     return response;
   } catch (error) {
     console.log("Lỗi khi fetch danh sách tài khoản", error);
@@ -35,7 +36,7 @@ async function getAllQuyen() {
   try {
     const response = await $.ajax({
       url: "./controller/quyenController.php",
-      type: "GET",
+      type: "POST",
       dataType: "json",
       data: {
         func: "getAll",
@@ -53,18 +54,17 @@ async function loadAllTaiKhoan() {
     console.log(tkList);
     $("#account-list").empty();
     tkList.forEach((item) => {
-      console.log(`Account ${item.tk_id} status:`, item.status);
-      const isActive = Number(item.status) === 1;
+      const isActive = Number(item.status) == 1;
       const statusBadge =
-        Number(item.status) === 0
+        Number(item.status) == 1
           ? '<span class="badge badge-soft badge-success" style="margin-left: -120px">Đang hoạt động</span>'
           : '<span class="badge badge-soft badge-error" style="margin-left: -120px">Đã khóa</span>';
-
+      console.log(`Account ${item.tk_id} status:`, item.status);
       $("#account-list").append(`
         <tr>
           <td>${item.tk_id}</td>
           <td>${item.username}</td>
-          <td>${item.ten_quyen}</td>
+          <td>${item.quyen_id}</td>
           <td class="text-center">
             ${statusBadge}
           </td>

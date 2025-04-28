@@ -26,7 +26,7 @@ class AccountModel
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("SELECT *
                                 FROM tai_khoan
-                                JOIN quyen ON tai_khoan.quyen_id = quyen.quyen_id;");
+                                ");
 
         if (!$stmt) {
             error_log("Prepare failed: " . $conn->error);
@@ -133,34 +133,53 @@ class AccountModel
             return false;
         }
     }
+
     public function getAccount($username)
     {
-        $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM tai_khoan WHERE username = ? AND status = 1");
+    $conn = $this->db->getConnection();
+    $stmt = $conn->prepare("SELECT username, password, qcn.key 
+                            FROM tai_khoan tk
+                            JOIN quyen_chucnang qcn ON tk.quyen_id = qcn.quyen_id 
+                            WHERE username = ?");
 
-        if (!$stmt) {
-            error_log("Prepare failed: " . $conn->error);
-            return false;
-        }
+    if (!$stmt) {
+        error_log("Prepare failed: " . $conn->error);
+        return false;
+    }
 
-        $stmt->bind_param("s", $username);
+    $stmt->bind_param("s", $username);
 
-        if (!$stmt->execute()) {
-            error_log("Execute failed: " . $stmt->error);
-            $stmt->close();
-            return false;
-        }
-
-        $result = $stmt->get_result();
-        $data = null;
-
-        if ($result->num_rows > 0) {
-            $data = json_encode($result->fetch_assoc());
-        }
-
+    if (!$stmt->execute()) {
+        error_log("Execute failed: " . $stmt->error);
         $stmt->close();
-        $this->db->closeConnection();
-        return $data;
+        return false;
+    }
+
+    $result = $stmt->get_result();
+    $data = null;
+    $keys = [];
+
+    while ($row = $result->fetch_assoc()) {
+        if (!$data) {
+            // Lưu lại thông tin user lần đầu tiên
+            $data = [
+                'username' => $row['username'],
+                'password' => $row['password'],
+                'keys' => []
+            ];
+        }
+
+        // Gom key vào danh sách
+        $keys[] = $row['key'];
+    }
+
+    if ($data) {
+        $data['keys'] = $keys;
+    }
+
+    $stmt->close();
+    $this->db->closeConnection();
+    return $data;
     }
 
     public function getById($tk_id)

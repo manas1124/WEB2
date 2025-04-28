@@ -210,7 +210,6 @@ $(function () {
         );
       });
     }
-
     if (quyenList != null) {
       quyenList.forEach((item) => {
         const isSelected =

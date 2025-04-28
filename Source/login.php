@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./assets/css/output.css" rel="stylesheet">
     <title>Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div id="signInForm" class="w-full max-w-md bg-white p-8 rounded shadow">
         <h1 class="text-2xl font-bold mb-6 text-center">Sign In</h1>
-        <form>
+        <form id="loginForm">
             <div class="mb-4">
                 <label for="username" class="block text-gray-700">Tên đăng nhập</label>
                 <input type="text" id="username" name="username" class="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -62,6 +62,13 @@
             signUp.classList.toggle("hidden");
         }
     </script>
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/flyonui/flyonui.js"></script>
+
+    <!-- <script src="./views/javascript/indexAdmin.js"></script> -->
+    <script src="./views/javascript/indexUser.js"></script>
+    <script src="./views/javascript/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
