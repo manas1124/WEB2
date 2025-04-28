@@ -118,20 +118,31 @@ if (isset($_POST['func'])) {
             $response = $isUpdateSuccess;
             break;
         case "getAllKhaoSatFilter":
-            $filters = [
-                'ten_ks' => $_GET['ten_ks'] ?? null,
-                'ngay_bat_dau' => $_GET['ngay_bat_dau'] ?? null,
-                'ngay_ket_thuc' => $_GET['ngay_ket_thuc'] ?? null,
-                'su_dung' => isset($_GET['su_dung']) ? (int)$_GET['su_dung'] : null,
-                'nks_id' => isset($_GET['nks_id']) ? (int)$_GET['nks_id'] : null,
-                'ltl_id' => isset($_GET['ltl_id']) ? (int)$_GET['ltl_id'] : null,
-                'ctdt_id' => isset($_GET['ctdt_id']) ? (int)$_GET['ctdt_id'] : null,
-                'status' => isset($_GET['status']) ? (int)$_GET['status'] : 1 // mặc định = 1
-            ];
-            
-            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-            $ks_ids = isset($_GET['ks_ids']) ?? null;
-            $response = $khaoSatModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
+            if (isset($_POST['ks_ids'])) {
+                $filters = [
+                    'ten_ks' => isset($_POST['ten_ks']) ?  $_POST['ten_ks'] : null,
+                    'ngay_bat_dau' => isset($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
+                    'ngay_ket_thuc' => isset($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
+                    'su_dung' => isset($_POST['su_dung']) ? (int)$_POST['su_dung'] : null,
+                    'nks_id' => isset($_POST['nks_id']) ? (int)$_POST['nks_id'] : null,
+                    'ltl_id' => isset($_POST['ltl_id']) ? (int)$_POST['ltl_id'] : null,
+                    'ctdt_id' => isset($_POST['ctdt_id']) ? (int)$_POST['ctdt_id'] : null,
+                    'status' => isset($_POST['status']) ? (int)$_POST['status'] : 1 // mặc định = 1
+                ];
+
+                $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+                $ks_ids = isset($_POST['ks_ids']) ? json_decode($_POST['ks_ids'], true) : null;
+                $data = $ksModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
+                $response = [
+                    'status' => true,
+                    'data' => $data
+                ];
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => "khong nhan duoc ks_ids"
+                ];
+            }
             break;
         default:
             $response = [

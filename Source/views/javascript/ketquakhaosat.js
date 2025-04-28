@@ -1,85 +1,76 @@
+// const { data } = require("jquery");
+
 window.HSStaticMethods.autoInit(); // phải dùng câu lệnh này để dùng lại js component
 
-async function getAllKhaoSat() {
-  try {
-    const response = await $.ajax({
-      url: "./controller/KhaoSatController.php",
-      type: "POST",
-      data: { func: "getAllKhaoSat"},
-      dataType: "json",
-    });
-    // console.log("fect",response)
-    return response;
-  } catch (e) {
-    console.log(e)
-    console.log("loi fetchdata getAllKhaoSat")
-    return null;
-  }
-}
-async function deleteKs(id) {
-  console.log("de",id)
-  try {
-    const response = await $.ajax({
-      url: "./controller/KhaoSatController.php",
-      type: "POST",
-      data: { func: "deleteKs", id: id},
-      dataType: "json",
-    });
-    if (response) {
-      alert ("xóa khảo sát thành công")
-      $("#khao-sat-page").trigger("click");
-    } else {
-      alert ("xóa khảo sát thất bại")
+async function getAllKhaoSat(page = 1, ks_ids = null, ten_ks = null,
+    ngay_bat_dau = null, ngay_ket_thuc = null,
+    nks_id = null, ltl_id = null, ctdt_id = null) {
+    try {
+        const response = await $.ajax({
+            url: "./controller/KhaoSatController.php",
+            type: "POST",
+            data: {
+                func: "getAllKhaoSatFilter",
+                page: page,
+                ks_ids: ks_ids,
+                ten_ks: ten_ks,
+                ngay_bat_dau: ngay_bat_dau,
+                ngay_ket_thuc: ngay_ket_thuc,
+                nks_id: nks_id,
+                ltl_id: ltl_id,
+                ctdt_id: ctdt_id
+
+            },
+            dataType: "json",
+        });
+        // console.log("fect",response)
+        return response;
+    } catch (e) {
+        console.log(e.responseText)
+        console.log("loi fetchdata getAllKhaoSat")  
+        return null;
     }
-    return response;
-  } catch (error) {
-    console.log("loi xoa khao sat ")
-    return null;
-  }
-}
-async function getKhaoSatById() {
-  try {
-    const response = await $.ajax({
-      url: "./controller/KhaoSatController.php",
-      type: "POST",
-      data: JSON.stringify({ func: "getKhaoSatById", data: { ks_id: 1 } }),
-    });
-    // response is json type
-    return { data: response , error: null};  // Directly return the JSON response
-  } catch (error) {
-    console.log("loi fetchdata getKhaoSatById");
-    return null;
-  }
 }
 
-$(function () {
+async function getKsIds() {
+    try {
+        const response = await $.ajax({
+            url: "./controller/ketQuaKhaoSatController.php",
+            type: "GET",
+            datatype: "json",
+            data: {
+                func: "getIdKhaoSat"
+            }
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-  $(".main-content").on("click",".action-item", function (e) {
-      e.preventDefault();
-      let action = $(this).data("act");
-      console.log(action)
-      // $(".main-content").load(`day la trang ${action}`)
-  });
+async function loadDsKhaoSat() {
+    const ks_ids = await getKsIds();
+    const ksList = await getAllKhaoSat(1, ks_ids);
 
+    console.log(ksList);
+    console.log(ks_ids);
 
-  (async () => {
-    let ksList  = await getAllKhaoSat();
     // ksList = JSON.parse(ksList)
-    if (ksList != null) {
-      // console.log(ksList)
-      
-      ksList.map((item) => {
-        $("#ks-list").append(`
+    if (ksList.status) {
+        // console.log(ksList)
+        $("#ks-list").empty();
+        console.log("ok");
+        ksList.data.data.map((item) => {
+            $("#ks-list").append(`
           <tr>
               <td>${item.ten_ks}</td>
               <td>${item.ngay_bat_dau}</td>
               <td>${item.ngay_ket_thuc}</td>
               <td class="text-center">
-              ${
-                item.su_dung == 1
-                  ? '<span class="badge badge-soft badge-success ">Đang thực hiện</span>'
-                  : '<span class="badge badge-soft badge-error ">Kết thúc</span>'
-              }
+              ${item.su_dung == 1
+                    ? '<span class="badge badge-soft badge-success ">Đang thực hiện</span>'
+                    : '<span class="badge badge-soft badge-error ">Kết thúc</span>'
+                }
               </td>
               <td>
                 <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-sua" data-id="${item.ks_id}" aria-label="sua khao sat"><span class="icon-[tabler--pencil] size-5"></span></button>
@@ -88,22 +79,20 @@ $(function () {
           </tr>
   
         `);
-      });
-      
+        });
+
     }
-    
-    // let nhomKsList = await getAllNhomKs();
-    // if (nhomKsList != null) {
-    //   console.log(nhomKsList)
-    //   nhomKsList.map( (nhom) =>{
-    //     $("#select-nhom-ks").append(`
-    //       <option value="aries"></option>
-    //       `)
-    //   } )
-      
-    // }
+}
 
+$(document).ready(function () {
+    loadDsKhaoSat();
 
-  })();
+    $(".main-content").on("click", ".action-item", function (e) {
+        e.preventDefault();
+        let action = $(this).data("act");
+        console.log(action)
+        // $(".main-content").load(`day la trang ${action}`)
+    });
+
 });
 

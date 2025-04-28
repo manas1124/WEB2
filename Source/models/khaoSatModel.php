@@ -160,6 +160,10 @@ class KhaoSatModel
     {
         $limit = 10;
         $conn = $this->db->getConnection();
+
+        if (!is_array($ks_ids)) {
+            $ks_ids = [];
+        }
         $placeholders = implode(',', array_fill(0, count($ks_ids), '?'));
         $condition = "WHERE khao_sat.ks_id IN ($placeholders)";
         $params = $ks_ids;
@@ -194,31 +198,31 @@ class KhaoSatModel
         }
 
         if (isset($filters['nks_id'])) {
-            $condition .= " AND nks_id = ?";
+            $condition .= " AND khao_sat.nks_id = ?";
             $params[] = $filters['nks_id'];
             $types .= "i";
         }
 
         if (isset($filters['ltl_id'])) {
-            $condition .= " AND ltl_id = ?";
+            $condition .= " AND khao_sat.ltl_id = ?";
             $params[] = $filters['ltl_id'];
             $types .= "i";
         }
 
         if (isset($filters['ctdt_id'])) {
-            $condition .= " AND ctdt_id = ?";
+            $condition .= " AND khao_sat.ctdt_id = ?";
             $params[] = $filters['ctdt_id'];
             $types .= "i";
         }
 
         if (isset($filters['status'])) {
-            $condition .= " AND status = ?";
+            $condition .= " AND khao_sat.status = ?";
             $params[] = $filters['status'];
             $types .= "i";
         }
 
         //tổng số trang
-        $countSql = "SELECT COUNT(*) as total FROM khao_sat" . $condition;
+        $countSql = "SELECT COUNT(*) as total FROM khao_sat " . $condition;
         $countStmt = $conn->prepare($countSql);
         if (!empty($params)) {
             $countStmt->bind_param($types, ...$params);
@@ -230,8 +234,7 @@ class KhaoSatModel
         $countStmt->close();
 
         // chính
-        $sql = "SELECT 
-                    khao_sat.ks_id, khao_sat.ten_ks, khao_sat.ngay_bat_dau, khao_sat.ngay_ket_thuc, 
+        $sql = "SELECT khao_sat.ks_id, khao_sat.ten_ks, khao_sat.ngay_bat_dau, khao_sat.ngay_ket_thuc, 
                     khao_sat.su_dung, khao_sat.status,
                     loai_tra_loi.ltl_id, loai_tra_loi.thang_diem,
                     nhom_khao_sat.nks_id, nhom_khao_sat.ten_nks,
@@ -243,7 +246,7 @@ class KhaoSatModel
                 JOIN nhom_khao_sat ON khao_sat.nks_id = nhom_khao_sat.nks_id
                 JOIN ctdt_daura ON khao_sat.ctdt_id = ctdt_daura.ctdt_id
                 JOIN chu_ki ON ctdt_daura.ck_id = chu_ki.ck_id 
-                JOIN nganh ON ctdt_daura.nganh_id = nganh.nganh_id" . $condition . " ORDER BY ks_id DESC LIMIT ? OFFSET ?";
+                JOIN nganh ON ctdt_daura.nganh_id = nganh.nganh_id " . $condition . " ORDER BY ks_id DESC LIMIT ? OFFSET ?";
         $offset = ($page - 1) * $limit;
         $params[] = $limit;
         $params[] = $offset;

@@ -22,10 +22,6 @@
                     <option value="-1">Chọn status</option>
                 </select>
             </div>
-        </div>
-    </div>
-    <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-4">
             <div>
                 <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
@@ -61,7 +57,7 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody id="kqks-list">
+            <tbody id="ks-list">
                 <tr>
                     <th>1</th>
                     <th>khảo sát mùa thu</th>
