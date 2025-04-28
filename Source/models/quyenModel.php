@@ -14,7 +14,10 @@ class QuyenModel
     public function getAll()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM quyen");
+        $stmt = $conn->prepare("SELECT *
+                                FROM quyen
+                                ");
+
         if (!$stmt) {
             error_log("Prepare failed: " . $conn->error);
             return false;
@@ -24,9 +27,7 @@ class QuyenModel
             error_log("Execute failed: " . $stmt->error);
             return false;
         }
-        $sql = "SELECT * FROM quyen ";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
+
         $result = $stmt->get_result();
         $data = [];
 
