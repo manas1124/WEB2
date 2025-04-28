@@ -165,59 +165,45 @@ class KhaoSatModel
             $ks_ids = [];
         }
         $placeholders = implode(',', array_fill(0, count($ks_ids), '?'));
-        $condition = "WHERE khao_sat.ks_id IN ($placeholders)";
+        $condition = "WHERE khao_sat.su_dung = 0 AND khao_sat.status = 1 AND khao_sat.ks_id IN ($placeholders)";
         $params = $ks_ids;
         $types = str_repeat('i', count($ks_ids));
 
 
         // Xử lý điều kiện lọc
-        
-
-        if (!empty($filters['ten_ks'])) {
+        if ($filters['ten_ks'] != null && $filters['ten_ks'] != '') {
             $condition .= " AND ten_ks LIKE ?";
             $params[] = '%' . $filters['ten_ks'] . '%';
             $types .= "s";
         }
-
-        if (!empty($filters['ngay_bat_dau'])) {
+        
+        if ($filters['ngay_bat_dau'] != null && $filters['ngay_bat_dau'] != '') {
             $condition .= " AND ngay_bat_dau >= ?";
             $params[] = $filters['ngay_bat_dau'];
             $types .= "s";
         }
-
-        if (!empty($filters['ngay_ket_thuc'])) {
+        
+        if ($filters['ngay_ket_thuc'] != null && $filters['ngay_ket_thuc'] != '') {
             $condition .= " AND ngay_ket_thuc <= ?";
             $params[] = $filters['ngay_ket_thuc'];
             $types .= "s";
         }
-
-        if (isset($filters['su_dung'])) {
-            $condition .= " AND su_dung = ?";
-            $params[] = $filters['su_dung'];
-            $types .= "i";
-        }
-
-        if (isset($filters['nks_id'])) {
+        
+        if ($filters['nks_id'] != null) {
             $condition .= " AND khao_sat.nks_id = ?";
             $params[] = $filters['nks_id'];
             $types .= "i";
         }
-
-        if (isset($filters['ltl_id'])) {
+        
+        if ($filters['ltl_id'] != null) {
             $condition .= " AND khao_sat.ltl_id = ?";
             $params[] = $filters['ltl_id'];
             $types .= "i";
         }
-
-        if (isset($filters['ctdt_id'])) {
+        
+        if ($filters['ctdt_id'] != null) {
             $condition .= " AND khao_sat.ctdt_id = ?";
             $params[] = $filters['ctdt_id'];
-            $types .= "i";
-        }
-
-        if (isset($filters['status'])) {
-            $condition .= " AND khao_sat.status = ?";
-            $params[] = $filters['status'];
             $types .= "i";
         }
 

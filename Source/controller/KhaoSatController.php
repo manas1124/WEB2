@@ -119,15 +119,13 @@ if (isset($_POST['func'])) {
             break;
         case "getAllKhaoSatFilter":
             if (isset($_POST['ks_ids'])) {
-                $filters = [
-                    'ten_ks' => isset($_POST['ten_ks']) ?  $_POST['ten_ks'] : null,
-                    'ngay_bat_dau' => isset($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
-                    'ngay_ket_thuc' => isset($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
-                    'su_dung' => isset($_POST['su_dung']) ? (int)$_POST['su_dung'] : null,
-                    'nks_id' => isset($_POST['nks_id']) ? (int)$_POST['nks_id'] : null,
-                    'ltl_id' => isset($_POST['ltl_id']) ? (int)$_POST['ltl_id'] : null,
-                    'ctdt_id' => isset($_POST['ctdt_id']) ? (int)$_POST['ctdt_id'] : null,
-                    'status' => isset($_POST['status']) ? (int)$_POST['status'] : 1 // mặc định = 1
+                $filters = [ 
+                    'ten_ks' => !empty($_POST['ten_ks']) ? $_POST['ten_ks'] : null,
+                    'ngay_bat_dau' => !empty($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
+                    'ngay_ket_thuc' => !empty($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
+                    'nks_id' => isset($_POST['nks_id']) && $_POST['nks_id'] !== '' ? (int)$_POST['nks_id'] : null,
+                    'ltl_id' => isset($_POST['ltl_id']) && $_POST['ltl_id'] !== '' ? (int)$_POST['ltl_id'] : null,
+                    'ctdt_id' => isset($_POST['ctdt_id']) && $_POST['ctdt_id'] !== '' ? (int)$_POST['ctdt_id'] : null,
                 ];
 
                 $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;

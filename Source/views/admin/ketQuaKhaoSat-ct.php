@@ -7,7 +7,7 @@
         <table class="table">
             <thead id="cauhoi-list">
                 <tr>
-                    
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="traloi-list">
@@ -18,4 +18,4 @@
         </table>
     </div>
 </div>
-<script src="./views/javascript/ketquakhaosat.js"></script>
+<script src="./views/javascript/ketquakhaosat-xemkq.js"></script>

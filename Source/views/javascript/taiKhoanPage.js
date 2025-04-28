@@ -18,7 +18,7 @@ async function getAllTaiKhoan() {
 async function getAllDoiTuong() {
   try {
     const response = await $.ajax({
-      url: "./controller/doiTuongController.php",
+      url: "./controller/loaiDoiTuongController.php",
       type: "GET",
       dataType: "json",
       data: {

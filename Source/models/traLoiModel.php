@@ -74,4 +74,37 @@ class TraLoiModel
 
         return $data;
     }
+
+    public function getByKqksIdAndChIds($kq_ks_id, $ch_ids)
+    {
+        $conn = $this->db->getConnection();
+
+        if (empty($ch_ids)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ch_ids), '?'));
+
+        $sql = "SELECT * FROM tra_loi WHERE kq_ks_id = ? AND ch_id IN ($placeholders)";
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt === false) {
+            throw new Exception("Prepare failed: " . $conn->error);
+        }
+
+        $types = str_repeat('i', count($ch_ids) + 1); // 'i' cho mỗi tham số kiểu int
+        $params = array_merge([$kq_ks_id], $ch_ids);
+
+        $stmt->bind_param($types, $params);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
 }

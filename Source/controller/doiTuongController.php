@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/doiTuongModel.php';
+require_once __DIR__ . '/../models/loaiDoiTuongModel.php';
 
 if (isset($_GET['func'])) {
     $func = $_GET['func'];

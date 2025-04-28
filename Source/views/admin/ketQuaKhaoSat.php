@@ -47,30 +47,17 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Mã khỏa sát</th>
                     <th>Tên khảo sát</th>
                     <th>Ngày bắt đầu</th>
                     <th>Ngay kết thúc</th>
                     <th>Nhóm khảo sát</th>
-                    <th>CTDT</th>
-                    <th>Trạng thái</th>
+                    <th>Ngành</th>
+                    <th>Chu kỳ</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody id="ks-list">
-                <tr>
-                    <th>1</th>
-                    <th>khảo sát mùa thu</th>
-                    <th>1-1-1</th>
-                    <th>1=3-1</th>
-                    <th>Nhóm ksss</th>
-                    <th>NNA</th>
-                    <th>HD</th>
-                    <td>
-                        <button class="btn btn-primary" data-act="kqks-chitiet">Xem chi tiết</button>
-                    </td>
-                </tr>
-
+                
             </tbody>
         </table>
     </div>

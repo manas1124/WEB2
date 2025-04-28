@@ -78,6 +78,12 @@ if ($act) {
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;
+        case "xem-kqks":
+            ob_start();
+            $filePath = "../views/admin/ketQuaKhaoSat-ct.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
         case "ctdt-them":
             ob_start();
             $filePath = "../views/admin/ctdtPage-them.php";

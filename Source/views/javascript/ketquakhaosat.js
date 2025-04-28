@@ -52,29 +52,24 @@ async function loadDsKhaoSat() {
     const ks_ids = await getKsIds();
     const ksList = await getAllKhaoSat(1, ks_ids);
 
-    console.log(ksList);
+    console.log(ksList.data);
     console.log(ks_ids);
 
     // ksList = JSON.parse(ksList)
     if (ksList.status) {
         // console.log(ksList)
         $("#ks-list").empty();
-        console.log("ok");
         ksList.data.data.map((item) => {
             $("#ks-list").append(`
           <tr>
               <td>${item.ten_ks}</td>
               <td>${item.ngay_bat_dau}</td>
               <td>${item.ngay_ket_thuc}</td>
-              <td class="text-center">
-              ${item.su_dung == 1
-                    ? '<span class="badge badge-soft badge-success ">Đang thực hiện</span>'
-                    : '<span class="badge badge-soft badge-error ">Kết thúc</span>'
-                }
-              </td>
+              <td>${item.ten_nks}</td>
+              <td>${item.ten_nganh}</td>
+              <td>${item.ten_ck}</td>
               <td>
-                <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-sua" data-id="${item.ks_id}" aria-label="sua khao sat"><span class="icon-[tabler--pencil] size-5"></span></button>
-                <button onclick="deleteKs(${item.ks_id})" class="btn btn-circle btn-text btn-sm" aria-label="xoa khao sat"><span class="icon-[tabler--trash] size-5"></span></button>
+                <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua"><span class="icon-[tabler--eye] size-5"></span></button>
               </td>
           </tr>
   
@@ -90,8 +85,7 @@ $(document).ready(function () {
     $(".main-content").on("click", ".action-item", function (e) {
         e.preventDefault();
         let action = $(this).data("act");
-        console.log(action)
-        // $(".main-content").load(`day la trang ${action}`)
+        console.log(action) 
     });
 
 });
