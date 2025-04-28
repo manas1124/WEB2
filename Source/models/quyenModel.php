@@ -79,10 +79,19 @@ class QuyenModel
         ];
     }
 
-    public function getById($quyen_id)
+    public function getQuyenById($quyen_id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM quyen WHERE quyen_id = ?");
+        $query = "
+                SELECT 
+                quyen.quyen_id,
+                quyen.ten_quyen,
+                quyen.status
+                FROM quyen
+                WHERE quyen.quyen_id = ?
+    ";
+
+        $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $quyen_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -93,7 +102,37 @@ class QuyenModel
             return false;
         }
     }
+    public function searchQuyen($keyword)
+    {
+        $conn = $this->db->getConnection();
+        $query = "SELECT * FROM quyen WHERE ten_quyen LIKE ? AND status = 1";
 
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            error_log("Prepare failed: " . $conn->error);
+            return [];
+        }
+
+        $likeKeyword = '%' . $keyword . '%';
+        $stmt->bind_param("s", $likeKeyword);
+
+        if (!$stmt->execute()) {
+            error_log("Execute failed: " . $stmt->error);
+            $stmt->close();
+            return [];
+        }
+
+        $result = $stmt->get_result();
+        $data = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $stmt->close();
+        $this->db->closeConnection();
+        return $data;
+    }
     public function create($ten_quyen, $status = 1)
     {
         $conn = $this->db->getConnection();

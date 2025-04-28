@@ -35,7 +35,7 @@ async function getAllQuyen() {
   try {
     const response = await $.ajax({
       url: "./controller/quyenController.php",
-      type: "GET",
+      type: "POST",
       dataType: "json",
       data: {
         func: "getAll",
@@ -76,29 +76,6 @@ function validateAccountData(data) {
   }
   return true;
 }
-// async function updateTaiKhoan(accountData) {
-//   if (!validateAccountData(accountData)) {
-//     console.error("Dữ liệu gửi lên không hợp lệ");
-//     return false;
-//   }
-//   try {
-//     const response = await $.ajax({
-//       url: "./controller/accountController.php",
-//       type: "POST",
-//       data: { func: "updateAccount", data: JSON.stringify(accountData) },
-//       dataType: "json",
-//     });
-//     if (response.error) {
-//       console.log("fect", response.error);
-//     }
-//     console.log("update", response);
-//     return response;
-//   } catch (error) {
-//     console.error("AJAX Error:", error);
-//     console.log("lỗi sửa tài khoản");
-//     return false;
-//   }
-// }
 async function updateTaiKhoan(accountData) {
   if (!validateAccountData(accountData)) {
     Swal.fire(
