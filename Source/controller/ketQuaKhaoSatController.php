@@ -1,10 +1,16 @@
 <?php
 require_once __DIR__ . '/../models/ketQuaKhaoSatModel.php';
+require_once __DIR__ . '/../models/mucKhaoSatModel.php';
+require_once __DIR__ . '/../models/cauHoiModel.php';
+require_once __DIR__ . '/../models/traLoiModel.php';
 // header('Content-Type: application/json'); 
 
 if (isset($_GET['func'])) {
     $func = $_GET['func'];
     $KqKhaoSatModel = new KqKhaoSatModel();
+    $mucKhaoSatModel = new MucKhaoSatModel();
+    $cauHoiModel = new CauHoiModel();
+    $traloiModel = new TraLoiModel();
     $response = null;
 
     switch ($func) {
@@ -31,9 +37,20 @@ if (isset($_GET['func'])) {
                 $response = $KqKhaoSatModel->getById((int)$id);
             }
             break;
-
+        case "getMucKhaoSat":
+            $ks_id = isset($_GET['ks_id']) ? $_GET['ks_id'] : null;
+            if($ks_id != null){
+                $response = $mucKhaoSatModel->getMucKhaoSatByKsId($ks_id);
+            }
+            break;
+        case "getCauHoi":
+            $mks_id = isset($_GET['mks_ids']) ? $_GET['mks_ids'] : null;
+            $response = $cauHoiModel->getByMucCauHois($mks_id);
+            break;
+        case "getTraLoi":
+            
+            break;
         case "create":
-            // Nếu nhận dữ liệu từ GET
             $nguoi_lamks_id = $_GET['nguoi_lamks_id'] ?? null;
             $ks_id = $_GET['ks_id'] ?? null;
 
@@ -44,7 +61,9 @@ if (isset($_GET['func'])) {
                 $response = $success ? ['success' => true] : ['error' => 'Tạo kết quả khảo sát thất bại'];
             }
             break;
-
+        case "getIdKhaoSat":
+            $response = $KqKhaoSatModel->getIdKhaoSat();
+            break;
         default:
             $response = [
                 'error' => 'Page not found',

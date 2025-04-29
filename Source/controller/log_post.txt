@@ -1,0 +1,96 @@
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
+Array
+(
+    [func] => getAllTaiKhoan
+)
+Array
+(
+    [func] => getAll
+)
