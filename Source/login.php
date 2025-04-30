@@ -57,36 +57,65 @@
                     </div>
                     <div class="flex gap-4">
                         <div class="input-floating w-1/2">
-                            <input name="phone" type="password" placeholder="Số điện thoại" class="input input-lg" id="txtPhone" />
+                            <input name="phone" type="tel" placeholder="Số điện thoại" class="input input-lg" id="txtPhone" />
                             <label class="input-floating-label" for="floatingLabelLarge">Số điện thoại</label>
                         </div>
                         <div class="input-floating w-1/2">
-                            <input name="email" type="password" placeholder="Email" class="input input-lg" id="txtEmail" />
+                            <input name="email" type="email" placeholder="Email" class="input input-lg" id="txtEmail" />
                             <label class="input-floating-label" for="floatingLabelLarge">Email</label>
                         </div>
                     </div>
-                    <select class="border p-2 rounded h-12">
-                        <option value="" disabled selected hidden>-- Chương trình đào tạo --</option>
-                        <option value="male">Công nghệ thông tin 2022-2025</option>
-                        <option value="female">Nữ</option>
-                        <option value="other">Khác</option>
-                    </select>
                     <div class="flex gap-4">
-                        <select class="border p-2 rounded w-1/2">
-                            <option value="" disabled selected hidden>-- Nhóm khảo sát --</option>
-                            <option value="male">Công nghệ thông tin 2022-2025</option>
-                            <option value="female">Nữ</option>
-                            <option value="other">Khác</option>
-                        </select>
-                        <select class="border p-2 rounded w-1/2">
-                            <option value="" disabled selected hidden>-- Đối tượng --</option>
-                            <option value="male">Công nghệ thông tin 2022-2025</option>
-                            <option value="female">Nữ</option>
-                            <option value="other">Khác</option>
-                        </select>
+                        <input name="address" type="text" placeholder="Địa chỉ" class="input input-lg" id="txtAddress" />
+                        <label class="input-floating-label" for="floatingLabelLarge">Địa chỉ</label>
                     </div>
+                    <select
+                        id="cbxChuongTrinhDaoTao"
+                        data-select='{
+                            "placeholder": "Chọn chương trình đào tạo...",
+                            "toggleTag": "<button type=\"button\" aria-expanded=\"false\" class=\"h-[46px] px-4 py-0\"></button>",
+                            "toggleClasses": "advance-select-toggle select-disabled:pointer-events-none select-disabled:opacity-40",
+                            "dropdownClasses": "advance-select-menu",
+                            "optionClasses": "advance-select-option selected:select-active",
+                            "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"icon-[tabler--check] shrink-0 size-4 text-primary hidden selected:block \"></span></div>",
+                            "extraMarkup": "<span class=\"icon-[tabler--caret-up-down] shrink-0 size-4 text-base-content absolute top-1/2 end-3 -translate-y-1/2 \"></span>"
+                            }'
+                        class="hidden">
+                    
+                        <option value="">Choose</option>
+                        <?php
+                            require_once __DIR__ . '../models/ctdtModel.php';
+                            $ctdtModel = new CtdtDauraModel();
+                            $ctdtList = $ctdtModel->getAll();
+                            foreach($ctdtList as $ctdt) {
+                                echo '<option value="' . $ctdt['ctdt_id'] . '">' . $ctdt['ten_nganh'] . ' - ' . $ctdt['ten_ck']. '</option>';
+                            }
+                        ?>
+                    </select>
+                    <select
+                        id="cbxDoiTuong"
+                        data-select='{
+                            "placeholder": "Chọn đối tượng...",
+                            "toggleTag": "<button type=\"button\" aria-expanded=\"false\" class=\"h-[46px] px-4 py-0\"></button>",
+                            "toggleClasses": "advance-select-toggle select-disabled:pointer-events-none select-disabled:opacity-40",
+                            "dropdownClasses": "advance-select-menu",
+                            "optionClasses": "advance-select-option selected:select-active",
+                            "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"icon-[tabler--check] shrink-0 size-4 text-primary hidden selected:block \"></span></div>",
+                            "extraMarkup": "<span class=\"icon-[tabler--caret-up-down] shrink-0 size-4 text-base-content absolute top-1/2 end-3 -translate-y-1/2 \"></span>"
+                            }'
+                        class="hidden">
+                        <option value="">Choose</option>
+                        <?php
+                            require_once __DIR__ . '../models/LoaiDoiTuongModel.php';
+                            $doiTuongModel = new LoaiDoiTuongModel();
+                            $doiTuongList = $doiTuongModel->getAll();
+                            foreach($doiTuongList as $doiTuong) {
+                                echo '<option value="' . $doiTuong['dt_id'] . '">' . $doiTuong['ten_dt'] . '</option>';
+                            }
+                        ?>
+                    </select>
                 </div>
-                <button type="button" id="signUpButton" class="w-full mt-6 bg-[#304CA2] text-white py-2 rounded hover:bg-[#4B66C2] cursor-pointer">Đăng kí</button>
+                <button type="submit" id="signUpButton" class="w-full mt-6 bg-[#304CA2] text-white py-2 rounded hover:bg-[#4B66C2] cursor-pointer">Đăng kí</button>
             </form>
             <p class="mt-4 text-center text-sm text-gray-600">
                 Quay về
