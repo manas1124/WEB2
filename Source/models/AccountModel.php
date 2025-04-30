@@ -7,8 +7,25 @@ class AccountModel
     {
         $this->db = new MyConnection();
     }
+
+    public function usernameIsExist($username)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM tai_khoan WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            return true; 
+        } else {
+            return false; 
+        }
+    }
+
+
     // Database operations
-    public function create($username, $password, $dt_id, $quyen_id, $status)
+    public function create($username, $password, $dt_id, $quyen_id = 3, $status = 1)
     {
         $conn = $this->db->getConnection();
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

@@ -92,6 +92,7 @@ class LoaiDoiTuongModel
         }
     }
 
+
     public function create($ten_dt, $status = 1)
     {
         $conn = $this->db->getConnection();
