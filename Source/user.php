@@ -1,51 +1,81 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./assets/css/output.css" rel="stylesheet">
-    <style>
-        button[aria-current="page"] {
-            background-color: var(--color-primary);
-            color: white;
-        }
-
-        button[aria-current="page"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="assets/css/output.css" />
+    <link rel="stylesheet" href="assets/css/user.css" />
 </head>
 
 <body>
-    <nav class="navbar bg-base-100 max-sm:rounded-box max-sm:shadow-sm sm:border-b border-base-content/25 sm:z-1 relative">
-        <div class="flex flex-1 items-center">
-            <a class="link text-base-content link-neutral text-xl font-semibold no-underline" href="#">
-                FlyonUI
-            </a>
-        </div>
-        <div class="navbar-end flex items-center gap-4">
-            <div class="dropdown relative inline-flex [--placement:bottom-end]">
-                <button id="dropdown-bottom-start" type="button" class="dropdown-toggle btn btn-primary"
-                    aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-                    Tài khoản
-                    <span class="icon-[tabler--chevron-down] dropdown-open:rotate-180 size-4"></span>
-                </button>
-                <ul class="dropdown-menu dropdown-open:opacity-100 hidden min-w-60" role="menu"
-                    aria-orientation="vertical" aria-labelledby="dropdown-bottom-start">
-                    <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
-                    <li><a class="dropdown-item" href="#">Hỗ trợ</a></li>
-                    <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+    <nav class="navbar rounded-box shadow-base-300/20 shadow-sm">
+        <div class="w-full md:flex md:items-center md:gap-2">
+            <div class="flex items-center justify-around">
+                <div class="flex flex-row">
+                    <a class="link text-base-content text-xl font-bold" href="#"><img class="w-30"
+                            src="./assets/image/sgu.png" alt="logo" /></a>
+                    <h3 class="ml-3 text-nowrap font-bold text-lg flex items-center justify-center">
+                        Trường đại học Sài Gòn
+                    </h3>
+                </div>
+            </div>
+            <div id="default-navbar-collapse"
+                class="md:navbar-end collapse hidden grow basis-full overflow-hidden transition-[height] duration-300 max-md:w-full">
+                <ul class="menu md:menu-horizontal gap-2 p-0 text-base max-md:mt-2">
+                    <li><a href="#">Trang chủ</a></li>
+                    <li><a href="#">Thực hiện khảo sát</a></li>
+                    <li><a href="#">Xem kết quả khảo sát</a></li>
+                    <li class="btn btn-prime"><a href="#">Đăng nhập</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <?php include("views/include/navUser.php") ?>
-
-    <div id="main-content"
-        class="ml-[16rem] max-sm:ml-4 lg:border-base-content/10 xl:border-e xl:pe-8 relative px-0 py-4 sm:py-8 lg:border-s lg:ps-8 flex flex-wrap gap-px-4 sm:gap-4">
-
+    <div id="main-content" class="h-full w-full">
+        <main class="hero">
+            <div>
+                <h1 class="font-bold text-[3rem] uppercase">Khảo sát sinh viên</h1>
+                <hr />
+                <h1 class="text-[1.5rem] uppercase">Trường đại học Sài Gòn</h1>
+            </div>
+        </main>
+        <footer class=" h-[100px] h-fit px-[4rem] py-[1rem] "
+            style="background-image: linear-gradient(90deg,rgba(184, 234, 255, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(184, 234, 255, 1) 100%);">
+            <div class="flex flex-col item">
+                <div class="left">
+                    <div class="inline-flex ">
+                        <img class="w-[6rem]" src="./assets/image/sgu.png" alt="logo" />
+                        <h3 class="ml-3 text-nowrap  font-bold text-lg flex items-center justify-center">
+                            Trường đại học Sài Gòn
+                        </h3>
+                    </div>
+                    <ul class="flex flex-col gap-2">
+                        <li class="inline-flex gap-2">
+                            <span class="icon-[ic--baseline-place]" style="width: 24px; height: 24px;"></span>
+                            <h1>Phòng D301, Số 273 An Dương Vương, Phường 3, Quận 5, TP. HCM</h1>
+                        </li>
+                        <li class="inline-flex gap-2">
+                            <span class="icon-[ic--baseline-phone]" style="width: 24px; height: 24px;"></span>
+                            <h1>Hotline: (028) 38382 664</h1>
+                        </li>
+                        <li class="inline-flex gap-2">
+                            <span class="icon-[material-symbols-light--mail]" style="width: 24px; height: 24px;"></span>
+                            <h1>Email: vpkcntt@sgu.edu.vn</h1>
+                        </li>
+                        <li class="inline-flex gap-2">
+                            <span class="icon-[ic--baseline-phone]" style="width: 24px; height: 24px;"></span>
+                            <h1>Phone: (028) 38382 664 - 0366 686 557</h1>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right"></div>
+            </div>
+        </footer>
     </div>
+
+
     <script src="../node_modules/flyonui/flyonui.js"></script>
     <script src="./views/javascript/indexUser.js"></script>
     <script src="./views/javascript/survey.js"></script>

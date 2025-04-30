@@ -14,18 +14,28 @@ class QuyenModel
     public function getAll()
     {
         $conn = $this->db->getConnection();
-        $sql = "SELECT * FROM quyen WHERE status = 1";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
+        $stmt = $conn->prepare("SELECT *
+                                FROM quyen
+                                ");
+
+        if (!$stmt) {
+            error_log("Prepare failed: " . $conn->error);
+            return false;
+        }
+
+        if (!$stmt->execute()) {
+            error_log("Execute failed: " . $stmt->error);
+            return false;
+        }
+
         $result = $stmt->get_result();
         $data = [];
 
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
         }
 
+        $stmt->close();
         return $data;
     }
 
@@ -79,10 +89,19 @@ class QuyenModel
         ];
     }
 
-    public function getById($quyen_id)
+    public function getQuyenById($quyen_id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM quyen WHERE quyen_id = ?");
+        $query = "
+                SELECT 
+                quyen.quyen_id,
+                quyen.ten_quyen,
+                quyen.status
+                FROM quyen
+                WHERE quyen.quyen_id = ?
+    ";
+
+        $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $quyen_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -93,7 +112,37 @@ class QuyenModel
             return false;
         }
     }
+    public function searchQuyen($keyword)
+    {
+        $conn = $this->db->getConnection();
+        $query = "SELECT * FROM quyen WHERE ten_quyen LIKE ? AND status = 1";
 
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            error_log("Prepare failed: " . $conn->error);
+            return [];
+        }
+
+        $likeKeyword = '%' . $keyword . '%';
+        $stmt->bind_param("s", $likeKeyword);
+
+        if (!$stmt->execute()) {
+            error_log("Execute failed: " . $stmt->error);
+            $stmt->close();
+            return [];
+        }
+
+        $result = $stmt->get_result();
+        $data = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $stmt->close();
+        $this->db->closeConnection();
+        return $data;
+    }
     public function create($ten_quyen, $status = 1)
     {
         $conn = $this->db->getConnection();

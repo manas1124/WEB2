@@ -4,7 +4,7 @@ async function getAllQuyen() {
   try {
     const response = await $.ajax({
       url: "./controller/quyenController.php",
-      type: "GET",
+      type: "POST",
       dataType: "json",
       data: {
         func: "getAll",
@@ -59,7 +59,7 @@ function updatepage(params) {
   });
 }
 function create() {
-  const ten_quyen = $("#name-quyen").val();
+  const ten_quyen = $("#ten_quyen").val();
   const status = $("#select-status").val();
   $.ajax({
     url: "./controller/quyenController.php",
@@ -118,7 +118,7 @@ $(document).ready(function () {
   });
 
   $("#btn-create").on("click", function () {
-    if ($("#namequyen").val() === "") {
+    if ($("#ten_quyen").val() === "") {
       Swal.fire({
         icon: "error",
         title: "Lỗi",

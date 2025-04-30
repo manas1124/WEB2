@@ -107,4 +107,17 @@ class KqKhaoSatModel
         $result = $stmt->get_result()->fetch_assoc();
         return $result['total'] > 0;
     }
+
+    public function getIdKhaoSat(){
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT DISTINCT ks_id FROM kq_khao_sat");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $ks_ids = [];
+        while ($row = $result->fetch_assoc()) {
+            $ks_ids[] = $row['ks_id'];
+        }
+    
+        return $ks_ids;
+    }
 }

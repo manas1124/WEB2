@@ -1,11 +1,11 @@
 <?php
-header('Content-Type: application/json');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+header('Content-Type: application/json');
 require_once __DIR__ . '/../models/quyenModel.php';
 
-if (isset($_GET['func'])) {
-    $func = $_GET['func'];
+if (isset($_POST['func'])) {
+    $func = $_POST['func'];
     $quyenModel = new QuyenModel();
     $response = null;
 
@@ -19,14 +19,6 @@ if (isset($_GET['func'])) {
             $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
             $response = $quyenModel->getAllpaging($page, $status);
             break;
-
-        case "getById":
-            if (isset($_GET["quyen_id"]) && $_GET["quyen_id"] !== '') {
-                $quyen_id = $_GET["quyen_id"];
-                $response = $quyenModel->getById($quyen_id);
-            }
-            break;
-
         case "create":
             if (isset($_POST["ten_quyen"]) && $_POST["ten_quyen"] !== '') {
                 $ten_quyen = $_POST["ten_quyen"];
@@ -44,7 +36,7 @@ if (isset($_GET['func'])) {
             echo json_encode($response);
             exit;
 
-        case "update":
+        case "updateQuyen":
             if (
                 isset($_GET["quyen_id"]) && $_GET["quyen_id"] !== '' &&
                 isset($_GET["ten_quyen"]) && $_GET["ten_quyen"] !== ''
@@ -54,6 +46,44 @@ if (isset($_GET['func'])) {
                 $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
                 $response = $quyenModel->update($quyen_id, $ten_quyen, $status);
             }
+            break;
+        case "checkExistQuyen":
+            if (!isset($_POST['data'])) {
+                echo json_encode([
+                    'status' => false,
+                    'message' => 'Thiếu dữ liệu quyen'
+                ]);
+                exit;
+            }
+            $data = json_decode($_POST['data'], true);
+            if (!is_array($data)) {
+                echo json_encode([
+                    'status' => false,
+                    'message' => 'Dữ liệu không hợp lệ'
+                ]);
+                exit;
+            }
+            $quyen_id = $data['quyen_id'] ?? null;
+            $ten_quyen = $data['ten_quyen'] ?? null;
+
+            if (empty($quyen_id) && empty($ten_quyen)) {
+                echo json_encode([
+                    'status' => false,
+                    'message' => 'Thiếu quyen_id hoặc ten_quyen'
+                ]);
+                exit;
+            }
+            $quyens = $quyenModel->searchQuyen($quyen_id, $ten_quyen);
+            $response = !empty($quyens);
+            echo json_encode([
+                'status' => $response,
+                'message' => $response ? 'Quyền đã tồn tại' : 'Quyền chưa tồn tại'
+            ]);
+            exit;
+            break;
+        case "getChiTietQuyenById":
+            $id = $_POST['id'];
+            $response = $accountModel->getQuyenById($id);
             break;
         case "delete":
             $quyen_id = $_POST['quyen_id'] ?? null;

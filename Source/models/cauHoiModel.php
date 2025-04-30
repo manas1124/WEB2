@@ -57,4 +57,27 @@ class CauHoiModel
             return false;
         }
     }
+
+    public function getByMucCauHois($mucCauHois){
+        $conn = $this->db->getConnection();
+
+        $placeholders = implode(',', array_fill(0, count($mucCauHois), '?'));
+        $sql = "SELECT * FROM cau_hoi WHERE mks_id IN ($placeholders)";
+    
+        $stmt = $conn->prepare($sql);
+        
+        $types = str_repeat('i', count(value: $mucCauHois));
+        $stmt->bind_param($types, ...$mucCauHois);
+    
+        $stmt->execute();
+    
+        $result = $stmt->get_result();
+        $data = [];
+    
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+    
+        return $data;
+    }
 }

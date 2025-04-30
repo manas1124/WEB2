@@ -8,7 +8,7 @@
         <div class="modal-body pt-0 mb-4">
             <div class="w-96">
                 <label class="label-text" for="file-decuong">Tên quyền</label>
-                <input type="text" placeholder="" class="input" id="name-quyen" />
+                <input type="text" placeholder="" class="input" id="ten_quyen" />
             <div class="w-96">
                 <label class="label-text" for="select-status">Status</label>
                 <select class="select" id="select-status">
