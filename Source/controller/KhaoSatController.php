@@ -24,6 +24,12 @@ if (isset($_POST['func'])) {
             $response = $ksModel->getKhaoSatById($id);
             // $response = $ksModel->getAllKhaoSat();
             break;
+        case "getKhaoSatByPageNumber":
+            $page = $_POST["number"] ;
+            $searchKeyWord = $_POST["keyword"];
+            
+            $response = $ksModel->getKhaoSatByPageNumber($page,null,$searchKeyWord);
+            break;
         case 'createKhaoSat':
             
             $tenKhaoSat = $_POST['ten-ks'];

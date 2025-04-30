@@ -50,6 +50,66 @@ class KhaoSatModel
         return $data;
     }
 
+    public function getKhaoSatByPageNumber($page, $status = null,$searchKeyWord = null)
+    {
+        $limit = 6;
+
+        $conn = $this->db->getConnection();
+        $sql = "SELECT * FROM khao_sat where 1 = 1 ";
+
+        // Đếm tổng số dòng (để tính tổng số trang)
+        $countSql = "SELECT COUNT(*) as total FROM khao_sat where 1 = 1 ";
+        $params = [];
+        $types = "";
+        // $status = 1;
+        if ($status !== null) {
+            $sql .= " AND status = ?";
+
+            $countSql .= " AND status = ?";
+            $params[] = $status;
+            $types .= "i";
+        }
+        if ($searchKeyWord !== null) {
+            $sql .= " AND ten_ks LIKE ?";
+
+            $countSql .= " AND ten_ks LIKE ?";
+            $params[] = "%".$searchKeyWord."%";
+            $types .= "s";
+        }
+        $countStmt = $conn->prepare($countSql);
+        if (!empty($params)) {
+            $countStmt->bind_param($types, ...$params);
+        }
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $totalRow = $countResult->fetch_assoc()['total'];
+        $totalPages = ceil($totalRow / $limit);
+        $page = max(1, $page);
+        $offset = ($page - 1) * $limit;
+        // Truy vấn dữ liệu trang hiện tại
+
+        $sql .= " LIMIT ?, ?";
+        $params[] = $offset;
+        $params[] = $limit;
+        $types .= "ii";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $finaldata = [
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'data' => $data
+        ];
+        return $finaldata;
+    }
+
     public function getKhaoSatById($ks_id)
     {
         $conn = $this->db->getConnection();
