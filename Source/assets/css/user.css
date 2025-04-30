@@ -1,0 +1,18 @@
+.hero {
+    /* height: 500px;
+    background-image: url("../image/bg-sgu.png"); */
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: 
+        linear-gradient(rgba(67, 67, 67, 0.6)),
+        url('../image/bg-sgu.png'); /* Replace with your own image if needed */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.8);
+}
