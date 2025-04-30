@@ -3,12 +3,12 @@ function test() {
   console.log("test2");
 }
 
-async function getKhaoSatByPageNumber(page = 1) {
+async function getKhaoSatByPageNumber(page = 1,keyword = null) {
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "getKhaoSatByPageNumber", number: page },
+      data: { func: "getKhaoSatByPageNumber", number: page, keyword:keyword },
       dataType: "json",
     });
     console.log("fect", response);
@@ -54,9 +54,9 @@ async function getKhaoSatById() {
     return null;
   }
 }
-async function renderAllKhaoSat(page = 1, status = null) {
-  const res = await getKhaoSatByPageNumber(page, status);
-  status = null;
+async function renderAllKhaoSat(page = 1, keyword = null) {
+  const res = await getKhaoSatByPageNumber(page, keyword);
+
   if (res) {
     const ksList = res.data;
     const totalPages = res.totalPages;
@@ -104,6 +104,11 @@ async function renderAllKhaoSat(page = 1, status = null) {
     );
   }
 }
+$("#btn-search-ks").on("click", function () {
+  let keyword = $("#input-search-ks").val()
+  renderAllKhaoSat(1,keyword);
+  $("#input-search-ks").val("")
+})
 $(function () {
   renderAllKhaoSat();
 

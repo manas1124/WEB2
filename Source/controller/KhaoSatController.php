@@ -26,7 +26,9 @@ if (isset($_POST['func'])) {
             break;
         case "getKhaoSatByPageNumber":
             $page = $_POST["number"] ;
-            $response = $ksModel->getKhaoSatByPageNumber($page);
+            $searchKeyWord = $_POST["keyword"];
+            
+            $response = $ksModel->getKhaoSatByPageNumber($page,null,$searchKeyWord);
             break;
         case 'createKhaoSat':
             

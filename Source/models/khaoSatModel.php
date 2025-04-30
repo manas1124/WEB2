@@ -50,9 +50,9 @@ class KhaoSatModel
         return $data;
     }
 
-    public function getKhaoSatByPageNumber($page, $status = null)
+    public function getKhaoSatByPageNumber($page, $status = null,$searchKeyWord = null)
     {
-        $limit = 10;
+        $limit = 6;
 
         $conn = $this->db->getConnection();
         $sql = "SELECT * FROM khao_sat where 1 = 1 ";
@@ -61,6 +61,7 @@ class KhaoSatModel
         $countSql = "SELECT COUNT(*) as total FROM khao_sat where 1 = 1 ";
         $params = [];
         $types = "";
+        // $status = 1;
         if ($status !== null) {
             $sql .= " AND status = ?";
 
@@ -68,7 +69,13 @@ class KhaoSatModel
             $params[] = $status;
             $types .= "i";
         }
+        if ($searchKeyWord !== null) {
+            $sql .= " AND ten_ks LIKE ?";
 
+            $countSql .= " AND ten_ks LIKE ?";
+            $params[] = "%".$searchKeyWord."%";
+            $types .= "s";
+        }
         $countStmt = $conn->prepare($countSql);
         if (!empty($params)) {
             $countStmt->bind_param($types, ...$params);
