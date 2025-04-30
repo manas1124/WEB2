@@ -20,12 +20,10 @@ if (isset($_GET['func'])) {
 
         case "getAllByKsId":
             $ks_id = $_GET['ks_id'] ?? null;
-            $page = $_GET['page'] ?? 1;
-
             if ($ks_id === null) {
                 $response = ['error' => 'Thiếu tham số ks_id'];
             } else {
-                $response = $KqKhaoSatModel->getAllByKsId((int)$page, (int)$ks_id);
+                $response = $KqKhaoSatModel->getAllByKsId($ks_id);
             }
             break;
 
@@ -48,7 +46,8 @@ if (isset($_GET['func'])) {
             $response = $cauHoiModel->getByMucCauHois($mks_id);
             break;
         case "getTraLoi":
-            
+            $kqks_ids = $_GET['kqks_ids'];
+            $response = $traloiModel->getByKqksIds($kqks_ids);
             break;
         case "create":
             $nguoi_lamks_id = $_GET['nguoi_lamks_id'] ?? null;

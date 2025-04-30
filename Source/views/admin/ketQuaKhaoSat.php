@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="w-full overflow-x-auto">
-        <table class="table">
+        <table class="table-striped table">
             <thead>
                 <tr>
                     <th>Tên khảo sát</th>
