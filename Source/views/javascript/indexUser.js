@@ -1,45 +1,3 @@
-// $((function () {
-//     function loadPage(page, isAdmin = false, addToHistory = true) {
-//         $.ajax({
-//             url: '../handle/adminHandler.php',
-//             type: 'POST',
-//             data: { page: page, admin: isAdmin },
-//             success: function (response) {
-//                 $('#content').html(response);
-
-//                 // Update URL without reloading the page
-//                 let newUrl = window.location.pathname + "?page=" + page;
-//                 if (isAdmin) newUrl += "&admin=true";
-
-//                 if (addToHistory) {
-//                     history.pushState({ page: page, admin: isAdmin }, "", newUrl);
-//                 }
-//             }
-//         });
-//     }
-
-//     $('.nav-link').on('click', function (e) {
-//         e.preventDefault();
-//         let page = $(this).data('page');
-//         let isAdmin = window.location.pathname.includes("admin.php");
-//         loadPage(page, isAdmin);
-//     });
-
-//     // Handle back/forward navigation
-//     window.onpopstate = function (event) {
-//         if (event.state) {
-//             loadPage(event.state.page, event.state.admin, false);
-//         }
-//     };
-
-//     // Load the page from the URL on page load
-//     const urlParams = new URLSearchParams(window.location.search);
-//     let page = urlParams.get('page') || (window.location.pathname.includes("admin.php") ? "dashboard" : "home");
-//     let isAdmin = urlParams.get('admin') === "true";
-//     loadPage(page, isAdmin, false);
-// }));
-
-
 
 $('#loginForm').on('submit', function(e){
     e.preventDefault(); 
@@ -49,8 +7,8 @@ $('#loginForm').on('submit', function(e){
         url: '/Source/controller/AuthController.php', 
         data: {
             action: 'login',
-            username: $('#username').val(), 
-            password: $('#password').val()
+            username: $('#txtUsername').val(), 
+            password: $('#txtPassword').val()
         }, 
         success: function (response) {
             // console.log(response);
@@ -65,6 +23,116 @@ $('#loginForm').on('submit', function(e){
         }
     });
 });
+
+$('#signUpForm').on('submit', function(e){
+    e.preventDefault(); 
+    data = {
+        username: $('#signUpForm #txtUsername').val(), 
+        password: $('#signUpForm #txtPassword').val(),
+        passwordConfirm: $('#signUpForm #txtConfirmPassword').val(),
+        fullName: $('#signUpForm #txtFullName').val(),
+        address: $('#signUpForm #txtAddress').val(),
+        phone: $('#signUpForm #txtPhone').val(),
+        email: $('#signUpForm #txtEmail').val(),
+        ctdt: $('#signUpForm #cbxChuongTrinhDaoTao').val(),
+        doiTuong: $('#signUpForm #cbxDoiTuong').val()
+    };
+    if (!vadlidate(data)) {
+        return;
+    }
+
+
+    $.ajax({
+        type: 'POST',
+        url: '/Source/controller/AuthController.php', 
+        data: {
+            action: 'register',
+            username: data.username, 
+            password: data.password,
+            fullName: data.fullName,
+            address: data.address,
+            phone: data.phone,
+            address: data.address,
+            email: data.email,
+            ctdtId: parseInt(data.ctdt),
+            loaiDoiTuongId: parseInt(data.doiTuong)
+        },
+        success: function (response) {
+            // console.log(response);
+
+            var data = JSON.parse(response);
+            alert(data.message); // Show the message from the server
+
+
+        },
+        error: function() {
+            alert('Có lỗi xảy ra khi gửi dữ liệu!');
+        }
+    });
+});
+
+
+function vadlidate(data) {
+    if (data.username == "") {
+        alert("Tên đăng nhập không được để trống!");
+        return false;
+    }
+    if (data.password == "") {
+        alert("Mật khẩu không được để trống!");
+        return false;
+    }
+    if (data.passwordConfirm == "") {
+        alert("Mật khẩu không được để trống!");
+        return false;
+    }
+    if (data.password != data.passwordConfirm) {
+        alert("Mật khẩu không khớp!");
+        return false;
+    }
+    if (data.fullName == "") {
+        alert("Họ tên không được để trống!");
+        return false;
+    }
+    if (data.phone == "") {
+        alert("Số điện thoại không được để trống!");
+        return false;
+    }
+    if (data.email == "") {
+        alert("Email không được để trống!");
+        return false;
+    }
+    if (data.address == "") {
+        alert("Địa chỉ không được để trống!");
+        return false;
+    }
+    if (data.address.match(/[^\p{L}\p{N}\s]/u)) {
+        alert("Địa chỉ không được có kí tự đặc biệt!");
+        return false;
+    }
+    if (data.ctdt == "") {
+        alert("Vui lòng chọn chương trình đào tạo !");
+        return false;
+    }
+    if (data.doiTuong == "") {
+        alert("Vui lòng chọn đối tượng!");
+        return false;
+    }
+    // username không được có kí tự đặc biệt 
+    if (data.username.match(/[^a-zA-Z0-9]/)) {
+        alert("Tên đăng nhập không được có kí tự đặc biệt!");
+        return false;
+    }
+    if (data.phone.match(/[^0-9]/)) {
+        alert("Số điện thoại không được có kí tự đặc biệt!");
+        return false;
+    }
+    if (data.phone.length < 10 || data.phone[0] != 0) {
+        alert("Số điện thoại phải gồm 10 số và bắt đầu bằng 0!");
+        return false;
+    }
+    return true;
+}
+
 // $(function () {
 //   function loadPage(page, isUser = false, addToHistory = true) {
 //     $.ajax({

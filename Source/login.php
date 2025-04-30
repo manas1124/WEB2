@@ -8,52 +8,125 @@
     <title>Login</title>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div id="signInForm" class="w-full max-w-md bg-white p-8 rounded shadow">
-        <h1 class="text-2xl font-bold mb-6 text-center">Sign In</h1>
-        <form id="loginForm">
-            <div class="mb-4">
-                <label for="username" class="block text-gray-700">Tên đăng nhập</label>
-                <input type="text" id="username" name="username" class="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <div class="mb-6">
-                <label for="password" class="block text-gray-700">Mật khẩu</label>
-                <input type="password" id="password" name="password" class="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Đăng nhập</button>
-        </form>
-        <p class="mt-4 text-center text-sm text-gray-600">
-            Chưa có tài khoản?
-            <button onclick="toggleSignUpForm()" class="text-blue-500 hover:underline">Đăng ký</button>
-        </p>
+<body class="flex w-full h-screen justify-between">
+    <img src="./assets/img/image.png" alt="Background Image" class="w-2/3" />
+    <div class="flex w-1/3 flex-col bg-[#dddddd] items-center">
+        <img src="./assets/img/logo.png" alt="" class="w-[150px] h-[150px] mt-4" />
+        <h1 class="text-2xl font-bold text-[#304CA2]">TRƯỜNG ĐẠI HỌC SÀI GÒN</h1>
+        <h1 class="text-1xl font-bold mb-6 text-[#304CA2]">Cổng thông tin đào tạo</h1>
+        <div id="signInForm" class="bg-white p-8 rounded-md mx-8 ">
+            <h1 class="text-3xl font-bold mb-6 text-[#304CA2]">ĐĂNG NHẬP</h1>
+            <form id="loginForm" class="flex gap-8 flex-wrap">
+                <div class="input-floating">
+                    <input name="username" type="text" placeholder="Tên đăng nhập" class="input input-lg" id="txtUsername" />
+                    <label class="input-floating-label" for="floatingLabelLarge">Tên đăng nhập</label>
+                </div>
+                <div class="input-floating">
+                    <input name="password" type="text" placeholder="Mật khẩu" class="input input-lg" id="txtPassword" />
+                    <label class="input-floating-label" for="floatingLabelLarge">Mật khẩu</label>
+                </div>
+                <button type="submit" class="w-full bg-[#304CA2] text-white py-2 rounded hover:bg-[#4B66C2] cursor-pointer">Đăng nhập</button>
+            </form>
+            <p class="mt-4 text-center text-sm text-gray-600">
+                Chưa có tài khoản?
+                <button onclick="toggleSignUpForm()" class="text-blue-500 hover:underline">Đăng ký</button>
+            </p>
+        </div>
+        <!-- Form đăng ký ẩn ban đầu -->
+        <div id="signUpForm" class="hidden max-w-4xl mx-8 bg-white p-8 rounded-md">
+            <h1 class="text-3xl font-bold mb-6 text-[#304CA2]">ĐĂNG KÝ</h1>
+            <form>
+                <div class="flex flex-col gap-4">
+                    <div class="input-floating">
+                        <input name="username" type="text" placeholder="Tên đăng nhập" class="input input-lg" id="txtUsername" />
+                        <label class="input-floating-label" for="floatingLabelLarge">Tên đăng nhập</label>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="input-floating w-1/2">
+                            <input name="password" type="password" placeholder="Mật khẩu" class="input input-lg" id="txtPassword" />
+                            <label class="input-floating-label" for="floatingLabelLarge">Mật khẩu</label>
+                        </div>
+                        <div class="input-floating w-1/2">
+                            <input name="confirmPassword" type="password" placeholder="Xác nhận mật khẩu" class="input input-lg" id="txtConfirmPassword" />
+                            <label class="input-floating-label" for="floatingLabelLarge">Xác nhận mật khẩu</label>
+                        </div>
+                    </div>
+                    <div class="input-floating">
+                        <input name="fullName" type="text" placeholder="Họ và tên" class="input input-lg" id="txtFullName" />
+                        <label class="input-floating-label" for="floatingLabelLarge">Họ và tên</label>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="input-floating w-1/2">
+                            <input name="phone" type="tel" placeholder="Số điện thoại" class="input input-lg" id="txtPhone" />
+                            <label class="input-floating-label" for="floatingLabelLarge">Số điện thoại</label>
+                        </div>
+                        <div class="input-floating w-1/2">
+                            <input name="email" type="email" placeholder="Email" class="input input-lg" id="txtEmail" />
+                            <label class="input-floating-label" for="floatingLabelLarge">Email</label>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <input name="address" type="text" placeholder="Địa chỉ" class="input input-lg" id="txtAddress" />
+                        <label class="input-floating-label" for="floatingLabelLarge">Địa chỉ</label>
+                    </div>
+                    <select
+                        id="cbxChuongTrinhDaoTao"
+                        data-select='{
+                            "placeholder": "Chọn chương trình đào tạo...",
+                            "toggleTag": "<button type=\"button\" aria-expanded=\"false\" class=\"h-[46px] px-4 py-0\"></button>",
+                            "toggleClasses": "advance-select-toggle select-disabled:pointer-events-none select-disabled:opacity-40",
+                            "dropdownClasses": "advance-select-menu",
+                            "optionClasses": "advance-select-option selected:select-active",
+                            "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"icon-[tabler--check] shrink-0 size-4 text-primary hidden selected:block \"></span></div>",
+                            "extraMarkup": "<span class=\"icon-[tabler--caret-up-down] shrink-0 size-4 text-base-content absolute top-1/2 end-3 -translate-y-1/2 \"></span>"
+                            }'
+                        class="hidden">
+                    
+                        <option value="">Choose</option>
+                        <?php
+                            require_once __DIR__ . '../models/ctdtModel.php';
+                            $ctdtModel = new CtdtDauraModel();
+                            $ctdtList = $ctdtModel->getAll();
+                            foreach($ctdtList as $ctdt) {
+                                echo '<option value="' . $ctdt['ctdt_id'] . '">' . $ctdt['ten_nganh'] . ' - ' . $ctdt['ten_ck']. '</option>';
+                            }
+                        ?>
+                    </select>
+                    <select
+                        id="cbxDoiTuong"
+                        data-select='{
+                            "placeholder": "Chọn đối tượng...",
+                            "toggleTag": "<button type=\"button\" aria-expanded=\"false\" class=\"h-[46px] px-4 py-0\"></button>",
+                            "toggleClasses": "advance-select-toggle select-disabled:pointer-events-none select-disabled:opacity-40",
+                            "dropdownClasses": "advance-select-menu",
+                            "optionClasses": "advance-select-option selected:select-active",
+                            "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"icon-[tabler--check] shrink-0 size-4 text-primary hidden selected:block \"></span></div>",
+                            "extraMarkup": "<span class=\"icon-[tabler--caret-up-down] shrink-0 size-4 text-base-content absolute top-1/2 end-3 -translate-y-1/2 \"></span>"
+                            }'
+                        class="hidden">
+                        <option value="">Choose</option>
+                        <?php
+                            require_once __DIR__ . '../models/LoaiDoiTuongModel.php';
+                            $doiTuongModel = new LoaiDoiTuongModel();
+                            $doiTuongList = $doiTuongModel->getAll();
+                            foreach($doiTuongList as $doiTuong) {
+                                echo '<option value="' . $doiTuong['dt_id'] . '">' . $doiTuong['ten_dt'] . '</option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+                <button type="submit" id="signUpButton" class="w-full mt-6 bg-[#304CA2] text-white py-2 rounded hover:bg-[#4B66C2] cursor-pointer">Đăng kí</button>
+            </form>
+            <p class="mt-4 text-center text-sm text-gray-600">
+                Quay về
+                <button onclick="toggleSignUpForm()" class="text-blue-500 hover:underline">Đăng nhập</button>
+            </p>
+        </div>
     </div>
-    <!-- Form đăng ký ẩn ban đầu -->
-    <div id="signUpForm" class="hidden w-full max-w-4xl bg-white p-8 mt-6 rounded shadow">
-        <h1 class="text-2xl font-bold mb-6 text-center">Create Account</h1>
-        <form>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" placeholder="Tên đăng nhập" id="tenDangNhap" name="TenDangNhap" class="border p-2 rounded w-full" />
-                <input type="password" placeholder="Mật khẩu" id="matKhau" name="MatKhau" class="border p-2 rounded w-full" />
-                <input type="password" placeholder="Xác thực mật khẩu" id="xacNhanMatKhau" name="XacThucMatKhau" class="border p-2 rounded w-full" />
-                <input type="text" placeholder="Họ và tên" id="hoTen" name="HoTen" class="border p-2 rounded w-full" />
-                <input type="tel" placeholder="Số điện thoại" id="sdt" name="SoDienThoai" class="border p-2 rounded w-full" />
-                <input type="email" placeholder="Email" id="email" name="Email" class="border p-2 rounded w-full" />
-                <input type="text" placeholder="Địa chỉ" id="diaChi" name="DiaChi" class="border p-2 rounded w-full" />
-                <input type="text" placeholder="Nhóm khảo sát" id="ks" name="KhaoSat" class="border p-2 rounded w-full" />
-                <input type="text" placeholder="Loại đối tượng" id="dt" name="DoiTuong" class="border p-2 rounded w-full" />
-                <input type="text" placeholder="Chương trình đào tạo" id="ctdt" name="CTDT" class="border p-2 rounded w-full" />
-            </div>
-            <button type="button" id="signUpButton" class="w-full mt-6 bg-green-500 text-white py-2 rounded hover:bg-green-600">Đăng kí</button>
-        </form>
-        <p class="mt-4 text-center text-sm text-gray-600">
-            Quay về
-            <button onclick="toggleSignUpForm()" class="text-blue-500 hover:underline">Đăng nhập</button>
-        </p>
-    </div>
+
 
     <!-- Toggle script -->
     <script>
-
         function toggleSignUpForm() {
             const signIn = document.getElementById("signInForm");
             const signUp = document.getElementById("signUpForm");
