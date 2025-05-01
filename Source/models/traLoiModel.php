@@ -92,7 +92,7 @@ class TraLoiModel
             throw new Exception("Prepare failed: " . $conn->error);
         }
 
-        $types = str_repeat('i', count($ch_ids) + 1); // 'i' cho mỗi tham số kiểu int
+        $types = str_repeat('i', count($ch_ids) + 1);
         $params = array_merge([$kq_ks_id], $ch_ids);
 
         $stmt->bind_param($types, $params);
@@ -104,6 +104,33 @@ class TraLoiModel
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
         }
+
+        return $data;
+    }
+
+    public function getByKqksIds($kqks_ids)
+    {
+        $conn = $this->db->getConnection();
+
+        if (empty($kqks_ids)) {
+            return [];
+        }
+        $placeholders = implode(',', array_fill(0, count($kqks_ids), '?')); 
+
+        $sql = "SELECT * FROM tra_loi WHERE kq_ks_id IN ($placeholders)";
+        $stmt = $conn->prepare($sql);
+
+        $types = str_repeat('i', count($kqks_ids)); 
+        $stmt->bind_param($types, ...$kqks_ids);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $stmt->close();
 
         return $data;
     }
