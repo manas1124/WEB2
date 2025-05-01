@@ -61,7 +61,7 @@ class KhaoSatModel
         $countSql = "SELECT COUNT(*) as total FROM khao_sat where 1 = 1 ";
         $params = [];
         $types = "";
-        // $status = 1;
+        $status = 1;
         if ($status !== null) {
             $sql .= " AND status = ?";
 
@@ -76,6 +76,8 @@ class KhaoSatModel
             $params[] = "%".$searchKeyWord."%";
             $types .= "s";
         }
+        $sql .= " ORDER BY ngay_bat_dau DESC";
+
         $countStmt = $conn->prepare($countSql);
         if (!empty($params)) {
             $countStmt->bind_param($types, ...$params);
