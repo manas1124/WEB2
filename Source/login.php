@@ -11,7 +11,7 @@
 <body class="flex w-full h-screen justify-between">
     <img src="./assets/img/image.png" alt="Background Image" class="w-2/3" />
     <div class="flex w-1/3 flex-col bg-[#dddddd] items-center">
-        <img src="./assets/img/logo.png" alt="" class="w-[150px] h-[150px] mt-4" />
+        <img id="logo-login" src="./assets/img/logo.png" alt="" class="w-[150px] h-[150px] mt-4" />
         <h1 class="text-2xl font-bold text-[#304CA2]">TRƯỜNG ĐẠI HỌC SÀI GÒN</h1>
         <h1 class="text-1xl font-bold mb-6 text-[#304CA2]">Cổng thông tin đào tạo</h1>
         <div id="signInForm" class="bg-white p-8 rounded-md mx-8 ">
@@ -67,7 +67,6 @@
                     </div>
                     <div class="flex gap-4">
                         <input name="address" type="text" placeholder="Địa chỉ" class="input input-lg" id="txtAddress" />
-                        <label class="input-floating-label" for="floatingLabelLarge">Địa chỉ</label>
                     </div>
                     <select
                         id="cbxChuongTrinhDaoTao"

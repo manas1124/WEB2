@@ -1,7 +1,6 @@
 
 $('#loginForm').on('submit', function(e){
     e.preventDefault(); 
-
     $.ajax({
         type: 'POST',
         url: '/Source/controller/AuthController.php', 
@@ -70,7 +69,6 @@ $('#signUpForm').on('submit', function(e){
         }
     });
 });
-
 
 function vadlidate(data) {
     if (data.username == "") {
@@ -186,10 +184,11 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 $("#main-content").html(response.html);
-                // Update the URL
                 let queryString = $.param(params);
                 queryString = cleanQueryString(queryString);
-                history.pushState(params, "", "user.php?" + queryString);
+                // Update the URL
+                history.pushState(params, "", "home.php?" + queryString);
+                
             },
             error: function (error) {
                 console.error("Error navigate page:", error);
@@ -209,6 +208,13 @@ $(function () {
         let newParams = { page: page };
         updateContent(newParams);
     });
+
+    $("#logo-login").on("click", function (event) {
+        window.location.href = "/Source/home.php";
+        console.log("haha");
+    });
+        
+
 
     $("#main-content").on("click", ".back-link", function (event) {
         event.preventDefault();
@@ -256,4 +262,20 @@ $(function () {
         }
     });
 
+
+    function cleanQueryString(queryString) {
+        let params = {};
+        if (queryString) {
+            let paramPairs = queryString.split("&");
+            for (let i = 0; i < paramPairs.length; i++) {
+                let pair = paramPairs[i].split("=");
+                let key = decodeURIComponent(pair[0]);
+                let value = decodeURIComponent(pair[1] || "");
+                if (value !== "") {
+                    params[key] = value;
+                }
+            }
+        }
+        return $.param(params);
+    }
 });
