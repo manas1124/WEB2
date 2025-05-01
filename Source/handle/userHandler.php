@@ -14,16 +14,27 @@ $response["text"] = "first $page";
 if ($page) {
 
     switch ($page) {
-        case "surveyPage":
+        case "home":
+            ob_start();
+            require_once("../home.php");
+            $response["html"] = ob_get_clean();
+            break;
+        case "survey":
             ob_start();
             require_once("../views/user/survey.php");
             $response["html"] = ob_get_clean();
             break;
-        case "ketQuaKhaoSat":
+        case "result-survey":
             ob_start();
             require_once("../views/admin/ketQuaKhaoSat.php");
             $response["html"] = ob_get_clean();
             break;
+        case "login":
+            ob_start();
+            require_once("../login.php");
+            $response["html"] = ob_get_clean();
+            break;
+        
         default:
             $response["html"] = `loi trang handle`;
             $response["error"] = "Invalid page requested.";
