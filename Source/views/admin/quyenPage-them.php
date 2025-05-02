@@ -1,6 +1,6 @@
 <div class="flex flex-col w-full">
     <div>
-        <a class="back-link btn btn-soft ">Quay lại</a>
+        <button id="return-page" class="back-link btn btn-soft ">Quay lại</button>
     </div>
     <div class="flex justify-center">
         <h3 class="modal-title">Thêm quyền</h3>
@@ -37,41 +37,41 @@
                     <th>Xóa</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
+            <tbody id="checkbox-data">
+                <tr id="khaoSat-row">
                     <td>Quản lý khảo sát</td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" checked /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
+                    <td><input type="checkbox" class="checkbox" id="ks-read" value="ks-read" /></td>
+                    <td><input type="checkbox" class="checkbox" id="ks-create" value="ks-create" /></td>
+                    <td><input type="checkbox" class="checkbox" id="ks-edit" value="ks-edit" /></td>
+                    <td><input type="checkbox" class="checkbox" id="ks-delete" value="ks-delete" /></td>
                 </tr>
-                <tr>
+                <tr id="nganh-chuky-ctdt-row">
                     <td>Quản lý ngành,chu kì, chương trình đào tạo</td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" checked /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
+                    <td><input type="checkbox" class="checkbox" id="nhomCkCtdt-read" value="nhomCkCtdt-read" /></td>
+                    <td><input type="checkbox" class="checkbox" id="nhomCkCtdt-create" value="nhomCkCtdt-create" /></td>
+                    <td><input type="checkbox" class="checkbox" id="nhomCkCtdt-edit" value="nhomCkCtdt-edit" /></td>
+                    <td><input type="checkbox" class="checkbox" id="nhomCkCtdt-delete" value="nhomCkCtdt-delete" /></td>
                 </tr>
-                <tr>
+                <tr id="doiTuong-nhomDoiTuong-row">
                     <td>Quản lý đối tượng và nhóm đối tượng</td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" checked /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
+                    <td><input type="checkbox" class="checkbox" id="doiTuong-read" value="doiTuong-read" /></td>
+                    <td><input type="checkbox" class="checkbox" id="doiTuong-create" value="doiTuong-create" /></td>
+                    <td><input type="checkbox" class="checkbox" id="doiTuong-edit" value="doiTuong-edit" /></td>
+                    <td><input type="checkbox" class="checkbox" id="doiTuong-delete" value="doiTuong-delete" /></td>
                 </tr>
-                <tr>
+                <tr id="taiKhoan-row">
                     <td>Quản lý tài khoản</td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" checked /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
+                    <td><input type="checkbox" class="checkbox" id="tk-read" value="tk-read" /></td>
+                    <td><input type="checkbox" class="checkbox" id="tk-create" value="tk-create" /></td>
+                    <td><input type="checkbox" class="checkbox" id="tk-edit" value="tk-edit" /></td>
+                    <td><input type="checkbox" class="checkbox" id="tk-delete" value="tk-delete" /></td>
                 </tr>
-                <tr>
+                <tr id="quyen-row">
                     <td>Quản lý quyền</td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" checked /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
-                    <td><input type="checkbox" class="checkbox" id="checkboxDefault" /></td>
+                    <td><input type="checkbox" class="checkbox" id="quyen-read" value="quyen-read" /></td>
+                    <td><input type="checkbox" class="checkbox" id="quyen-create" value="quyen-create" /></td>
+                    <td><input type="checkbox" class="checkbox" id="quyen-edit" value="quyen-edit" /></td>
+                    <td><input type="checkbox" class="checkbox" id="quyen-delete" value="quyen-delete" /></td>
                 </tr>
             </tbody>
         </table>

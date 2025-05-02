@@ -25,6 +25,13 @@ if (isset($_POST['func'])) {
                 $status = isset($_POST["status"]) && $_POST["status"] !== '' ? $_POST["status"] : null;
 
                 $response = $quyenModel->create($ten_quyen, $status);
+                $newQuyenId = $response['insert_id'];
+                $chiTietChucNangList = $_POST["selectedChucNang"];
+                if (count($chiTietChucNangList) > 0) {
+                    foreach ($chiTietChucNangList as $chucNangKey) {
+                        $quyenModel->createChucNangQuyen($newQuyenId, $chucNangKey);
+                    }
+                }
             } else {
                 $response = [
                     "status" => false,
@@ -73,7 +80,7 @@ if (isset($_POST['func'])) {
                 ]);
                 exit;
             }
-            $quyens = $quyenModel->searchQuyen($quyen_id, $ten_quyen);
+            $quyens = $quyenModel->searchQuyen( $ten_quyen);
             $response = !empty($quyens);
             echo json_encode([
                 'status' => $response,
