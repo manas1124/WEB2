@@ -45,15 +45,42 @@ if (isset($_POST['func'])) {
 
         case "updateQuyen":
             if (
-                isset($_GET["quyen_id"]) && $_GET["quyen_id"] !== '' &&
-                isset($_GET["ten_quyen"]) && $_GET["ten_quyen"] !== ''
+                !isset($_POST["quyen_id"]) && !$_POST["quyen_id"] !== '' &&
+                !isset($_POST["ten_quyen"]) && !$_POST["ten_quyen"] !== ''
             ) {
-                $quyen_id = $_GET["quyen_id"];
-                $ten_quyen = $_GET["ten_quyen"];
-                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-                $response = $quyenModel->update($quyen_id, $ten_quyen, $status);
+                echo json_encode([
+                    'status' => false,
+                    'message' => "khong nhận được data chức năng quyền ",
+                ]);
+                exit;
             }
-            break;
+            $quyenId = $_POST["quyen_id"];
+            $ten_quyen = $_POST["ten_quyen"];
+            $selectedChucNangList = $_POST["selectedChucNang"];
+            $status = 1;
+            $isUpdateQuyenSuccess = $quyenModel->update($quyenId, $ten_quyen, $status);
+            
+            $isXoaChucNangSuccess = $quyenModel->deleteAllChucNangByQuyenId($quyenId);
+           
+            if (count($selectedChucNangList) > 0) {
+                foreach ($selectedChucNangList as $chucNangKey) {
+                    $quyenModel->createChucNangQuyen($quyenId, $chucNangKey);
+                }
+            }
+            
+
+            if ($isUpdateQuyenSuccess && $isXoaChucNangSuccess) {
+                echo json_encode([
+                    'status' => true,
+                    'message' => "Sửa chức quyền thành công",
+                ]);
+                exit;
+            }
+            echo json_encode([
+                'status' => false,
+                'message' => "sửa chức năng thất bại ",
+            ]);
+            exit;
         case "checkExistQuyen":
             if (!isset($_POST['data'])) {
                 echo json_encode([
@@ -80,14 +107,34 @@ if (isset($_POST['func'])) {
                 ]);
                 exit;
             }
-            $quyens = $quyenModel->searchQuyen( $ten_quyen);
+            $quyens = $quyenModel->searchQuyen($ten_quyen);
             $response = !empty($quyens);
             echo json_encode([
                 'status' => $response,
                 'message' => $response ? 'Quyền đã tồn tại' : 'Quyền chưa tồn tại'
             ]);
             exit;
-            break;
+
+        case "getChucNangAndQuyenByQuyenId":
+            $id = $_POST['quyen_id'];
+            $dataQuyen = $quyenModel->getQuyenById($id);
+            $dataChucNang = $quyenModel->getChucNangByQuyenId($id);
+
+            if ($dataQuyen) {
+                echo json_encode([
+                    'status' => true,
+                    'message' => "Lấy thông tin quyền thành công",
+                    'dataQuyen' => $dataQuyen,
+                    'dataChucNang' => $dataChucNang,
+                ]);
+                exit;
+            }
+            echo json_encode([
+                'status' => false,
+                'message' => "Lấy thông tin quyền fail"
+            ]);
+            exit;
+
         case "getChiTietQuyenById":
             $id = $_POST['id'];
             $response = $accountModel->getQuyenById($id);

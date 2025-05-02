@@ -194,12 +194,12 @@ class QuyenModel
             "message" => $success ? "Thêm chức năng thành công" : "Thêm chức năng thất bại",
         ];
     }
-    public function deleteChucNangQuyen($quyen_id,$chuc_nang_key)
+    public function deleteAllChucNangByQuyenId($quyen_id)
     {
         $conn = $this->db->getConnection();
-        $sql = "DELETE FROM quyen_chucnang WHERE quyen_id = ? AND quyen_chucnang.key = ?";
+        $sql = "DELETE FROM chuc_nang WHERE quyen_id = ? ";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("is", $quyen_id,$chuc_nang_key);
+        $stmt->bind_param("i", $quyen_id,);
         $result = $stmt->execute();
         $stmt->close();
         $this->db->closeConnection();

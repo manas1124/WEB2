@@ -14,25 +14,9 @@ async function getAllQuyen() {
     return null;
   }
 }
-async function updateQuyen(quyenData) {
-  if (!validateAccountData(quyenData)) {
-    Swal.fire(
-      "Thiếu dữ liệu",
-      "Vui lòng kiểm tra lại các trường bắt buộc",
-      "warning"
-    );
-    return false;
-  }
-
+async function updateQuyen(formData) {
   try {
-    const formData = new FormData();
-    formData.append("func", "updateAccount");
-
-    // Gửi từng field riêng biệt thay vì stringify JSON
-    for (const key in quyenData) {
-      formData.append(key, quyenData[key]);
-    }
-
+    formData.append("func", "updateQuyen");
     const response = await $.ajax({
       url: "./controller/quyenController.php",
       type: "POST",
@@ -42,16 +26,10 @@ async function updateQuyen(quyenData) {
       dataType: "json",
     });
 
-    if (response.status) {
-      Swal.fire("Thành công", response.message, "success");
-    } else {
-      Swal.fire("Thất bại", response.message, "error");
-    }
-
     return response;
   } catch (error) {
     console.error("AJAX Error:", error);
-    Swal.fire("Lỗi hệ thống", "Không thể cập nhật tài khoản", "error");
+    Swal.fire("Lỗi hệ thống", "Không thể cập nhật quyền", "error");
     return false;
   }
 }
@@ -74,20 +52,42 @@ function updatepage(params) {
     },
   });
 }
-async function getChiTietQuyenById(id) {
+
+async function getChucNangAndQuyenByQuyenId(quyen_id) {
   try {
     const response = await $.ajax({
       url: "./controller/quyenController.php",
       type: "POST",
-      data: { func: "getChiTietQuyenById", tk_id: tk_id },
+      data: { func: "getChucNangAndQuyenByQuyenId", quyen_id: quyen_id },
       dataType: "json",
     });
-    console.log("fect", response);
-    return response;
-  } catch (e) {
-    console.log(e);
-    console.log("loi fetchdata");
-    return null;
+
+    console.log("Fetch Response:", response);
+
+    const { status, message, dataQuyen, dataChucNang } = response || {};
+
+    if (status === true) {
+      return { status, message, dataQuyen, dataChucNang };
+    } else {
+      console.error(
+        "Failed to fetch quyền information:",
+        message || "Unknown error"
+      );
+      return {
+        status: false,
+        message: message || "Failed to fetch quyền information",
+        dataQuyen: null,
+        dataChucNang: null,
+      };
+    }
+  } catch (error) {
+    console.error("AJAX Error:", error);
+    return {
+      status: false,
+      message: "Lỗi kết nối hoặc lỗi server",
+      dataQuyen: null,
+      dataChucNang: null,
+    };
   }
 }
 async function checkExistQuyen(ten_quyen) {
@@ -128,67 +128,77 @@ $(function () {
         console.error("No permission ID found in URL.");
         return;
       }
-      const defaultData = await getChiTietQuyenById(currentQuyenId);
-      if (!defaultData) {
-        console.error("No permission data found for ID:", currentQuyenId);
+      const { dataChucNang, dataQuyen } = await getChucNangAndQuyenByQuyenId(
+        currentQuyenId
+      );
+      if (!dataChucNang || !dataQuyen) {
+        console.error("lỗi lấy data quyền hiện tại");
         return;
       }
+      console.log(dataQuyen);
+      $("#ten-quyen").val(dataQuyen.ten_quyen);
 
-      const quyenList = await getAllQuyen();
-      if (!quyenList || quyenList.length === 0) {
-        console.error("Failed to fetch permission list.");
-        return;
-      }
-
-      $("#select-quyen").empty(); // Always clear first
-      quyenList.forEach((item) => {
-        const isSelected =
-          item.quyen_id == defaultData.quyen_id ? "selected" : "";
-        $("#select-quyen").append(
-          `<option value='${item.quyen_id}' ${isSelected}>${item.ten_quyen}</option>`
-        );
+      dataChucNang.forEach((item) => {
+        const ten_cn_value = item.ten_cn;
+        const status = item.status;
+        $(
+          '#checkbox-data input[type="checkbox"][value="' + ten_cn_value + '"]'
+        ).prop("checked", status === 1);
       });
-
-      $("#quyen_id").val(defaultData.quyen_id);
-      $("#ten_quyen").val(defaultData.ten_quyen);
     } catch (error) {
       console.error("An error occurred while loading permission data:", error);
     }
   })();
 
-  const submitChangeQuyen = document.getElementById("btn-save-quyen");
-  submitChangeQuyen.addEventListener("click", async () => {
-    const tenQuyen = $("#ten_quyen").val().trim();
+  const submitChangeQuyen = $("#btn-save");
+
+  submitChangeQuyen.on("click", async () => {
+    const tenQuyen = $("#ten-quyen").val();
+    const status = $("#select-status").val();
+    const selectedChucNang = $("#checkbox-data tr")
+      .find('input[type="checkbox"]:checked')
+      .map(function () {
+        return $(this).val();
+      })
+      .get();
 
     const urlParams = new URLSearchParams(window.location.search);
-    let currentQuyenId = urlParams.get("id");
-    if (!currentQuyenId) {
-      currentQuyenId = $("#quyen_id").val(); // fallback
-    }
+    const currentQuyenId = urlParams.get("id") || $("#quyen_id").val();
     console.log("Current Permission ID:", currentQuyenId);
 
     const isValidData = () => {
       if (!tenQuyen) {
-        alert("Vui lòng nhập tên quyền");
+        Swal.fire("Lỗi", "Vui lòng nhập tên quyền", "warning");
         return false;
       }
       return true;
     };
 
-    const updateData = {
-      quyen_id: currentQuyenId,
-      ten_quyen: tenQuyen,
-    };
-
-    console.log(updateData); // Debug dữ liệu gửi đi
-
     if (isValidData()) {
-      const response = await updateQuyen(updateData);
-      if (response) {
-        alert("Cập nhật quyền thành công!");
+      // const selectedChucNang = ["as", "ab"];
+      const formData = new FormData();
+      formData.append("quyen_id", currentQuyenId);
+      formData.append("ten_quyen", tenQuyen);
+      console.log("chuc nang da chon:", selectedChucNang);
+      selectedChucNang.forEach(function (chucNang) {
+        formData.append("selectedChucNang[]", chucNang);
+      });
+
+      console.log(
+        "FormData - selectedChucNang[] values:",
+        formData.getAll("selectedChucNang[]")
+      );
+
+      const response = await updateQuyen(formData);
+      if (response && response.status) {
+        Swal.fire("Thành công", "Cập nhật quyền thành công!", "success");
       } else {
-        alert("Cập nhật quyền thất bại.");
+        Swal.fire("Thất bại", "Cập nhật quyền thất bại.", "error");
+        console.log(response.message);
       }
     }
   });
+});
+$("#return-page").on("click", function () {
+  $("#quyen-page").trigger("click");
 });
