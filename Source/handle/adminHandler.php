@@ -32,6 +32,16 @@ if ($page) {
             require_once("../views/admin/nganh.php");
             $response["html"] = ob_get_clean();
             break;
+        case "nhomks":
+            ob_start();
+            require_once("../views/admin/nhomks.php");
+            $response["html"] = ob_get_clean();
+            break;
+        case "qlUserPage":
+            ob_start();
+            require_once("../views/admin/qlUserPage.php");
+            $response["html"] = ob_get_clean();
+            break;
         case "chuky":
             ob_start();
             require_once("../views/admin/chuky.php");
@@ -93,6 +103,30 @@ if ($act) {
         case "ctdt-sua":
             ob_start();
             $filePath = "../views/admin/ctdtPage-sua.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "user-them":
+            ob_start();
+            $filePath = "../views/admin/qlUserPage-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+         case "user-sua":
+            ob_start();
+            $filePath = "../views/admin/qlUserPage-edit.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "nhomks-them":
+            ob_start();
+            $filePath = "../views/admin/nhomks-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+         case "nhomks-sua":
+            ob_start();
+            $filePath = "../views/admin/nhomks-sua.php";
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;
