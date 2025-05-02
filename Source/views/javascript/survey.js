@@ -33,7 +33,7 @@ const sendSurvey = (obj) => {
         const score = convertScore(radio.val());
         // console.log(question, idQuestion);
         // console.log(score);
-        if (score == 0) {
+        if (isNaN(score)) {
             alert("Phải hoàn thành tất cả các câu hỏi trước khi gửi!");
             return;
         }
@@ -49,11 +49,11 @@ const sendSurvey = (obj) => {
             act: act,
             data: JSON.stringify(result),
             surveyId: surveyId,
-            username: 'vana'
+            username: 'quangdepzai'
         },
         dataType: "json",
-        success: function (data) {
-            alert(data.message);            
+        success: function (response) {
+            alert(response['message']); // Show the message from the server     
             // history.pushState({}, "page", "?act=survey&surveyId=" + surveyId);
             
         },
@@ -64,18 +64,5 @@ const sendSurvey = (obj) => {
 }
 
 function convertScore(value) {
-    switch (value) {
-        case "rkhl":
-            return 1;
-        case "khl":
-            return 2;
-        case "bt":
-            return 3;
-        case "hl":
-            return 4;
-        case "rhl":
-            return 5;
-        default:
-            return 0;
-    }
+    return Number(value);
 }

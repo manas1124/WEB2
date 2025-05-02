@@ -1,12 +1,29 @@
 <?php
-
-if(isset($_GET['act']) && $_GET['act']) {
-    $act = $_GET['act'];
-        if($act == 'do-survey') {
-            require_once '../views/user/doSurvey.php';
-        }
-       
-}
+    require_once '../utils/JwtUtil.php';
+    session_start();
+    if(isset($_GET['act']) && $_GET['act']) {
+        $act = $_GET['act'];
+            if($act == 'do-survey') {
+                if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                    $accessToken = $_SESSION['accessToken'];
+                    $isVaid = isAuthorization($accessToken, 'view.survey');
+                    if ($isVaid) {
+                        require_once '../views/user/doSurvey.php';
+                    }
+                    else {
+                        echo 'Ko có quyền truy cập!';
+                        exit;
+                    }
+                }
+                else {
+                    echo 'hihi!';
+                    exit;
+                }
+                
+                
+            }
+        
+    }
 else if (isset($_POST['act']) && $_POST['act']) {
     if ($_POST['act'] == 'send-survey') {
         require_once '../models/AnswerModel.php';
@@ -47,8 +64,7 @@ else if (isset($_POST['act']) && $_POST['act']) {
         $surveyId = $_POST['surveyId'];
         $username = $_POST['username'];
         $accountModel = new AccountModel();
-        $account = json_decode($accountModel->getAccount($username), true);
-        
+        $account = $accountModel->getAccount($username);
 
         $surveyReulstModel = new SurveyResultModel();
         $data = [

@@ -50,6 +50,68 @@ class KhaoSatModel
         return $data;
     }
 
+    public function getKhaoSatByPageNumber($page, $status = null,$searchKeyWord = null)
+    {
+        $limit = 6;
+
+        $conn = $this->db->getConnection();
+        $sql = "SELECT * FROM khao_sat where 1 = 1 ";
+
+        // Đếm tổng số dòng (để tính tổng số trang)
+        $countSql = "SELECT COUNT(*) as total FROM khao_sat where 1 = 1 ";
+        $params = [];
+        $types = "";
+        $status = 1;
+        if ($status !== null) {
+            $sql .= " AND status = ?";
+
+            $countSql .= " AND status = ?";
+            $params[] = $status;
+            $types .= "i";
+        }
+        if ($searchKeyWord !== null) {
+            $sql .= " AND ten_ks LIKE ?";
+
+            $countSql .= " AND ten_ks LIKE ?";
+            $params[] = "%".$searchKeyWord."%";
+            $types .= "s";
+        }
+        $sql .= " ORDER BY ngay_bat_dau DESC";
+
+        $countStmt = $conn->prepare($countSql);
+        if (!empty($params)) {
+            $countStmt->bind_param($types, ...$params);
+        }
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $totalRow = $countResult->fetch_assoc()['total'];
+        $totalPages = ceil($totalRow / $limit);
+        $page = max(1, $page);
+        $offset = ($page - 1) * $limit;
+        // Truy vấn dữ liệu trang hiện tại
+
+        $sql .= " LIMIT ?, ?";
+        $params[] = $offset;
+        $params[] = $limit;
+        $types .= "ii";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $finaldata = [
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'data' => $data
+        ];
+        return $finaldata;
+    }
+
     public function getKhaoSatById($ks_id)
     {
         $conn = $this->db->getConnection();
@@ -138,10 +200,129 @@ class KhaoSatModel
         $stmt->close();
         return $data;
     }
+
+    public function isCTDTInUse($ctdt_id)
+    {
+        $conn = $this->db->getConnection();
+        $query = "SELECT ks_id FROM khao_sat WHERE ctdt_id = ? AND status = 1";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $ctdt_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getAllKhaoSatFilter($filters = [], $page = 1, $ks_ids)
+    {
+        $limit = 10;
+        $conn = $this->db->getConnection();
+
+        if (!is_array($ks_ids)) {
+            $ks_ids = [];
+        }
+        $placeholders = implode(',', array_fill(0, count($ks_ids), '?'));
+        $condition = "WHERE khao_sat.su_dung = 0 AND khao_sat.status = 1 AND khao_sat.ks_id IN ($placeholders)";
+        $params = $ks_ids;
+        $types = str_repeat('i', count($ks_ids));
+
+
+        // Xử lý điều kiện lọc
+        if ($filters['ten_ks'] != null && $filters['ten_ks'] != '') {
+            $condition .= " AND ten_ks LIKE ?";
+            $params[] = '%' . $filters['ten_ks'] . '%';
+            $types .= "s";
+        }
+        
+        if ($filters['ngay_bat_dau'] != null && $filters['ngay_bat_dau'] != '') {
+            $condition .= " AND ngay_bat_dau >= ?";
+            $params[] = $filters['ngay_bat_dau'];
+            $types .= "s";
+        }
+        
+        if ($filters['ngay_ket_thuc'] != null && $filters['ngay_ket_thuc'] != '') {
+            $condition .= " AND ngay_ket_thuc <= ?";
+            $params[] = $filters['ngay_ket_thuc'];
+            $types .= "s";
+        }
+        
+        if ($filters['nks_id'] != null) {
+            $condition .= " AND khao_sat.nks_id = ?";
+            $params[] = $filters['nks_id'];
+            $types .= "i";
+        }
+        
+        if ($filters['ltl_id'] != null) {
+            $condition .= " AND khao_sat.ltl_id = ?";
+            $params[] = $filters['ltl_id'];
+            $types .= "i";
+        }
+        
+        if ($filters['ctdt_id'] != null) {
+            $condition .= " AND khao_sat.ctdt_id = ?";
+            $params[] = $filters['ctdt_id'];
+            $types .= "i";
+        }
+
+        //tổng số trang
+        $countSql = "SELECT COUNT(*) as total FROM khao_sat " . $condition;
+        $countStmt = $conn->prepare($countSql);
+        if (!empty($params)) {
+            $countStmt->bind_param($types, ...$params);
+        }
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $totalRecords = $countResult->fetch_assoc()['total'];
+        $totalPages = ceil($totalRecords / $limit);
+        $countStmt->close();
+
+        // chính
+        $sql = "SELECT khao_sat.ks_id, khao_sat.ten_ks, khao_sat.ngay_bat_dau, khao_sat.ngay_ket_thuc, 
+                    khao_sat.su_dung, khao_sat.status,
+                    loai_tra_loi.ltl_id, loai_tra_loi.thang_diem,
+                    nhom_khao_sat.nks_id, nhom_khao_sat.ten_nks,
+                    chu_ki.ck_id, chu_ki.ten_ck,
+                    nganh.nganh_id, nganh.ten_nganh,
+                    ctdt_daura.la_ctdt
+                FROM khao_sat
+                JOIN loai_tra_loi ON khao_sat.ltl_id = loai_tra_loi.ltl_id
+                JOIN nhom_khao_sat ON khao_sat.nks_id = nhom_khao_sat.nks_id
+                JOIN ctdt_daura ON khao_sat.ctdt_id = ctdt_daura.ctdt_id
+                JOIN chu_ki ON ctdt_daura.ck_id = chu_ki.ck_id 
+                JOIN nganh ON ctdt_daura.nganh_id = nganh.nganh_id " . $condition . " ORDER BY ks_id DESC LIMIT ? OFFSET ?";
+        $offset = ($page - 1) * $limit;
+        $params[] = $limit;
+        $params[] = $offset;
+        $types .= "ii";
+
+        $stmt = $conn->prepare($sql);
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $stmt->close();
+
+        return [
+            'data' => $data,
+            'totalPages' => $totalPages,
+            'currentPage' => $page
+        ];
+    }
+
 }
 
 // $m = new KhaoSatModel();
 // $r = $m->getKhaoSatById(2);
 // echo json_encode($r);
-
-?>

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/ctdtModel.php';
+require_once __DIR__ . '/../models/khaoSatModel.php';
 // header('Content-Type: application/json'); 
 
 if (isset($_GET['func'])) {
@@ -7,6 +8,7 @@ if (isset($_GET['func'])) {
     // $data = $_GET['data'];
     // $data = json_decode($data);
     $CtdtDauraModel = new CtdtDauraModel();
+    $khaoSatModel = new KhaoSatModel();
     $response = null;
 
     switch ($func) {
@@ -36,24 +38,68 @@ if (isset($_GET['func'])) {
                 $ck_id = $_GET["ck_id"];
                 $la_ctdt = $_GET["la_ctdt"];
                 $status = isset($_GET["status"]) ? $_GET["status"] : null;
-                $response = $CtdtDauraModel->create($file, $nganh_id, $ck_id, $la_ctdt, $status);
+                if ($CtdtDauraModel->isExist($nganh_id, $ck_id, $la_ctdt)) {
+                    $response = [
+                        'status' => false,
+                        'message' => 'CTDT_CDR đã tồn tại'
+                    ];
+                } else {
+                    $data = $CtdtDauraModel->create($file, $nganh_id, $ck_id, $la_ctdt, $status);
+                    $response = [
+                        'status' => true,
+                        'data' => $data
+                    ];
+                }
             }
             break;
         case "update":
-            if (isset($_GET["ctdt_id"]) && isset($_GET["nganh_id"]) && isset($_GET["ck_id"]) && isset($_GET["la_ctdt"]) && isset($_GET["file"])) {
+            if (isset($_GET["ctdt_id"])) {
+                $ctdt_id = $_GET["ctdt_id"];
+                $isInUse = $khaoSatModel->isCTDTInUse($ctdt_id);
+            }
+            if ($isInUse) {
+                $response = [
+                    'status' => false,
+                    'message' => 'CTDT đang sử dụng trong bài khảo sát'
+                ];
+            } else if (isset($_GET["ctdt_id"]) && isset($_GET["nganh_id"]) && isset($_GET["ck_id"]) && isset($_GET["la_ctdt"]) && isset($_GET["file"])) {
                 $ctdt_id = $_GET["ctdt_id"];
                 $file = $_GET["file"];
                 $nganh_id = $_GET["nganh_id"];
                 $ck_id = $_GET["ck_id"];
                 $la_ctdt = $_GET["la_ctdt"];
                 $status = isset($_GET["status"]) ? $_GET["status"] : null;
-                $response = $CtdtDauraModel->update($ctdt_id, $file, $nganh_id, $ck_id, $la_ctdt, $status);
+                if ($CtdtDauraModel->isExist($nganh_id, $ck_id, $la_ctdt)) {
+                    $response = [
+                        'status' => false,
+                        'message' => 'CTDT_CDR đã tồn tại'
+                    ];
+                } else {
+                    $data = $CtdtDauraModel->create($file, $nganh_id, $ck_id, $la_ctdt, $status);
+                    $response = [
+                        'status' => true,
+                        'data' => $data
+                    ];
+                }
             }
             break;
         case "toggleStatus":
             if (isset($_GET["ctdt_id"])) {
                 $ctdt_id = $_GET["ctdt_id"];
-                $response = $CtdtDauraModel->toggleStatus($ctdt_id);
+                $isInUse = $khaoSatModel->isCTDTInUse($ctdt_id);
+            }
+            if ($isInUse) {
+                $response = [
+                    'status' => false,
+                    'message' => 'CTDT đang sử dụng trong bài khảo sát'
+                ];
+            } else if (isset($_GET["ctdt_id"])) {
+                $ctdt_id = $_GET["ctdt_id"];
+                $data = $CtdtDauraModel->toggleStatus($ctdt_id);
+                $response = [
+                    'status' => true,
+                    'data' => $data
+                ];
             }
             break;
         default:

@@ -24,6 +24,12 @@ if (isset($_POST['func'])) {
             $response = $ksModel->getKhaoSatById($id);
             // $response = $ksModel->getAllKhaoSat();
             break;
+        case "getKhaoSatByPageNumber":
+            $page = $_POST["number"] ;
+            $searchKeyWord = $_POST["keyword"];
+            
+            $response = $ksModel->getKhaoSatByPageNumber($page,null,$searchKeyWord);
+            break;
         case 'createKhaoSat':
             
             $tenKhaoSat = $_POST['ten-ks'];
@@ -116,6 +122,31 @@ if (isset($_POST['func'])) {
                 
             }
             $response = $isUpdateSuccess;
+            break;
+        case "getAllKhaoSatFilter":
+            if (isset($_POST['ks_ids'])) {
+                $filters = [ 
+                    'ten_ks' => !empty($_POST['ten_ks']) ? $_POST['ten_ks'] : null,
+                    'ngay_bat_dau' => !empty($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
+                    'ngay_ket_thuc' => !empty($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
+                    'nks_id' => isset($_POST['nks_id']) && $_POST['nks_id'] !== '' ? (int)$_POST['nks_id'] : null,
+                    'ltl_id' => isset($_POST['ltl_id']) && $_POST['ltl_id'] !== '' ? (int)$_POST['ltl_id'] : null,
+                    'ctdt_id' => isset($_POST['ctdt_id']) && $_POST['ctdt_id'] !== '' ? (int)$_POST['ctdt_id'] : null,
+                ];
+
+                $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+                $ks_ids = isset($_POST['ks_ids']) ? json_decode($_POST['ks_ids'], true) : null;
+                $data = $ksModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
+                $response = [
+                    'status' => true,
+                    'data' => $data
+                ];
+            } else {
+                $response = [
+                    'status' => false,
+                    'message' => "khong nhan duoc ks_ids"
+                ];
+            }
             break;
         default:
             $response = [
