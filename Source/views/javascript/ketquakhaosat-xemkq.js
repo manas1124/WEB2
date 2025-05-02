@@ -119,14 +119,23 @@ async function loadDuLieu(ks_id) {
     const cauHoiTh = document.createElement('th');
     cauHoiTh.textContent = 'Câu hỏi';
     headerRow.appendChild(cauHoiTh);
+    const thangDiem = document.createElement('th');
+    thangDiem.textContent = 'Thang điểm';
+    thangDiem.colSpan = khaoSat.thang_diem;
+    thangDiem.style.textAlign = "center";
+    headerRow.appendChild(thangDiem);
+    cauhoiList.appendChild(headerRow);
 
-    // Thêm tiêu đề thang điểm 1-5
-    for (let diem = 1; diem <= 5; diem++) {
+    const headerRow2 = document.createElement('tr');
+    const space = document.createElement('th');
+    headerRow2.appendChild(space);
+    for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
         const th = document.createElement('th');
         th.textContent = diem;
-        headerRow.appendChild(th);
+        th.style.textAlign = "center";
+        headerRow2.appendChild(th);
     }
-    cauhoiList.appendChild(headerRow);
+    cauhoiList.appendChild(headerRow2);
 
     // 7. Tạo nội dung bảng
     const traloiList = document.getElementById('traloi-list');
@@ -136,9 +145,10 @@ async function loadDuLieu(ks_id) {
     mucKhaoSat.forEach(mks => {
         // Dòng tiêu đề mục
         const mksRow = document.createElement('tr');
+        mksRow.classList.add('hover');
         const mksTd = document.createElement('td');
         mksTd.textContent = mks.ten_muc;
-        mksTd.colSpan = 6; // 1 cột câu hỏi + 5 cột điểm
+        mksTd.colSpan = khaoSat.thang_diem + 1;
         mksTd.style.fontWeight = 'bold';
         mksRow.appendChild(mksTd);
         traloiList.appendChild(mksRow);
@@ -148,15 +158,17 @@ async function loadDuLieu(ks_id) {
 
         relatedQuestions.forEach(ch => {
             const row = document.createElement('tr');
+            row.classList.add('hover');
             const cauHoiTd = document.createElement('td');
             cauHoiTd.textContent = ch.noi_dung;
             row.appendChild(cauHoiTd);
 
             // Đếm số trả lời theo từng điểm
-            for (let diem = 1; diem <= 5; diem++) {
+            for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
                 const count = traLoi.filter(tl => tl.ch_id === ch.ch_id && tl.ket_qua === diem).length;
                 const td = document.createElement('td');
                 td.textContent = count;
+                td.style.textAlign = "center";
                 row.appendChild(td);
             }
 
@@ -178,4 +190,5 @@ $(document).ready(function () {
     $('#excel').on('click', function () {
         xuatExel(ks_id);
     });
+    $('.table').addClass('table-striped');
 });
