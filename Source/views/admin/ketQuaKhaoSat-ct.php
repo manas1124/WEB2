@@ -7,12 +7,7 @@
         </div>
     </div>
     <div class="w-full overflow-x-auto">
-        <style>
-            #traloi-list td:not(:nth-child(1)){
-                text-align: center;
-            }
-        </style>
-        <table class="table-striped table">
+        <table class="table">
             <thead id="cauhoi-list">
                 <tr>
                     <th></th>
