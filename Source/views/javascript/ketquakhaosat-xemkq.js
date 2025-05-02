@@ -1,3 +1,21 @@
+async function getKhaoSatById(ks_id) {
+    try {
+        const response = await $.ajax({
+            url: "./controller/KhaoSatController.php",
+            type: "POSt",
+            dataType: "json",
+            data: {
+                func: "getChiTietKsById",
+                id: ks_id
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
 async function getAllMucKhaoSat(ks_id) {
     try {
         const response = await $.ajax({
@@ -49,23 +67,6 @@ async function getAllKqks(ks_id) {
         return null;
     }
 }
-async function getAllDoiTuong(dt_ids) {
-    try {
-        const response = await $.ajax({
-            url: "./controller/doiTuongController.php",
-            type: "GET",
-            dataType: "json",
-            data: {
-                func: "getByIds",
-                dt_ids: dt_ids
-            },
-        });
-        return response;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
 async function getAllTraLoi(kqks_ids) {
     try {
         const response = await $.ajax({
@@ -85,6 +86,11 @@ async function getAllTraLoi(kqks_ids) {
 }
 
 async function loadDuLieu(ks_id) {
+
+    // 0. Lấy chi tiết khảo sát
+    const khaoSat = await getKhaoSatById(ks_id);
+
+    // 1. Lấy danh sách mục khảo sát
     const mucKhaoSat = await getAllMucKhaoSat(ks_id);
     const mks_ids = mucKhaoSat.map(item => item.mks_id);
 
@@ -96,16 +102,12 @@ async function loadDuLieu(ks_id) {
     const kqks_ids = kqks.data.map(item => item.kqks_id);
     const doiTuong_ids = kqks.data.map(item => item.nguoi_lamks_id);
 
-    // 4. Lấy thông tin đối tượng
-    const doiTuong = await getAllDoiTuong(doiTuong_ids);
-
-    // 5. Lấy danh sách trả lời
+    // 4. Lấy danh sách trả lời
     const traLoi = await getAllTraLoi(kqks_ids);
 
     console.log(mucKhaoSat);
     console.log(cauHoi);
     console.log(kqks);
-    console.log(doiTuong);
     console.log(traLoi);
 
 
@@ -114,84 +116,52 @@ async function loadDuLieu(ks_id) {
     cauhoiList.innerHTML = ''; // Xóa nội dung cũ
 
     const headerRow = document.createElement('tr');
-    const emailTh = document.createElement('th');
-    emailTh.textContent = 'Email';
-    headerRow.appendChild(emailTh);
+    const cauHoiTh = document.createElement('th');
+    cauHoiTh.textContent = 'Câu hỏi';
+    headerRow.appendChild(cauHoiTh);
 
-    // Tạo tiêu đề cho mục khảo sát và câu hỏi
-    const questionMap = {}; // Ánh xạ ch_id với vị trí cột
-    let colIndex = 1;
-
-    mucKhaoSat.forEach(mks => {
-        // Tạo tiêu đề mục khảo sát
-        const mksTh = document.createElement('th');
-        mksTh.textContent = mks.ten_muc;
-        headerRow.appendChild(mksTh);
-        colIndex++;
-
-        // Tìm các câu hỏi thuộc mục khảo sát này
-        const relatedQuestions = cauHoi.filter(ch => ch.mks_id === mks.mks_id);
-        relatedQuestions.forEach(ch => {
-            const chTh = document.createElement('th');
-            chTh.textContent = ch.noi_dung;
-            headerRow.appendChild(chTh);
-            questionMap[ch.ch_id] = colIndex;
-            colIndex++;
-        });
-    });
-
+    // Thêm tiêu đề thang điểm 1-5
+    for (let diem = 1; diem <= 5; diem++) {
+        const th = document.createElement('th');
+        th.textContent = diem;
+        headerRow.appendChild(th);
+    }
     cauhoiList.appendChild(headerRow);
 
     // 7. Tạo nội dung bảng
     const traloiList = document.getElementById('traloi-list');
-    traloiList.innerHTML = ''; // Xóa nội dung cũ
+    traloiList.innerHTML = '';
 
-    // Tạo dữ liệu cho từng đối tượng
-    const users = {};
-    kqks.data.forEach(kq => {
-        const dt = doiTuong.find(dt => dt.dt_id === kq.nguoi_lamks_id);
-        if (dt) {
-            users[kq.kqks_id] = { email: dt.email, answers: {} };
-        }
-    });
+    // Duyệt qua từng mục khảo sát
+    mucKhaoSat.forEach(mks => {
+        // Dòng tiêu đề mục
+        const mksRow = document.createElement('tr');
+        const mksTd = document.createElement('td');
+        mksTd.textContent = mks.ten_muc;
+        mksTd.colSpan = 6; // 1 cột câu hỏi + 5 cột điểm
+        mksTd.style.fontWeight = 'bold';
+        mksRow.appendChild(mksTd);
+        traloiList.appendChild(mksRow);
 
-    // Gán câu trả lời vào users
-    traLoi.forEach(tl => {
-        const kq = kqks.data.find(kq => kq.kqks_id === tl.kq_ks_id);
-        if (kq) {
-            if (users[kq.kqks_id]) {
-                users[kq.kqks_id].answers[tl.ch_id] = tl.ket_qua || '';
+        // Tìm các câu hỏi thuộc mục khảo sát này
+        const relatedQuestions = cauHoi.filter(ch => ch.mks_id === mks.mks_id);
+
+        relatedQuestions.forEach(ch => {
+            const row = document.createElement('tr');
+            const cauHoiTd = document.createElement('td');
+            cauHoiTd.textContent = ch.noi_dung;
+            row.appendChild(cauHoiTd);
+
+            // Đếm số trả lời theo từng điểm
+            for (let diem = 1; diem <= 5; diem++) {
+                const count = traLoi.filter(tl => tl.ch_id === ch.ch_id && tl.ket_qua === diem).length;
+                const td = document.createElement('td');
+                td.textContent = count;
+                row.appendChild(td);
             }
-        }
-    });
 
-    // Tạo hàng cho mỗi đối tượng
-    Object.values(users).forEach(user => {
-        const row = document.createElement('tr');
-
-        // Cột Email
-        const emailTd = document.createElement('td');
-        emailTd.textContent = user.email;
-        row.appendChild(emailTd);
-
-        // Cột mục khảo sát (để trống)
-        mucKhaoSat.forEach(mks => {
-            const mksTd = document.createElement('td');
-            row.appendChild(mksTd);
-
-            // Cột câu hỏi
-            const relatedQuestions = cauHoi.filter(ch => ch.mks_id === mks.mks_id);
-            relatedQuestions.forEach(ch => {
-                const answerTd = document.createElement('td');
-                answerTd.textContent = user.answers[ch.ch_id] || '';
-                row.appendChild(answerTd);
-            })
+            traloiList.appendChild(row);
         });
-
-
-
-
-        traloiList.appendChild(row);
     });
 }
 
