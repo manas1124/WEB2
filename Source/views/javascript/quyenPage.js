@@ -61,6 +61,21 @@ function updatepage(params) {
 function create() {
   const ten_quyen = $("#ten_quyen").val();
   const status = $("#select-status").val();
+  var selectedChucNang = [];
+
+  // Iterate through each row in the tbody
+  $("#checkbox-data tr").each(function () {
+    var rowId = $(this).attr("id");
+
+    $(this)
+      .find('input[type="checkbox"]:checked')
+      .each(function () {
+        selectedChucNang.push($(this).val());
+      });
+
+  });
+  console.log(ten_quyen,selectedChucNang)
+  
   $.ajax({
     url: "./controller/quyenController.php",
     type: "POST",
@@ -68,7 +83,9 @@ function create() {
     data: {
       func: "create",
       ten_quyen : ten_quyen,
+      selectedChucNang: selectedChucNang,
       status : status,
+
     },
     success: function (response) {
       if (response) {
@@ -99,6 +116,7 @@ function create() {
       });
     },
   });
+  
 }
 $(document).ready(function () {
   loadAllQuyen();
@@ -129,6 +147,10 @@ $(document).ready(function () {
     }
   });
 });
+$("#return-page").on("click", function () {
+  $("#quyen-page").trigger("click");
+});
+
 $(document).on("click", '[id="quyen-xoa"]', function () {
   const quyen_id = $(this).data("id");
 

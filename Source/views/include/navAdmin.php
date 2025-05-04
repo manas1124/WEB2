@@ -47,7 +47,7 @@ echo '<aside id="default-sidebar"
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-item nav-link" data-page="quyenPage">
+                    <a id="quyen-page" href="#" class="nav-item nav-link" data-page="quyenPage">
                         <span class="icon-[tabler--message] size-5"></span>
                         Quyền
                     </a>

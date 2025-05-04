@@ -14,9 +14,7 @@ class QuyenModel
     public function getAll()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT *
-                                FROM quyen
-                                ");
+        $stmt = $conn->prepare("SELECT * FROM quyen where status = 1");
 
         if (!$stmt) {
             error_log("Prepare failed: " . $conn->error);
@@ -48,7 +46,7 @@ class QuyenModel
 
         $params = [];
         $types = "";
-
+        $status = 1;
         if ($status !== null) {
             $sql .= " AND status = ?";
             $countSql .= " AND status = ?";
@@ -150,18 +148,20 @@ class QuyenModel
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("si", $ten_quyen, $status);
         $success = $stmt->execute();
+        $insert_id = $conn->insert_id;
         $stmt->close();
         $this->db->closeConnection();
 
         return [
             "status" => $success,
-            "message" => $success ? "Thêm quyền thành công" : "Thêm quyền thất bại"
+            "message" => $success ? "Thêm quyền thành công" : "Thêm quyền thất bại",
+            "insert_id" => $insert_id
         ];
     }
     public function delete($quyen_id)
     {
         $conn = $this->db->getConnection();
-        $sql = "DELETE FROM quyen WHERE quyen_id = ?";
+        $sql = "UPDATE quyen SET status = 0 WHERE quyen_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $quyen_id);
         $result = $stmt->execute();
@@ -176,5 +176,56 @@ class QuyenModel
         $stmt->bind_param("sii", $ten_quyen, $status, $quyen_id);
 
         return $stmt->execute();
+    }
+
+    //chuc nang quyen
+    public function createChucNangQuyen($quyen_id,$chuc_nang_key,$status = 1 )
+    {
+        $conn = $this->db->getConnection();
+        $sql = "INSERT INTO chuc_nang (quyen_id, ten_cn, status) VALUES (?, ?,?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("isi",$quyen_id,$chuc_nang_key, $status );
+        $success = $stmt->execute();
+        $stmt->close();
+        $this->db->closeConnection();
+
+        return [
+            "status" => $success,
+            "message" => $success ? "Thêm chức năng thành công" : "Thêm chức năng thất bại",
+        ];
+    }
+    public function deleteAllChucNangByQuyenId($quyen_id)
+    {
+        $conn = $this->db->getConnection();
+        $sql = "DELETE FROM chuc_nang WHERE quyen_id = ? ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $quyen_id,);
+        $result = $stmt->execute();
+        $stmt->close();
+        $this->db->closeConnection();
+        return $result;
+    }
+    public function getChucNangByQuyenId($quyen_id)
+    {
+        $conn = $this->db->getConnection();
+        $query = " SELECT  * FROM chuc_nang WHERE quyen_id = ? ";
+
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $quyen_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = [];
+        
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $stmt->close();
+        $this->db->closeConnection();
+        
+        return $data;
+        
+        if ($result->num_rows <= 0) {
+            return false;
+        }
     }
 }
