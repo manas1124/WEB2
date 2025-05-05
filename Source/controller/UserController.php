@@ -13,7 +13,9 @@ if (isset($_POST['func'])) {
     switch ($func) {
         case "getAllUser":
             $search = isset($_POST['search']) ? $_POST['search'] : '';
-            $response = $ksModel->getAllUser($search); 
+            $nhomKsId = $_POST['nhomKsId'] ?? '';
+
+            $response = $ksModel->getAllUser($search,$nhomKsId); 
             break;
 
         case "deleteUser":
