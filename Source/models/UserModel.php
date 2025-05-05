@@ -12,12 +12,24 @@ class UserModel {
     }
 
    
-     public function getAllUser($search = '') {
+     public function getAllUser($search = '',$nhomKsId = '') {
         $conn = $this->db->getConnection();
        
-        $stmt = $conn->prepare("SELECT * FROM doi_tuong WHERE ho_ten LIKE ? OR diachi LIKE ?");
+        if ($nhomKsId != '') {
+            $stmt = $conn->prepare("SELECT u.*, nks.ten_nks 
+                FROM doi_tuong u
+                LEFT JOIN nhom_khao_sat nks ON u.nhom_ks = nks.nks_id
+                WHERE (u.ho_ten LIKE ? OR u.email LIKE ?) AND u.nhom_ks = ?");
+            $stmt->bind_param("ssi", $searchTerm, $searchTerm, $nhomKsId); 
+        } else {
+            $stmt = $conn->prepare("SELECT u.*, nks.ten_nks 
+                FROM doi_tuong u
+                LEFT JOIN nhom_khao_sat nks ON u.nhom_ks = nks.nks_id
+                WHERE u.ho_ten LIKE ? OR u.email LIKE ?");
+            $stmt->bind_param("ss", $searchTerm, $searchTerm);
+        }
         $searchTerm = "%$search%";
-        $stmt->bind_param("ss", $searchTerm, $searchTerm);
+       
         $stmt->execute();
         $result = $stmt->get_result();  
 
