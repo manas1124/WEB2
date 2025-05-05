@@ -88,6 +88,7 @@
         echo json_encode([
             'status' => $isSuccess ? 'success' : 'error',
             'message' => $isSuccess ? 'Đăng nhập thành công!' : 'Mật khẩu không đúng!',
+            'accessToken' => $isSuccess ? $accessToken : 'chưa có access token'
         ]);
     }
 
