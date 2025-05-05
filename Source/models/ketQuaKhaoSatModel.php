@@ -92,7 +92,7 @@ class KqKhaoSatModel
     public function totalKQKhaoSat($ks_id)
     {
         $conn = $this->db->getConnection();
-        $query = "SELECT COUNT(*) as total FROM kq_khao_sat WHERE ks_id = ?";
+        $query = "SELECT COUNT(*) as total FROM kq_khao_sat WHERE ks_id = ? AND status = 1";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $ks_id);
         $stmt->execute();
@@ -103,7 +103,7 @@ class KqKhaoSatModel
     public function getIdKhaoSat()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT DISTINCT ks_id FROM kq_khao_sat");
+        $stmt = $conn->prepare("SELECT DISTINCT ks_id FROM kq_khao_sat AND status = 1");
         $stmt->execute();
         $result = $stmt->get_result();
         $ks_ids = [];
