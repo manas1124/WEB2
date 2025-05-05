@@ -3,6 +3,11 @@ require_once __DIR__ . '/../models/ketQuaKhaoSatModel.php';
 require_once __DIR__ . '/../models/mucKhaoSatModel.php';
 require_once __DIR__ . '/../models/cauHoiModel.php';
 require_once __DIR__ . '/../models/traLoiModel.php';
+
+require '../../vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 // header('Content-Type: application/json'); 
 
 if (isset($_GET['func'])) {
@@ -37,7 +42,7 @@ if (isset($_GET['func'])) {
             break;
         case "getMucKhaoSat":
             $ks_id = isset($_GET['ks_id']) ? $_GET['ks_id'] : null;
-            if($ks_id != null){
+            if ($ks_id != null) {
                 $response = $mucKhaoSatModel->getMucKhaoSatByKsId($ks_id);
             }
             break;
@@ -62,6 +67,25 @@ if (isset($_GET['func'])) {
             break;
         case "getIdKhaoSat":
             $response = $KqKhaoSatModel->getIdKhaoSat();
+            break;
+        case "xuatExel":
+            if (isset($_GET['ks_id'])) {
+                $ks_id = $_GET['ks_id'];
+                $spreadsheet = $KqKhaoSatModel->exportSurveyToExcel($ks_id);
+            
+                if ($spreadsheet) {
+                    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                    header('Content-Disposition: attachment; filename="survey_export_' . $ks_id . '.xlsx"');
+                    header('Cache-Control: max-age=0');
+            
+                    $writer = new Xlsx($spreadsheet);
+                    $writer->save('php://output');
+                    exit;
+                } else {
+                    http_response_code(404);
+                    echo "Không tìm thấy khảo sát.";
+                }
+            }
             break;
         default:
             $response = [

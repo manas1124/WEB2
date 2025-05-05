@@ -62,7 +62,7 @@ class CauHoiModel
         $conn = $this->db->getConnection();
 
         $placeholders = implode(',', array_fill(0, count($mucCauHois), '?'));
-        $sql = "SELECT * FROM cau_hoi WHERE mks_id IN ($placeholders)";
+        $sql = "SELECT * FROM cau_hoi WHERE mks_id IN ($placeholders) AND status = 1";
     
         $stmt = $conn->prepare($sql);
         

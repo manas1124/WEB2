@@ -117,7 +117,7 @@ class TraLoiModel
         }
         $placeholders = implode(',', array_fill(0, count($kqks_ids), '?')); 
 
-        $sql = "SELECT * FROM tra_loi WHERE kq_ks_id IN ($placeholders)";
+        $sql = "SELECT * FROM tra_loi WHERE kq_ks_id IN ($placeholders) AND status =1";
         $stmt = $conn->prepare($sql);
 
         $types = str_repeat('i', count($kqks_ids)); 
