@@ -178,7 +178,29 @@ async function loadDuLieu(ks_id) {
 }
 
 function xuatExel(ks_id) {
-
+    $.ajax({
+        url: './controller/ketQuaKhaoSatController.php',
+        type: 'GET',
+        data: { 
+            func: "xuatExel",
+            ks_id: ks_id 
+        },
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function(response) {
+            var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `survey_export_${ks_id}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+        error: function(xhr, status, error) {
+            console.error("Đã xảy ra lỗi khi xuất Excel:", error);
+        }
+    });
 }
 
 $(document).ready(function () {

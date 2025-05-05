@@ -61,22 +61,49 @@ async function loadDsKhaoSat() {
         $("#ks-list").empty();
         ksList.data.data.map((item) => {
             $("#ks-list").append(`
-          <tr>
-              <td>${item.ten_ks}</td>
-              <td>${item.ngay_bat_dau}</td>
-              <td>${item.ngay_ket_thuc}</td>
-              <td>${item.ten_nks}</td>
-              <td>${item.ten_nganh}</td>
-              <td>${item.ten_ck}</td>
-              <td>
-                <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua"><span class="icon-[tabler--eye] size-5"></span></button>
-              </td>
-          </tr>
+            <tr>
+                <td>${item.ten_ks}</td>
+                <td>${item.ngay_bat_dau}</td>
+                <td>${item.ngay_ket_thuc}</td>
+                <td>${item.ten_nks}</td>
+                <td>${item.ten_nganh}</td>
+                <td>${item.ten_ck}</td>
+                <td>
+                    <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua"><span class="icon-[tabler--eye] size-5"></span></button>
+                    <button class="btn btn-primary btnExcel" data-id="${item.ks_id}>Xuất Excel</button>
+                </td>
+            </tr>
   
         `);
         });
 
     }
+}
+
+function xuatExel(ks_id) {
+    $.ajax({
+        url: './controller/ketQuaKhaoSatController.php',
+        type: 'GET',
+        data: { 
+            func: "xuatExel",
+            ks_id: ks_id 
+        },
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function(response) {
+            var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `survey_export_${ks_id}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+        error: function(xhr, status, error) {
+            console.error("Đã xảy ra lỗi khi xuất Excel:", error);
+        }
+    });
 }
 
 $(document).ready(function () {
@@ -86,6 +113,11 @@ $(document).ready(function () {
         e.preventDefault();
         let action = $(this).data("act");
         console.log(action) 
+    });
+
+    $('.btnExcel').on('click', function () {
+        let ks_id = $(this).data("id");
+        xuatExel(ks_id);
     });
 
 });
