@@ -208,6 +208,8 @@ async function getUserById(id) {
     }
 }
 $(function () {
+    //xu ly lay du lieu nguoi dang dung trong session
+    //getuserinfor
     (async () => {
         const account = await getCurrentLoginAccount();
         if (account) {
