@@ -182,22 +182,22 @@ class QuyenModel
     public function createChucNangQuyen($quyen_id,$chuc_nang_key,$status = 1 )
     {
         $conn = $this->db->getConnection();
-        $sql = "INSERT INTO chuc_nang (quyen_id, ten_cn, status) VALUES (?, ?,?)";
+        $sql = "INSERT INTO quyen_chucnang (quyen_id, `key`, status) values(?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("isi",$quyen_id,$chuc_nang_key, $status );
+        $stmt->bind_param("isi",$quyen_id,$chuc_nang_key, $status);
         $success = $stmt->execute();
         $stmt->close();
         $this->db->closeConnection();
 
         return [
             "status" => $success,
-            "message" => $success ? "Thêm chức năng thành công" : "Thêm chức năng thất bại",
+            "message" => $success ? "Thêm chức năng thành công" : "Thêm quyền - chức năng thất bại",
         ];
     }
     public function deleteAllChucNangByQuyenId($quyen_id)
     {
         $conn = $this->db->getConnection();
-        $sql = "DELETE FROM chuc_nang WHERE quyen_id = ? ";
+        $sql = "DELETE FROM quyen_chucnang WHERE quyen_id = ? ";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $quyen_id,);
         $result = $stmt->execute();
@@ -208,7 +208,7 @@ class QuyenModel
     public function getChucNangByQuyenId($quyen_id)
     {
         $conn = $this->db->getConnection();
-        $query = " SELECT  * FROM chuc_nang WHERE quyen_id = ? ";
+        $query = " SELECT  * FROM quyen_chucnang WHERE quyen_id = ? ";
 
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $quyen_id);

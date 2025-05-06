@@ -103,15 +103,18 @@
                             "extraMarkup": "<span class=\"icon-[tabler--caret-up-down] shrink-0 size-4 text-base-content absolute top-1/2 end-3 -translate-y-1/2 \"></span>"
                             }'
                         class="hidden">
-                        <option value="">Choose</option>
-                        <?php
+                        <option value="">Chọn loại đối tượng</option>
+                        <option value="1">Sinh viên</option>
+                        <option value="2">Giảng viên</option>
+                        <option value="3">Doanh nghiệp</option>
+                        <!-- <?php
                             require_once __DIR__ . '../models/LoaiDoiTuongModel.php';
                             $doiTuongModel = new LoaiDoiTuongModel();
                             $doiTuongList = $doiTuongModel->getAll();
                             foreach($doiTuongList as $doiTuong) {
                                 echo '<option value="' . $doiTuong['dt_id'] . '">' . $doiTuong['ten_dt'] . '</option>';
                             }
-                        ?>
+                        ?> -->
                     </select>
                 </div>
                 <button type="submit" id="signUpButton" class="w-full mt-6 bg-[#304CA2] text-white py-2 rounded hover:bg-[#4B66C2] cursor-pointer">Đăng kí</button>

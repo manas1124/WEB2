@@ -40,38 +40,38 @@
             <tbody id="checkbox-data">
                 <tr id="khaoSat-row">
                     <td>Quản lý khảo sát</td>
-                    <td><input type="checkbox" class="checkbox" id="ks-read" value="ks-read" /></td>
-                    <td><input type="checkbox" class="checkbox" id="ks-create" value="ks-create" /></td>
-                    <td><input type="checkbox" class="checkbox" id="ks-edit" value="ks-edit" /></td>
-                    <td><input type="checkbox" class="checkbox" id="ks-delete" value="ks-delete" /></td>
+                    <td><input type="checkbox" class="checkbox" id="view.survey" value="view.survey" /></td>
+                    <td><input type="checkbox" class="checkbox" id="create.survey" value="create.survey" /></td>
+                    <td><input type="checkbox" class="checkbox" id="edit.survey" value="edit.survey" /></td>
+                    <td><input type="checkbox" class="checkbox" id="delete.survey" value="delete.survey" /></td>
                 </tr>
                 <tr id="nganh-chuky-ctdt-row">
                     <td>Quản lý ngành,chu kì, chương trình đào tạo</td>
-                    <td><input type="checkbox" class="checkbox" id="nhomCkCtdt-read" value="nhomCkCtdt-read" /></td>
-                    <td><input type="checkbox" class="checkbox" id="nhomCkCtdt-create" value="nhomCkCtdt-create" /></td>
-                    <td><input type="checkbox" class="checkbox" id="nhomCkCtdt-edit" value="nhomCkCtdt-edit" /></td>
-                    <td><input type="checkbox" class="checkbox" id="nhomCkCtdt-delete" value="nhomCkCtdt-delete" /></td>
+                    <td><input type="checkbox" class="checkbox" id="view.program" value="view.program" /></td>
+                    <td><input type="checkbox" class="checkbox" id="create.program" value="create.program" /></td>
+                    <td><input type="checkbox" class="checkbox" id="edit.program" value="edit.program" /></td>
+                    <td><input type="checkbox" class="checkbox" id="delete.program" value="delete.program" /></td>
                 </tr>
                 <tr id="doiTuong-nhomDoiTuong-row">
                     <td>Quản lý đối tượng và nhóm đối tượng</td>
-                    <td><input type="checkbox" class="checkbox" id="doiTuong-read" value="doiTuong-read" /></td>
-                    <td><input type="checkbox" class="checkbox" id="doiTuong-create" value="doiTuong-create" /></td>
-                    <td><input type="checkbox" class="checkbox" id="doiTuong-edit" value="doiTuong-edit" /></td>
-                    <td><input type="checkbox" class="checkbox" id="doiTuong-delete" value="doiTuong-delete" /></td>
+                    <td><input type="checkbox" class="checkbox" id="view.target" value="view.target" /></td>
+                    <td><input type="checkbox" class="checkbox" id="create.target" value="create.target" /></td>
+                    <td><input type="checkbox" class="checkbox" id="edit.target" value="edit.target" /></td>
+                    <td><input type="checkbox" class="checkbox" id="delete.target" value="delete.target" /></td>
                 </tr>
                 <tr id="taiKhoan-row">
                     <td>Quản lý tài khoản</td>
-                    <td><input type="checkbox" class="checkbox" id="tk-read" value="tk-read" /></td>
-                    <td><input type="checkbox" class="checkbox" id="tk-create" value="tk-create" /></td>
-                    <td><input type="checkbox" class="checkbox" id="tk-edit" value="tk-edit" /></td>
-                    <td><input type="checkbox" class="checkbox" id="tk-delete" value="tk-delete" /></td>
+                    <td><input type="checkbox" class="checkbox" id="view.account" value="view.account" /></td>
+                    <td><input type="checkbox" class="checkbox" id="create.account" value="create.account" /></td>
+                    <td><input type="checkbox" class="checkbox" id="edit.account" value="edit.account" /></td>
+                    <td><input type="checkbox" class="checkbox" id="delete.account" value="delete.account" /></td>
                 </tr>
                 <tr id="quyen-row">
                     <td>Quản lý quyền</td>
-                    <td><input type="checkbox" class="checkbox" id="quyen-read" value="quyen-read" /></td>
-                    <td><input type="checkbox" class="checkbox" id="quyen-create" value="quyen-create" /></td>
-                    <td><input type="checkbox" class="checkbox" id="quyen-edit" value="quyen-edit" /></td>
-                    <td><input type="checkbox" class="checkbox" id="quyen-delete" value="quyen-delete" /></td>
+                    <td><input type="checkbox" class="checkbox" id="view.permission" value="view.permission" /></td>
+                    <td><input type="checkbox" class="checkbox" id="create.permission" value="create.permission" /></td>
+                    <td><input type="checkbox" class="checkbox" id="edit.permission" value="edit.permission" /></td>
+                    <td><input type="checkbox" class="checkbox" id="delete.permission" value="delete.permission" /></td>
                 </tr>
             </tbody>
         </table>

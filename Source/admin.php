@@ -35,7 +35,7 @@
         <div class="navbar-end flex items-center gap-4">
 
             <div class="dropdown relative inline-flex [--placement:bottom-end]">
-                <button id="dropdown-bottom-start" type="button" class="dropdown-toggle btn btn-primary"
+                <button id="dropdown-bottom-start" type="button" class="dropdown-toggle btn btn-text px-4 py-2 text-base-300"
                     aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
                     Bottom end
                     <span class="icon-[tabler--chevron-down] dropdown-open:rotate-180 size-4"></span>

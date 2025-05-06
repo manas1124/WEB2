@@ -139,7 +139,7 @@ $(function () {
       $("#ten-quyen").val(dataQuyen.ten_quyen);
 
       dataChucNang.forEach((item) => {
-        const ten_cn_value = item.ten_cn;
+        const ten_cn_value = item.key;
         const status = item.status;
         $(
           '#checkbox-data input[type="checkbox"][value="' + ten_cn_value + '"]'

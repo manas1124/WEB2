@@ -75,6 +75,16 @@ class AccountModel
         $stmt->bind_param("ssiiii", $username, $hashedPassword, $dt_id, $quyen_id, $status, $tk_id);
         return $stmt->execute();
     }
+    public function updateUsernameAndPassword($tk_id, $username, $hashedPassword)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("UPDATE tai_khoan 
+                                SET username = ?, password = ?
+                                WHERE tk_id = ?
+    ");
+        $stmt->bind_param("ssi", $username, $hashedPassword, $tk_id);
+        return $stmt->execute();
+    }
     //hàm xoá , chuyển status về 0 thay vì xoá hết
     public function softDelete($tk_id)
     {
@@ -154,7 +164,7 @@ class AccountModel
     public function getAccount($username)
     {
     $conn = $this->db->getConnection();
-    $stmt = $conn->prepare("SELECT username, password, dt_id, qcn.key 
+    $stmt = $conn->prepare("SELECT tk_id, username, password, dt_id, qcn.key 
                             FROM tai_khoan tk
                             JOIN quyen_chucnang qcn ON tk.quyen_id = qcn.quyen_id 
                             WHERE username = ?");
@@ -183,6 +193,7 @@ class AccountModel
                 'username' => $row['username'],
                 'password' => $row['password'],
                 'dt_id' => $row['dt_id'],
+                'tk_id' => $row['tk_id'],
                 'keys' => []
             ];
         }
