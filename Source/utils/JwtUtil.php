@@ -9,6 +9,8 @@
 
     function generateToken($account) {
         $payload = [
+            'userId' =>$account['tk_id'],
+            'dtId' =>$account['dt_id'],
             'sub' => $account['username'],
             'iat' => time(), 
             'exp' => time() + (60 * 15),  // 1 min

@@ -58,13 +58,42 @@
             }
         }
 
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Đăng ký thành công!'
-        ]);
-        exit;
+        // echo json_encode([
+        //     'status' => 'success',
+        //     'message' => 'Đăng ký thành công!'
+        // ]);
+        // exit;
     }
 
+    //update tai khoan - cap nhat thong tin tai khoan
+    if (isset($_POST['action']) && $_POST['action'] == 'updateAccount') {
+        $tk_id = $_POST['tk_id'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $accountModel = new AccountModel();
+            if ($accountModel->usernameIsExist($username)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Tài khoản đã tồn tại!'
+                ]);
+                exit;
+            }
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $isSuccess = $accountModel->updateUsernameAndPassword($tk_id,$username, $hashedPassword, );
+            if ($isSuccess) {
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Cập nhật thành công!'
+                ]);
+                exit;
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Cập nhật không thành công!'
+                ]);
+                exit;
+            }
+    }
     if (isset($_POST['action']) && $_POST['action'] == 'login') {
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -92,7 +121,30 @@
         ]);
     }
 
-
+    if (isset($_POST['func']) && $_POST['func'] == "getCurrentLoginUser") {
+        if (!isset($_SESSION['accessToken'] ) &&  $_SESSION['accessToken']== "") {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Chưa đăng nhập để lấy thông tin tài khoản !',
+            ]);
+            exit;
+        }
+        
+        $userInfor = validateToken($_SESSION['accessToken']);
+        if (!$userInfor) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Chưa đăng nhập !',
+            ]);
+            exit;
+        }
+        echo json_encode([
+            'status' => "success",
+            'message' => "get user infor sucess",
+            'userInfor' => $userInfor,
+            
+        ]);
+    }
     function isValidAccount($account, $password) {
         if ($account != null && isValidPassword($password, $account)) {
             return true;

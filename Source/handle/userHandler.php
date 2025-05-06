@@ -34,7 +34,11 @@ if ($page) {
             require_once("../login.php");
             $response["html"] = ob_get_clean();
             break;
-        
+        case "user-infor":
+            ob_start();
+            require_once("../views/user/userInfor.php");
+            $response["html"] = ob_get_clean();
+            break;
         default:
             $response["html"] = `loi trang handle`;
             $response["error"] = "Invalid page requested.";
