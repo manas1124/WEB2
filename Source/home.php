@@ -25,7 +25,9 @@
             <div id="default-navbar-collapse"
                 class="md:navbar-end collapse hidden grow basis-full overflow-hidden transition-[height] duration-300 max-md:w-full">
                 <ul class="menu md:menu-horizontal gap-2 p-0 text-base max-md:mt-2">
+
                     <li><a href="./home.php">Trang chủ</a></li>
+
                     <li><a href="#" class="nav-item" data-page="survey">Thực hiện khảo sát</a></li>
                     <li><a href="#" class="nav-item" data-page="result-survey">Xem kết quả khảo sát</a></li>
 
@@ -43,6 +45,7 @@
                         </ul>
                     </div>
                     <li id="btn-login" class="btn btn-prime hidden"><a href="./login.php">Đăng nhập</a></li>
+
                 </ul>
             </div>
         </div>
