@@ -56,29 +56,29 @@ if (isset($_POST['func'])) {
             }
             $quyenId = $_POST["quyen_id"];
             $ten_quyen = $_POST["ten_quyen"];
-            $selectedChucNangList = $_POST["selectedChucNang"];
+            
             $status = 1;
             $isUpdateQuyenSuccess = $quyenModel->update($quyenId, $ten_quyen, $status);
             
             $isXoaChucNangSuccess = $quyenModel->deleteAllChucNangByQuyenId($quyenId);
-           
-            if (count($selectedChucNangList) > 0) {
+            
+            if (!isset($_POST["selectedChucNang"]) && !empty($_POST["selectedChucNang"]) ) {
+                $selectedChucNangList = $_POST["selectedChucNang"];
                 foreach ($selectedChucNangList as $chucNangKey) {
                     $quyenModel->createChucNangQuyen($quyenId, $chucNangKey);
                 }
             }
             
-
             if ($isUpdateQuyenSuccess && $isXoaChucNangSuccess) {
                 echo json_encode([
                     'status' => true,
-                    'message' => "Sửa chức quyền thành công",
+                    'message' => "Sửa chức năng- quyền thành công",
                 ]);
                 exit;
             }
             echo json_encode([
                 'status' => false,
-                'message' => "sửa chức năng thất bại ",
+                'message' => "sửa chức năng - quyền thất bại ",
             ]);
             exit;
         case "checkExistQuyen":

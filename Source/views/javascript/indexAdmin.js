@@ -1,4 +1,23 @@
 $(function () {
+    //check login, xu ly neu da dang nhap
+    (async () => {
+        let acc = await getCurrentLoginAccount();
+        console.log(acc);
+        if (acc == null) {
+          window.location.href = "./logad.php";
+          return; 
+        } else {
+            console.log("admin",acc)
+            const userInfor = await getUserById(acc.dtId)
+            console.log("infor",userInfor)
+            let username = "Xin chào "+ userInfor.ho_ten + " !"
+            $("#dropdown-bottom-infor").text(username)
+            $("#dropdown-bottom-infor").removeClass("hidden")
+           
+        }
+      })();
+
+    //navigate
     // Function to update content and URL
     function updateContent(params) {
         $.ajax({
@@ -105,4 +124,64 @@ $(function () {
         }
         return $.param(params);
     }
+
+    // xu ly sau
+    
+    $(".btn-logout").on("click",function () {
+        logout()
+    })
 });
+
+function logout() {
+    $.ajax({
+        type: 'POST',
+        url: './controller/AuthController.php', 
+        data: {action: 'logout'}, 
+        success: function (response) {
+            console.log(response);
+
+            var data = JSON.parse(response);
+            alert(data['message']); // Show the message from the server
+            window.location.href = "./logad.php";
+
+        },
+        error: function() {
+            alert('Có lỗi xảy ra khi gửi dữ liệu!');
+        }
+    });
+}
+
+async function getCurrentLoginAccount() {
+    try {
+      const response = await $.ajax({
+        url: "./controller/AuthController.php",
+        type: "POST",
+        dataType: "json",
+        data: { func :"getCurrentLoginUser"},
+      });
+      if (response.status == 'error') {
+        console.log(response.message)
+        return null;
+      }
+      return response.userInfor;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+}
+async function getUserById(id) {
+    try {
+      const response = await $.ajax({
+        
+        url: "./controller/UserController.php",
+        type: "POST",
+        data: { func: "getUserById", id: id },
+        dataType: "json",
+      });
+      console.log(" Phản hồi getUserById:", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("Lỗi khi lấy dữ liệu người dùng", error);
+      return null;
+    }
+}
