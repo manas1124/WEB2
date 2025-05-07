@@ -195,7 +195,27 @@ $(document).ready(function () {
     });
 
     $("#btn-save").on("click", function () {
-        update();
+        const tenChuky = $("#ten-ck").val().trim();
+        if (!tenChuky) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Tên chu kỳ không được để trống!'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn sửa?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có, sửa ngay',
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                update();
+            }
+        });
     });
 
     $("#pagination").on("click", ".btn-page", function () {
@@ -210,24 +230,29 @@ $(document).ready(function () {
     });
 
     $("#pagination").on("click", ".btn-prev", function () {
-        const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+        let currentPage = Number($("#pagination button[aria-current='page']").data("page"));
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
+        console.log(currentPage);
         if (currentPage == 1) {
             return;
         }
         currentPage -= 1;
+        console, log(currentPage);
         loadAllChuky(currentPage, status);
     });
 
     $("#pagination").on("click", ".btn-next", function () {
-        const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+        let currentPage = Number($("#pagination button[aria-current='page']").data("page"));
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        if (currentPage == $("#pagination .btn-page]").length) {
+        const totalPages = $("#pagination .btn-page").length;
+        console.log(currentPage);
+        if (currentPage == totalPages) {
             return;
         }
         currentPage += 1;
+        console, log(currentPage);
         loadAllChuky(currentPage, status);
     });
 });

@@ -11,14 +11,14 @@
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
             <div>
-                <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
-                    <option value="-1">Chọn status</option>
+                    <option value="-1">Chọn trạng thái</option>
                     <option value="1">Đang sử dụng</option>
                     <option value="0">Đã khóa</option>
                 </select>
             </div>
             <button type="button" class="btn btn-primary" id="btn-loc" data-act="nganh-loc">Lọc</button>
+            <button type="button" class="btn btn-primary " id="btn-reset" data-act="reset">Reset</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto">

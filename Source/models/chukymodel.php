@@ -76,7 +76,7 @@ class ChuKyModel
 
         // Truy vấn dữ liệu trang hiện tại
 
-        $sql .= " LIMIT ?, ?";
+        $sql .= " ORDER BY ck_id DESC LIMIT ?, ?";
         $params[] = $offset;
         $params[] = $limit;
         $types .= "ii";

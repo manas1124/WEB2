@@ -287,14 +287,14 @@ $(document).ready(async function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Bạn quên chọn ngành rồi kìa!'
+                text: 'Ngành không được để trống!'
             });
         }
         else if ($("#select-chuky").val() == -1) {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Bạn quên chọn chu kỳ rồi kìa!'
+                text: 'Chu kỳ không được để trống!'
             });
         }
         else {
@@ -314,18 +314,28 @@ $(document).ready(async function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Bạn quên chọn ngành rồi kìa!'
+                text: 'Ngành không được để trống!'
             });
         }
         else if ($("#select-chuky").val() == -1) {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Bạn quên chọn chu kỳ rồi kìa!'
+                text: 'Chu kỳ không được để trống!'
             });
         }
         else {
-            update();
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn sửa ctdt?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Có, sửa ngay',
+                cancelButtonText: 'Không'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    update();
+                }
+            });
         }
     });
 

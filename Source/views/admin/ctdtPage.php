@@ -8,19 +8,16 @@
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
             <div>
-                <label class="label-text" for="select-nganh">Ngành </label>
                 <select class="select" id="select-nganh">
                     <option value="-1">Chọn ngành</option>
                 </select>
             </div>
             <div>
-                <label class="label-text" for="select-chuky">Chu kỳ </label>
                 <select class="select" id="select-chuky">
                     <option value="-1">Chọn chu kỳ</option>
                 </select>
             </div>
             <div>
-                <label class="label-text" for="select-loai">Loại </label>
                 <select class="select" id="select-loai">
                     <option value="-1">Chọn loại</option>
                     <option value="1">Chương trình đào tạo</option>
@@ -28,14 +25,14 @@
                 </select>
             </div>
             <div>
-                <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
-                    <option value="-1">Chọn status</option>
+                    <option value="-1">Chọn trạng thái</option>
                     <option value="1">Đang sử dụng</option>
                     <option value="0">Đã khóa</option>
                 </select>
             </div>
-            <button class="btn btn-primary" id="btn-loc" data-act="ctdt-loc">Lọc</button>
+            <button type="button" class="btn btn-primary" id="btn-loc" data-act="ctdt-loc">Lọc</button>
+            <button type="button" class="btn btn-primary" id="btn-reset" data-act="reset">Reset</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto">

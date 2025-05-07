@@ -75,7 +75,7 @@ if (isset($_GET['func'])) {
                         'message' => 'CTDT_CDR đã tồn tại'
                     ];
                 } else {
-                    $data = $CtdtDauraModel->create($file, $nganh_id, $ck_id, $la_ctdt, $status);
+                    $data = $CtdtDauraModel->update($ctdt_id, $file, $nganh_id, $ck_id, $la_ctdt, $status);
                     $response = [
                         'status' => true,
                         'data' => $data
