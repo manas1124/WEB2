@@ -25,7 +25,7 @@
             <div id="default-navbar-collapse"
                 class="md:navbar-end collapse hidden grow basis-full overflow-hidden transition-[height] duration-300 max-md:w-full">
                 <ul class="menu md:menu-horizontal gap-2 p-0 text-base max-md:mt-2">
-                    <li><a href="/Source/home.php">Trang chủ</a></li>
+                    <li><a href="../Source/home.php">Trang chủ</a></li>
                     <li><a href="#" class="nav-item" data-page="survey">Thực hiện khảo sát</a></li>
                     <li><a href="#" class="nav-item" data-page="result-survey">Xem kết quả khảo sát</a></li>
                     
@@ -42,7 +42,7 @@
                             <li><a id="btn-logout" class="dropdown-item" href="#"> Đăng xuất </a></li>
                         </ul>
                     </div>
-                    <li id="btn-login" class="btn btn-prime hidden"><a href="/Source/login.php">Đăng nhập</a></li>
+                    <li id="btn-login" class="btn btn-prime hidden"><a href="../Source/login.php">Đăng nhập</a></li>
                 </ul>
             </div>
         </div>
@@ -95,6 +95,7 @@
     <script src="./views/javascript/indexUser.js"></script>
     <script src="./views/javascript/survey.js"></script>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="Source/views/javascript/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
