@@ -71,7 +71,7 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
         $accountModel = new AccountModel();
-            if ($accountModel->usernameIsExist($username)) {
+            if ($accountModel->usernameIsExistByAccountId($username,$tk_id)) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'Tài khoản đã tồn tại!'
@@ -127,7 +127,7 @@
         }
         echo json_encode([
             'status' => $isSuccess ? 'success' : 'error',
-            'message' => $isSuccess ? 'Đăng nhập thành công!' : 'Mật khẩu không đúng!',
+            'message' => $isSuccess ? 'Đăng nhập thành công!' : "Mật khẩu không đúng! " ,
             'accessToken' => $isSuccess ? $accessToken : 'chưa có access token'
         ]);
     }
