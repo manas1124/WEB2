@@ -5,7 +5,7 @@ class MyConnection
     private $server = "localhost";
     private $username = "root";
     private $password = "123456789";
-    private $database = "web2";
+    private $database = "web3";
 
     // private $server = "localhost:3307";
     // private $username = "root";

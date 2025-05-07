@@ -52,7 +52,7 @@ class UserModel {
         }
         return null;
     }
-   
+    
     public function addUser($ho_ten,$email,$diachi,$dien_thoai,$nhom_ks,$loai_dt_id,$ctdt_id ) {
        
         $conn = $this->db->getConnection();
