@@ -61,7 +61,7 @@ class NganhModel
         $offset = ($page - 1) * $limit;
         // Truy vấn dữ liệu trang hiện tại
 
-        $sql .= " LIMIT ?, ?";
+        $sql .= " ORDER BY nganh_id DESC LIMIT ?, ?";
         $params[] = $offset;
         $params[] = $limit;
         $types .= "ii";

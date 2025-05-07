@@ -125,13 +125,13 @@ if (isset($_POST['func'])) {
             break;
         case "getAllKhaoSatFilter":
             if (isset($_POST['ks_ids'])) {
-                $filters = [ 
-                    'ten_ks' => !empty($_POST['ten_ks']) ? $_POST['ten_ks'] : null,
-                    'ngay_bat_dau' => !empty($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
+                $filters = [
+                    'txt_search'        => !empty($_POST['txt_search']) ? $_POST['txt_search'] : null,
+                    'ngay_bat_dau'  => !empty($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
                     'ngay_ket_thuc' => !empty($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
-                    'nks_id' => isset($_POST['nks_id']) && $_POST['nks_id'] !== '' ? (int)$_POST['nks_id'] : null,
-                    'ltl_id' => isset($_POST['ltl_id']) && $_POST['ltl_id'] !== '' ? (int)$_POST['ltl_id'] : null,
-                    'ctdt_id' => isset($_POST['ctdt_id']) && $_POST['ctdt_id'] !== '' ? (int)$_POST['ctdt_id'] : null,
+                    'nks_id'        => isset($_POST['nks_id']) && $_POST['nks_id'] !== '' ? (int)$_POST['nks_id'] : null,
+                    'nganh'        => isset($_POST['nganh']) && $_POST['nganh'] !== '' ? (int)$_POST['nganh'] : null,
+                    'chuky'       => isset($_POST['chuky']) && $_POST['chuky'] !== '' ? (int)$_POST['chuky'] : null,
                 ];
 
                 $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;

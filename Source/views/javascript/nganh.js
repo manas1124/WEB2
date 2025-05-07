@@ -188,7 +188,27 @@ $(document).ready(function () {
         }
     });
     $("#btn-save").on("click", function () {
-        update();
+        const tenNganh = $("#ten-nganh").val().trim();
+        if (!tenNganh) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Tên ngành không được để trống!'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn sửa ngành?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có, sửa ngay',
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                update(); // Gọi hàm cập nhật khi xác nhận
+            }
+        });
     });
 
     $("#btn-loc").on("click", function () {
@@ -209,7 +229,7 @@ $(document).ready(function () {
     });
 
     $("#pagination").on("click", ".btn-prev", function () {
-        const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+        let currentPage = Number($("#pagination button[aria-current='page']").data("page"));
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
         if (currentPage == 1) {
@@ -220,10 +240,11 @@ $(document).ready(function () {
     });
 
     $("#pagination").on("click", ".btn-next", function () {
-        const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+        let currentPage = Number($("#pagination button[aria-current='page']").data("page"));
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        if (currentPage == $("#pagination .btn-page]").length) {
+        const totalPages = $("#pagination .btn-page").length; // lấy tổng số trang
+        if (currentPage == totalPages) {
             return;
         }
         currentPage += 1;
