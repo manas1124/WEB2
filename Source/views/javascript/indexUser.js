@@ -14,7 +14,9 @@ $('#loginForm').on('submit', function(e){
 
             var data = JSON.parse(response);
             alert(data['message']); // Show the message from the server
-            window.location.href = "./home.php";
+            if (data["status"] !=="error") {
+                window.location.href = "./home.php";
+            }         
 
         },
         error: function() {
