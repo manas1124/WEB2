@@ -17,13 +17,13 @@ if (isset($_GET['func'])) {
             break;
         case "getAllpaging":
             $page = isset($_GET["page"]) ? $_GET["page"] : 1;
-
+            $txt_search = isset($_GET["txt_search"]) ? $_GET["txt_search"] : '';
             $nganh_id = isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '' ? $_GET["nganh_id"] : null;
             $ck_id = isset($_GET["ck_id"]) && $_GET["ck_id"] !== '' ? $_GET["ck_id"] : null;
             $la_ctdt = isset($_GET["la_ctdt"]) && $_GET["la_ctdt"] !== '' ? $_GET["la_ctdt"] : null;
             $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
 
-            $response = $CtdtDauraModel->getAllpaging($page, $nganh_id, $ck_id, $la_ctdt, $status);
+            $response = $CtdtDauraModel->getAllpaging($page, $nganh_id, $ck_id, $la_ctdt, $status, $txt_search);
             break;
         case "getById":
             if (isset($_GET["ctdt_id"])) {
@@ -75,7 +75,7 @@ if (isset($_GET['func'])) {
                         'message' => 'CTDT_CDR đã tồn tại'
                     ];
                 } else {
-                    $data = $CtdtDauraModel->create($file, $nganh_id, $ck_id, $la_ctdt, $status);
+                    $data = $CtdtDauraModel->update($ctdt_id, $file, $nganh_id, $ck_id, $la_ctdt, $status);
                     $response = [
                         'status' => true,
                         'data' => $data
