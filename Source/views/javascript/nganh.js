@@ -1,4 +1,4 @@
-async function getAllNganh(page = 1, status = null) {
+async function getAllNganh(page = 1, status = null, txt_search = null) {
     try {
         const response = await $.ajax({
             url: "./controller/nganhController.php",
@@ -7,7 +7,8 @@ async function getAllNganh(page = 1, status = null) {
             data: {
                 func: "getAllpaging",
                 page: page,
-                status: status
+                status: status,
+                txt_search: txt_search
             },
         });
         return response;
@@ -17,8 +18,8 @@ async function getAllNganh(page = 1, status = null) {
     }
 }
 
-async function loadAllNganh(page = 1, status = null) {
-    const res = await getAllNganh(page, status);
+async function loadAllNganh(page = 1, status = null, txt_search = null) {
+    const res = await getAllNganh(page, status, txt_search);
     if (res) {
         console.log(res);
         const nganhList = res.data;
@@ -212,10 +213,25 @@ $(document).ready(function () {
     });
 
     $("#btn-loc").on("click", function () {
+        const txtSearch = $("#search-keyword").val().trim();
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        loadAllNganh(1, status);
+        loadAllNganh(1, status, txtSearch);
     });
+
+    $("#btn-search").on("click", function () {
+        const txtSearch = $("#search-keyword").val().trim();
+        const selectedValue = $("#select-status").val();
+        const status = selectedValue == -1 ? null : selectedValue;
+        loadAllNganh(1, status, txtSearch); 
+    });
+
+    $("#btn-reset").on("click", function () {
+        $("#select-status").val(-1);
+        const txtSearch = $("#search-keyword").val().trim();
+        loadAllNganh(1, null, txtSearch);
+    });
+    
 
     $("#pagination").on("click", ".btn-page", function () {
         const currentPage = Number($("#pagination button[aria-current='page']").data("page"));

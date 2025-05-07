@@ -1,4 +1,4 @@
-async function getAllChuky(page = 1, status = null) {
+async function getAllChuky(page = 1, status = null, txt_search = null) {
     try {
         const response = await $.ajax({
             url: "./controller/chuKyController.php",
@@ -7,7 +7,8 @@ async function getAllChuky(page = 1, status = null) {
             data: {
                 func: "getAllpaging",
                 page: page,
-                status: status
+                status: status,
+                txt_search: txt_search
             },
         });
         return response;
@@ -17,8 +18,8 @@ async function getAllChuky(page = 1, status = null) {
     }
 }
 
-async function loadAllChuky(page = 1, status = null) {
-    const res = await getAllChuky(page, status);
+async function loadAllChuky(page = 1, status = null, txt_search = null) {
+    const res = await getAllChuky(page, status, txt_search);
     if (res) {
         console.log(res);
         const chukyList = res.data;
@@ -176,11 +177,28 @@ function toggleStatus(ck_id) {
 $(document).ready(function () {
     loadAllChuky(1);
 
+    // Xử lý nút Lọc
     $("#btn-loc").on("click", function () {
+        const txtSearch = $("#search-keyword").val().trim();
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        loadAllChuky(1, status);
+        loadAllChuky(1, status, txtSearch);
     });
+
+    $("#btn-search").on("click", function () {
+        const txtSearch = $("#search-keyword").val().trim();
+        const selectedValue = $("#select-status").val();
+        const status = selectedValue == -1 ? null : selectedValue;
+        loadAllChuky(1, status, txtSearch); 
+    });
+
+
+    $("#btn-reset").on("click", function () {
+        $("#select-status").val(-1);
+        const txtSearch = $("#search-keyword").val().trim();
+        loadAllChuky(1, null, txtSearch);
+    });
+
 
     $("#btn-create").on("click", function () {
         if ($("#ten-chuky").val() != "") {

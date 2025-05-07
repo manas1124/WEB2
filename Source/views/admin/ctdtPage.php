@@ -8,6 +8,16 @@
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
             <div>
+                <input type="text" class="input w-48" id="search-keyword" name="keyword" />
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary h-10" id="btn-search" name="search">Tìm kiếm</button>
+            </div>
+        </div>
+    </div>
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-4">
+            <div>
                 <select class="select" id="select-nganh">
                     <option value="-1">Chọn ngành</option>
                 </select>
@@ -43,7 +53,7 @@
                     <th>Ngành</th>
                     <th>Chu kỳ</th>
                     <th>Loại</th>
-                    <th>File</th>
+                    <th>Đề cương</th>
                     <th>Trạng thái</th>
                     <th>Action</th>
                 </tr>
