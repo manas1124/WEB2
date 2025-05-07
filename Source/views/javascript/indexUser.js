@@ -15,7 +15,7 @@ $('#loginForm').on('submit', function(e){
 
             var data = JSON.parse(response);
             alert(data['message']); // Show the message from the server
-            window.location.replace("http://localhost:3000/Source/home.php");
+            window.location.href = "./home.php";
 
         },
         error: function() {
@@ -45,7 +45,7 @@ $('#signUpForm').on('submit', function(e){
 
     $.ajax({
         type: 'POST',
-        url: '/Source/controller/AuthController.php', 
+        url: './controller/AuthController.php', 
         data: {
             action: 'register',
             username: data.username, 
