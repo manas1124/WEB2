@@ -23,17 +23,13 @@
                     <label class="input-floating-label" for="floatingLabelLarge">Tên đăng nhập</label>
                 </div>
                 <div class="input-floating">
-                    <input name="password" type="text" placeholder="Mật khẩu" class="input input-lg" id="txtPassword" />
+                    <input name="password" type="password" placeholder="Mật khẩu" class="input input-lg" id="txtPassword" />
                     <label class="input-floating-label" for="floatingLabelLarge">Mật khẩu</label>
                 </div>
                 <button type="submit"
                     class="w-full bg-[#304CA2] text-white py-2 rounded hover:bg-[#4B66C2] cursor-pointer">Đăng
                     nhập</button>
             </form>
-            <p class="mt-4 text-center text-sm text-gray-600">
-                Chưa có tài khoản?
-                <button onclick="toggleSignUpForm()" class="text-blue-500 hover:underline">Đăng ký</button>
-            </p>
         </div>
 
     </div>
@@ -58,8 +54,9 @@
 
                 var data = JSON.parse(response);
                 alert(data['message']); // Show the message from the server
-                window.location.href = "./admin.php";
-
+                if (data["status"] !== 'error') {
+                    window.location.href = "./admin.php";
+                }
             },
             error: function() {
                 alert('Có lỗi xảy ra khi gửi dữ liệu!');
