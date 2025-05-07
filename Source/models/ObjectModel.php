@@ -36,4 +36,17 @@ class ObjectModel
             return -1;
         }
     }
+    public function update($dt_id, $ho_ten, $email, $dien_thoai, $diachi)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("UPDATE doi_tuong SET ho_ten=?, email=?, dien_thoai=?, diachi=? WHERE dt_id=?");
+        if (!$stmt) return false;
+
+        $stmt->bind_param("ssssi", $ho_ten, $email, $dien_thoai, $diachi, $dt_id);
+        $result = $stmt->execute();
+        $stmt->close();
+        $conn->close();
+
+        return $result;
+    }
 }
