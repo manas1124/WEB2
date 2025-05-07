@@ -121,6 +121,15 @@
         ]);
     }
 
+    if (isset($_POST['action']) && $_POST['action'] == 'logout') {
+        $_SESSION = array();
+        session_destroy();
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Đăng xuất thành công',
+        ]);
+    }
+
     if (isset($_POST['func']) && $_POST['func'] == "getCurrentLoginUser") {
         if (!isset($_SESSION['accessToken'] ) &&  $_SESSION['accessToken']== "") {
             echo json_encode([
