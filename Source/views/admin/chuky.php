@@ -43,15 +43,7 @@
                 </tr>
             </thead>
             <tbody id="chuky-list">
-                <tr>
-                    <td>1</td>
-                    <td>2020-2024</td>
-                    <td>1</td>
-                    <td>
-                        <button class="action-item btn btn-primary" data-act="chuky-sua">Sửa</button>
-                        <button class="btn btn-primary" data-act="chuky-khoa">Khóa</button>
-                    </td>
-                </tr>
+                
 
             </tbody>
         </table>

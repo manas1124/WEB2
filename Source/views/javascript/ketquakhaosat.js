@@ -55,6 +55,15 @@ async function loadDsKhaoSat(page = 1, txt_search = null,
     console.log(ks_ids);
     const ksList = await getAllKhaoSat(page, ks_ids, txt_search, ngay_bat_dau, ngay_ket_thuc, nks_id, nganh, chuky);
 
+    if (ksList?.status === false && ksList?.message) {
+        Swal.fire({
+            title: "Thông báo",
+            text: ksList.message,
+            icon: "warning"
+        });
+        return;
+    }
+
     console.log(ksList);
     console.log(ks_ids);
 
@@ -221,11 +230,11 @@ function xuatExel(ks_id) {
 
 
 $(document).ready(function () {
+    loadAllNhomKhaoSat();
     loadDsKhaoSat();
     loadAllChuky();
     loadAllNganh();
     loadAllNhomKhaoSat();
-
     $(".main-content").on("click", ".action-item", function (e) {
         e.preventDefault();
         let action = $(this).data("act");

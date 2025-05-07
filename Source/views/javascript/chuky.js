@@ -20,6 +20,14 @@ async function getAllChuky(page = 1, status = null, txt_search = null) {
 
 async function loadAllChuky(page = 1, status = null, txt_search = null) {
     const res = await getAllChuky(page, status, txt_search);
+    if (res?.status == false && res?.message) {
+        Swal.fire({
+            title: "Thông báo",
+            text: res.message,
+            icon: "warning"
+        });
+        return;
+    }
     if (res) {
         console.log(res);
         const chukyList = res.data;
@@ -156,16 +164,25 @@ function toggleStatus(ck_id) {
             ck_id: ck_id,
         },
         success: function (response) {
-            if (response) {
+            if (response?.status == false && response?.message) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Đổi trạng thái thành công!',
-                    showConfirmButton: false,
-                    timer: 2000
+                    title: "Thông báo",
+                    text: response.message,
+                    icon: "warning"
                 });
-                const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
-                loadAllChuky(currentPage);
+            } else {
+                if (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đổi trạng thái thành công!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+                    loadAllChuky(currentPage);
+                }
             }
+
 
         },
         error: function (error) {
@@ -189,7 +206,7 @@ $(document).ready(function () {
         const txtSearch = $("#search-keyword").val().trim();
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        loadAllChuky(1, status, txtSearch); 
+        loadAllChuky(1, status, txtSearch);
     });
 
 

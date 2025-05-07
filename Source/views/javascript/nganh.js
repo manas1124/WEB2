@@ -20,6 +20,14 @@ async function getAllNganh(page = 1, status = null, txt_search = null) {
 
 async function loadAllNganh(page = 1, status = null, txt_search = null) {
     const res = await getAllNganh(page, status, txt_search);
+    if (res?.status === false && res?.message) {
+        Swal.fire({
+            title: "Thông báo",
+            text: res.message,
+            icon: "warning"
+        });
+        return;
+    }
     if (res) {
         console.log(res);
         const nganhList = res.data;

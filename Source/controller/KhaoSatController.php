@@ -4,6 +4,9 @@ require_once __DIR__ . '/../models/khaoSatModel.php';
 require_once __DIR__ . '/../models/cauHoiModel.php';
 require_once __DIR__ . '/../models/mucKhaoSatModel.php';
 require_once __DIR__ . '/../models/SurveyModel.php';
+require_once __DIR__ . '/../utils/JwtUtil.php';
+
+session_start();
 
 header('Content-Type: application/json');
 
@@ -124,28 +127,39 @@ if (isset($_POST['func'])) {
             $response = $isUpdateSuccess;
             break;
         case "getAllKhaoSatFilter":
-            if (isset($_POST['ks_ids'])) {
-                $filters = [
-                    'txt_search'        => !empty($_POST['txt_search']) ? $_POST['txt_search'] : null,
-                    'ngay_bat_dau'  => !empty($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
-                    'ngay_ket_thuc' => !empty($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
-                    'nks_id'        => isset($_POST['nks_id']) && $_POST['nks_id'] !== '' ? (int)$_POST['nks_id'] : null,
-                    'nganh'        => isset($_POST['nganh']) && $_POST['nganh'] !== '' ? (int)$_POST['nganh'] : null,
-                    'chuky'       => isset($_POST['chuky']) && $_POST['chuky'] !== '' ? (int)$_POST['chuky'] : null,
-                ];
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    if (isset($_POST['ks_ids'])) {
+                        $filters = [
+                            'txt_search'        => !empty($_POST['txt_search']) ? $_POST['txt_search'] : null,
+                            'ngay_bat_dau'  => !empty($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
+                            'ngay_ket_thuc' => !empty($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
+                            'nks_id'        => isset($_POST['nks_id']) && $_POST['nks_id'] !== '' ? (int)$_POST['nks_id'] : null,
+                            'nganh'        => isset($_POST['nganh']) && $_POST['nganh'] !== '' ? (int)$_POST['nganh'] : null,
+                            'chuky'       => isset($_POST['chuky']) && $_POST['chuky'] !== '' ? (int)$_POST['chuky'] : null,
+                        ];
 
-                $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-                $ks_ids = isset($_POST['ks_ids']) ? json_decode($_POST['ks_ids'], true) : null;
-                $data = $ksModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
-                $response = [
-                    'status' => true,
-                    'data' => $data
-                ];
-            } else {
-                $response = [
-                    'status' => false,
-                    'message' => "khong nhan duoc ks_ids"
-                ];
+                        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+                        $ks_ids = isset($_POST['ks_ids']) ? json_decode($_POST['ks_ids'], true) : [];
+                        $data = $ksModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
+                        $response = [
+                            'status' => true,
+                            'data' => $data
+                        ];
+                    } else {
+                        $response = [
+                            'status' => false,
+                            'message' => "khong nhan duoc ks_ids"
+                        ];
+                    }
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
             }
             break;
         default:

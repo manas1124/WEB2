@@ -58,6 +58,14 @@ async function getAllNganh() {
 
 async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null, txt_search = null) {
     const res = await getAllctdt(page, nganh_id, ck_id, la_ctdt, status, txt_search);
+    if (res?.status === false && res?.message) {
+        Swal.fire({
+            title: "Thông báo",
+            text: res.message,
+            icon: "warning"
+        });
+        return;
+    }
     if (res) {
         console.log(res);
         const ctdtList = res.data;
@@ -350,7 +358,7 @@ $(document).ready(async function () {
         const loai = selectedLoai == -1 ? null : selectedLoai;
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
-    
+
         console.log("Tìm kiếm:", txt_search);
         loadAllCTDT(1, nganh, chuky, loai, status, txt_search);
     });
