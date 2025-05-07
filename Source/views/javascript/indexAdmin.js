@@ -127,7 +127,7 @@ $(function () {
 
     // xu ly sau
     
-    $(".btn-logout").click(function () {
+    $(".btn-logout").on("click",function () {
         logout()
     })
 });

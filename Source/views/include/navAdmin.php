@@ -65,8 +65,8 @@ echo '<aside id="default-sidebar"
                     </a>
                 </li>
                 <li>
-                    <a>
-                        <span class=" btn-logout icon-[tabler--logout-2] size-5"></span>
+                    <a class=" btn-logout">
+                        <span class=" icon-[tabler--logout-2] size-5"></span>
                         Đăng xuất
                     </a>
                 </li>

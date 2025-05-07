@@ -99,11 +99,22 @@
         $password = $_POST['password'];
         
         $accountModel = new AccountModel();
+
+        //luc mới tạo tài khoản dùng quyền mặc định là 3
+        $isExistAccount = $accountModel->usernameIsExist($username);
+        if (!$isExistAccount) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Username không tồn tại'
+            ]);
+            exit;
+        }
+        
         $account = $accountModel->getAccount($username);
         if (!$account) {
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Tài khoản không tồn tại'
+                'message' => 'Lấy thông tin tài khoản ở php lỗi'
             ]);
             exit;
         }

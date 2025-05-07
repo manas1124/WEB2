@@ -160,13 +160,12 @@ class AccountModel
             return false;
         }
     }
-
+    // loi lấy quyền của tài khoản, tài khoản có quyền nhưng không có chức năng
     public function getAccount($username)
     {
     $conn = $this->db->getConnection();
-    $stmt = $conn->prepare("SELECT tk_id, username, password, dt_id, qcn.key 
-                            FROM tai_khoan tk
-                            JOIN quyen_chucnang qcn ON tk.quyen_id = qcn.quyen_id 
+    $stmt = $conn->prepare("SELECT tk_id, username, password, dt_id,quyen_id
+                            FROM tai_khoan
                             WHERE username = ?");
 
     if (!$stmt) {
@@ -194,15 +193,23 @@ class AccountModel
                 'password' => $row['password'],
                 'dt_id' => $row['dt_id'],
                 'tk_id' => $row['tk_id'],
+                'quyen_id' => $row['quyen_id'],
                 'keys' => []
             ];
         }
 
         // Gom key vào danh sách
-        $keys[] = $row['key'];
+        // $keys[] = $row['key'];
     }
 
     if ($data) {
+        require_once __DIR__ . '/../models/quyenModel.php';
+        $quyenModel = new QuyenModel();
+        $quyenList = $quyenModel->getChucNangByQuyenId($data['quyen_id']);
+        //gom vào danh sách
+        foreach ($quyenList as $item) {
+            $keys[] = $item['key'];
+        }
         $data['keys'] = $keys;
     }
 
