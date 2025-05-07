@@ -102,7 +102,25 @@
     } else {
       selectElement.append('<option value="">Không có nhóm khảo sát</option>');
     }
+}
+  
+async function loadNhomKsToSelectModal() {
+  const nhomKsList = await getNhomKs(); 
+  const selectElement = $("#nhom-ks-select-modal"); 
+
+  selectElement.empty(); 
+  selectElement.append('<option value="">Tất cả</option>'); 
+  if (nhomKsList != null) {
+    nhomKsList.map((item) => {
+      selectElement.append(`
+        <option value="${item.nks_id}">${item.ten_nks}</option>
+      `);
+    });
+  } else {
+    selectElement.append('<option value="">Không có nhóm khảo sát</option>');
   }
+}
+  
   // function loadUserList() {
     
   
@@ -191,7 +209,9 @@
   $(function () {
     loadUserList();
     loadNhomKsToSelect();
-  
+    loadNhomKsToSelectModal();
+
+
     $("#search").on("input", function () {
       loadUserList(); 
     });
