@@ -46,7 +46,7 @@
             if ($isSuccess) {
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Đăng ký thành công!'
+                    'message' => 'Đăng ký thành công!',
                 ]);
                 exit;
             } else {
@@ -57,12 +57,6 @@
                 exit;
             }
         }
-
-        // echo json_encode([
-        //     'status' => 'success',
-        //     'message' => 'Đăng ký thành công!'
-        // ]);
-        // exit;
     }
 
     //update tai khoan - cap nhat thong tin tai khoan
@@ -118,8 +112,10 @@
             ]);
             exit;
         }
+        
         // var_dump($account);
         $isSuccess = false;
+        $test = isValidAccount($account, $password);
         if(isValidAccount($account, $password)) {
             $accessToken = generateToken($account);
             $_SESSION['accessToken'] = $accessToken;
@@ -128,7 +124,7 @@
         echo json_encode([
             'status' => $isSuccess ? 'success' : 'error',
             'message' => $isSuccess ? 'Đăng nhập thành công!' : 'Mật khẩu không đúng!',
-            'accessToken' => $isSuccess ? $accessToken : 'chưa có access token'
+            'accessToken' => $isSuccess ? $accessToken : null
         ]);
     }
 
@@ -165,15 +161,17 @@
             
         ]);
     }
+
+
     function isValidAccount($account, $password) {
-        if ($account != null && isValidPassword($password, $account)) {
+        if ($account != null && isValidPassword($password, $account['password'])) {
             return true;
         } 
         return false;
     }
 
-    function isValidPassword($password, $account) {
-        return password_verify($password, $account['password']);
+    function isValidPassword($password, $passwordHash) {
+        return password_verify($password, $passwordHash);
     }
 
 ?>

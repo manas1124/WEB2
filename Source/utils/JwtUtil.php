@@ -13,7 +13,7 @@
             'dtId' =>$account['dt_id'],
             'sub' => $account['username'],
             'iat' => time(), 
-            'exp' => time() + (60 * 15),  // 1 min
+            'exp' => time() + (60 * 15),  // 15 mins
             'permission' => $account['keys'] 
         ];
         return JWT::encode($payload, KEY, 'HS256');
@@ -40,7 +40,13 @@
         }
         return false;
     }
-
+    function getObjectId($token) {
+        $decoded = validateToken($token);
+        if ($decoded) {
+            return $decoded->dtId;
+        }
+        return null;
+    }
 
     
 ?>
