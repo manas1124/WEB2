@@ -15,7 +15,7 @@ class LoaiDoiTuongModel
     public function getAll()
     {
         $conn = $this->db->getConnection();
-        $sql = "SELECT * FROM loai_doi_tuong  WHERE status = 1";
+        $sql = "SELECT * FROM loai_doi_tuong WHERE status = 1";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
