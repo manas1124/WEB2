@@ -228,46 +228,46 @@ function xuatExel(ks_id) {
 
 async function getNhomKs() {
     try {
-      const response = await $.ajax({
-        url: "./controller/nhomKsController.php",
-        type: "GET",
-        data: { func: "getAllNhomKs" },
-        dataType: "json",
-      });
-      console.log("fect", response);
-      return response;
+        const response = await $.ajax({
+            url: "./controller/nhomKsController.php",
+            type: "GET",
+            data: { func: "getAllNhomKs" },
+            dataType: "json",
+        });
+        console.log("fect", response);
+        return response;
     } catch (error) {
-      console.log(error);
-      console.log("loi fetchdata getAllKhaoSat 1");
-      return null;
+        console.log(error);
+        console.log("loi fetchdata getAllKhaoSat 1");
+        return null;
     }
-  }
+}
 
 async function loadNhomKsToSelectModal() {
-    const nhomKsList = await getNhomKs(); 
-    const selectElement = $("#nhom-ks-select-modal"); 
-  
-    selectElement.empty(); 
-    selectElement.append('<option value="">Tất cả</option>'); 
+    const nhomKsList = await getNhomKs();
+    const selectElement = $("#nhom-ks-select-modal");
+
+    selectElement.empty();
+    selectElement.append('<option value="">Tất cả</option>');
     if (nhomKsList != null) {
-      nhomKsList.map((item) => {
-        selectElement.append(`
+        nhomKsList.map((item) => {
+            selectElement.append(`
           <option value="${item.nks_id}">${item.ten_nks}</option>
         `);
-      });
+        });
     } else {
-      selectElement.append('<option value="">Không có nhóm khảo sát</option>');
+        selectElement.append('<option value="">Không có nhóm khảo sát</option>');
     }
-  }
+}
 
 
-$(document).ready(function () {
+$(function () {
     loadDsKhaoSat();
     loadAllChuky();
     loadAllNganh();
     loadAllNhomKhaoSat();
     loadNhomKsToSelectModal();
-    
+
     $(".main-content").on("click", ".action-item", function (e) {
         e.preventDefault();
         let action = $(this).data("act");
@@ -291,7 +291,7 @@ $(document).ready(function () {
             ngay_ket_thuc: $("#to-date").val(),
             nks_id: nhom !== "-1" ? nhom : null,
             nganh: nganh !== "-1" ? nganh : null,
-            chuky: chuky !== "-1" ? chuky : null, 
+            chuky: chuky !== "-1" ? chuky : null,
         };
     }
 
@@ -350,5 +350,43 @@ $(document).ready(function () {
         const selectedPage = currentPage + 1;
         loadDsKhaoSat(selectedPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
     });
-});
 
+    $("#form-send-mail").on("submit", function (e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+        const objectSelect = $("#nhom-ks-select-modal").val();
+        const subject = $("input[name='subject-text']").val();
+        const body = $("textarea[name='body-text']").val();
+        const file = $("#file-attachment")[0].files[0]; // file đính kèm
+        console.log(objectSelect, subject, body, file);
+        // Tạo FormData để gửi cả dữ liệu văn bản và file
+        const formData = new FormData();
+        formData.append("objectSelect", objectSelect);
+        formData.append("subject", subject);
+        formData.append("body", body);
+        formData.append("attachment", file);
+        formData.append("func", "sendMail");
+
+        console.log(formData);
+
+        $.ajax({
+            url: "./controller/UserController.php",
+            method: "POST",
+            dataType: "json",
+            data: formData,
+            processData: false, // 🔥 bắt buộc khi gửi FormData
+            contentType: false, // 🔥 bắt buộc khi gửi file
+
+            success: function (response) {
+                const data = JSON.parse(response);
+                if (data.status === "success") {
+                    $("#slide-down-animated-modal").addClass("hidden");
+                }
+                alert(data.message);
+
+            },
+            error: function (err) {
+                console.error("Gửi thất bại", err);
+            }
+        });
+    });
+});
