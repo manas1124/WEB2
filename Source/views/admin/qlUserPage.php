@@ -14,7 +14,7 @@
     </div>
     <div id="slide-down-animated-modal" class="overlay modal overlay-open:opacity-100 overlay-open:duration-300 hidden bg-black/25" role="dialog" tabindex="-1">
         <div class="modal-dialog overlay-open:mt-12 overlay-open:opacity-100 overlay-open:duration-300 transition-all ease-out">
-            <div class="modal-content">
+            <form id="form-send-mail" class="modal-content" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h3 class="modal-title">Gửi khảo sát</h3>
                     <button type="button" class="btn btn-text btn-circle btn-sm absolute end-3 top-3" aria-label="Close" data-overlay="#slide-down-animated-modal">
@@ -23,30 +23,29 @@
                 </div>
                 <div class="modal-body flex gap-4 flex-col">
                     <div class="w-full">
-                        <label class="label-text" for="selectHelperText"> Đối tượng khảo sát </label>
-                        <select id="nhom-ks-select-modal" class="select" id="selectHelperText">
+                        <label class="label-text" for="nhom-ks-select-modal"> Đối tượng khảo sát </label>
+                        <select id="nhom-ks-select-modal" class="select" name="objectSelect">
                         </select>
                     </div>
                     <div class="w-full">
                         <label class="label-text" for="selectHelperText"> Tiêu đề </label>
-                        <input type="text" placeholder="Tiêu đề khảo sát" class="input w-full" />
+                        <input type="text" name="subject-text" placeholder="Tiêu đề khảo sát" class="input w-full" />
                     </div>
                     <div class="w-full">
                         <label class="label-text" for="selectHelperText"> Nội dung khảo sát </label>
-                        <textarea class="textarea" placeholder="Nội dung..." id="textareaLabel"></textarea>
+                        <textarea class="textarea" name="body-text" placeholder="Nội dung..." id="textareaLabel"></textarea>
                     </div>
                     <div class="w-full">
-                        <label class="label-text" for="selectHelperText"> File đính kèm </label>
-                        <div class="dropzone" id="my-dropzone"></div>
+                        <input type="file" name="attachment" class="input w-full" id="file-attachment" accept=".xlsx, .xls, .docx, .doc, .pdf" />
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-soft btn-secondary" data-overlay="#slide-down-animated-modal">
                         Close
                     </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Gửi khảo sát</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     <div class="my-4">

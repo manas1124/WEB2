@@ -168,6 +168,46 @@ async function loadNhomKsToSelectModal() {
     console.log("Search:", searchKeyword);
     console.log("Nhóm khảo sát ID:", nhomKsId);
     
+
+    $("#form-send-mail").on("submit", function(e) { 
+      e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+      const objectSelect = $("#nhom-ks-select-modal").val();
+      const subject = $("input[name='subject-text']").val();
+      const body = $("textarea[name='body-text']").val();
+      const file = $("#file-attachment")[0].files[0]; // file đính kèm
+      console.log(objectSelect, subject, body, file);
+      // Tạo FormData để gửi cả dữ liệu văn bản và file
+      const formData = new FormData();
+      formData.append("objectSelect", objectSelect);
+      formData.append("subject", subject);
+      formData.append("body", body);
+      formData.append("attachment", file);
+      formData.append("func", "sendMail");
+
+      console.log(formData);
+
+      $.ajax({
+        url: "./controller/UserController.php",
+        method: "POST",
+        dataType: "json",
+        data: formData,
+        processData: false, // 🔥 bắt buộc khi gửi FormData
+        contentType: false, // 🔥 bắt buộc khi gửi file
+
+        success: function (response) {
+            const data = JSON.parse(response);
+            if (data.status === "success") {
+              $("#slide-down-animated-modal").addClass("hidden");
+            }
+            alert(data.message);
+                     
+        },
+        error: function(err) {
+            console.error("Gửi thất bại", err);
+        }
+    });
+
+    });
    
     getAllUser(searchKeyword, nhomKsId).then((ksList) => {
       console.log("User list:", ksList);

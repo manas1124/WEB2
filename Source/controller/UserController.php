@@ -11,6 +11,26 @@ if (isset($_POST['func'])) {
     $ksModel = new UserModel();
  
     switch ($func) {
+        case "sendMail":
+            require_once '../utils/MailUtil.php';
+            require_once '../models/ObjectModel.php';
+            $ObjectModel = new ObjectModel();
+            $nhom_ks_id = $_POST['objectSelect'];
+            $listEmail = $ObjectModel->getEmailByNhomKS($nhom_ks_id);
+            $file = isset($_FILES['attachment']) ? $_FILES['attachment'] : null;
+            $response = json_encode([
+                'status' => 'failed',
+                'message' => 'Gửi khảo sát không thành công!',
+            ]);
+            if($file != null && $file['error'] === UPLOAD_ERR_OK) {
+                $response = sendMail($listEmail, $_POST['subject'], $_POST['body'], $file);
+            }
+            else {
+                $response = sendMail($listEmail, $_POST['subject'], $_POST['body']);
+            }
+         
+            break;
+
         case "getAllUser":
             $search = isset($_POST['search']) ? $_POST['search'] : '';
             $nhomKsId = $_POST['nhomKsId'] ?? '';
