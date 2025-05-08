@@ -150,11 +150,20 @@ class ChuKyModel
         }
     }
 
-    public function isExist($ten_ck)
+    public function isExist($ten_ck, $ck_id = null)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT 1 FROM chu_ki WHERE ten_ck = ?");
-        $stmt->bind_param("s", $ten_ck);
+        $sql = "SELECT 1 FROM chu_ki WHERE ten_ck = ?";
+
+        if ($ck_id !== null) {
+            $sql .= " AND ck_id != ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $ten_ck, $ck_id);
+        } else {
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $ten_ck);
+        }
+
         $stmt->execute();
         $result = $stmt->get_result();
 

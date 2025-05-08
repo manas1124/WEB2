@@ -89,6 +89,14 @@ async function loadDuLieu(ks_id) {
 
     // 0. Lấy chi tiết khảo sát
     const khaoSat = await getKhaoSatById(ks_id);
+    if (khaoSat?.status === false && khaoSat?.message) {
+        Swal.fire({
+            title: "Thông báo",
+            text: khaoSat.message,
+            icon: "warning"
+        });
+        return;
+    }
 
     // 1. Lấy danh sách mục khảo sát
     const mucKhaoSat = await getAllMucKhaoSat(ks_id);
@@ -181,23 +189,31 @@ function xuatExel(ks_id) {
     $.ajax({
         url: './controller/ketQuaKhaoSatController.php',
         type: 'GET',
-        data: { 
+        data: {
             func: "xuatExel",
-            ks_id: ks_id 
+            ks_id: ks_id
         },
         xhrFields: {
             responseType: 'blob'
         },
-        success: function(response) {
-            var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `survey_export_${ks_id}.xlsx`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        success: function (response) {
+            if (response?.status === false && response?.message) {
+                Swal.fire({
+                    title: "Thông báo",
+                    text: response.message,
+                    icon: "warning"
+                });
+            } else {
+                var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `survey_export_${ks_id}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error("Đã xảy ra lỗi khi xuất Excel:", error);
         }
     });

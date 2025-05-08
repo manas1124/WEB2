@@ -188,7 +188,7 @@ $(function () {
         "FormData - selectedChucNang[] values:",
         formData.getAll("selectedChucNang[]")
       );
-
+      console.log(formData);
       const response = await updateQuyen(formData);
       if (response && response.status) {
         Swal.fire("Thành công", "Cập nhật quyền thành công!", "success");

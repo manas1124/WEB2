@@ -4,6 +4,9 @@ require_once __DIR__ . '/../models/khaoSatModel.php';
 require_once __DIR__ . '/../models/cauHoiModel.php';
 require_once __DIR__ . '/../models/mucKhaoSatModel.php';
 require_once __DIR__ . '/../models/SurveyModel.php';
+require_once __DIR__ . '/../utils/JwtUtil.php';
+
+session_start();
 
 header('Content-Type: application/json');
 
@@ -17,135 +20,223 @@ if (isset($_POST['func'])) {
 
     switch ($func) {
         case "getAllKhaoSat":
-            $response = $ksModel->getAllKhaoSat();
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    $response = $ksModel->getAllKhaoSat();
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
             break;
         case "getChiTietKsById":
-            $id = $_POST['id'];
-            $response = $ksModel->getKhaoSatById($id);
-            // $response = $ksModel->getAllKhaoSat();
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    $id = $_POST['id'];
+                    $response = $ksModel->getKhaoSatById($id);
+                    // $response = $ksModel->getAllKhaoSat();
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
             break;
         case "getKhaoSatByPageNumber":
-            $page = $_POST["number"] ;
-            $searchKeyWord = $_POST["keyword"];
-            
-            $response = $ksModel->getKhaoSatByPageNumber($page,null,$searchKeyWord);
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    $page = $_POST["number"];
+                    $searchKeyWord = $_POST["keyword"];
+
+                    $response = $ksModel->getKhaoSatByPageNumber($page, null, $searchKeyWord);
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
             break;
         case 'createKhaoSat':
-            
-            $tenKhaoSat = $_POST['ten-ks'];
-            $nhomKsId = $_POST['nhomks-id'];
-            $dateStart = $_POST['date-start'];
-            $dateEnd = $_POST['date-end'];
-            $loaiTraLoi = $_POST['loai-tra-loi'];
-            $isSuDung = $_POST['su-dung'];
-            $ctdtId = $_POST['ctdt-id'];
-            
-            //xử lý tạo khảo sát thủ công hoặc nhập file
-            if (isset($_FILES['excelFile']) ) {
-                $tmpExcelPath =$_FILES['excelFile']['tmp_name'];
-                require 'xuly_import.php';
-                $content = survey_content_excel_to_json($tmpExcelPath);
-            } else {
-                $content = json_decode($_POST['content'], true);
-            }
-            
-            $idNewKs = $ksModel->create(
-                $tenKhaoSat,
-                $dateStart,
-                $dateEnd,
-                $isSuDung,
-                $nhomKsId,
-                $loaiTraLoi,
-                $ctdtId,
-                1
-            );
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'create.survey');
+                if ($isVaid) {
 
-            // tao ra bai khao sat moi thanh cong thi moi tao nội dung
-            if ($idNewKs >= 0) {
-                $mucArray = $content;
-                foreach ($mucArray as $mucItem) {
-                    $newMucId = $mucKhaoSatModel->create($mucItem["sectionName"], $idNewKs);
-                    $cauHoiArray = $mucItem["questions"];
-                    foreach ($cauHoiArray as $cauHoiItem) {
-                        $cauHoiModel->create($cauHoiItem, $newMucId);
+                    $tenKhaoSat = $_POST['ten-ks'];
+                    $nhomKsId = $_POST['nhomks-id'];
+                    $dateStart = $_POST['date-start'];
+                    $dateEnd = $_POST['date-end'];
+                    $loaiTraLoi = $_POST['loai-tra-loi'];
+                    $isSuDung = $_POST['su-dung'];
+                    $ctdtId = $_POST['ctdt-id'];
+
+                    //xử lý tạo khảo sát thủ công hoặc nhập file
+                    if (isset($_FILES['excelFile'])) {
+                        $tmpExcelPath = $_FILES['excelFile']['tmp_name'];
+                        require 'xuly_import.php';
+                        $content = survey_content_excel_to_json($tmpExcelPath);
+                    } else {
+                        $content = json_decode($_POST['content'], true);
                     }
+
+                    $idNewKs = $ksModel->create(
+                        $tenKhaoSat,
+                        $dateStart,
+                        $dateEnd,
+                        $isSuDung,
+                        $nhomKsId,
+                        $loaiTraLoi,
+                        $ctdtId,
+                        1
+                    );
+
+                    // tao ra bai khao sat moi thanh cong thi moi tao nội dung
+                    if ($idNewKs >= 0) {
+                        $mucArray = $content;
+                        foreach ($mucArray as $mucItem) {
+                            $newMucId = $mucKhaoSatModel->create($mucItem["sectionName"], $idNewKs);
+                            $cauHoiArray = $mucItem["questions"];
+                            foreach ($cauHoiArray as $cauHoiItem) {
+                                $cauHoiModel->create($cauHoiItem, $newMucId);
+                            }
+                        }
+                    }
+
+                    $response = true;
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
                 }
-            }        
-            
-            $response = true;
+            }
             break;
         case "checkExistCtdt":
+
             $data = $_POST['data'];
             $data = json_decode($data, true);
             $arr = $ksModel->searchCtdt($data["nganh_id"], $data["chu_ki_id"], $data["is_ctdt_daura"]);
             $response = $arr[0]["ctdt_id"]; // tra ve ctdt tim duoc
 
             break;
-        case "deleteKs" : 
-            $id = $_POST['id'];
-            $response = $ksModel->delete($id);
+        case "deleteKs":
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'edit.survey');
+                if ($isVaid) {
+                    $id = $_POST['id'];
+                    $response = $ksModel->delete($id);
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
             break;
         case "getSurveyFieldAndQuestion":
-            $id = $_POST['id'];
-            $response = json_decode($surveyModel->getsurveyFieldAndQuestion($id));
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    $id = $_POST['id'];
+                    $response = json_decode($surveyModel->getsurveyFieldAndQuestion($id));
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
             break;
         case "updateKhaoSat":
-            $data = $_POST['data'];
-            $data = json_decode($data, true);
-            $isUpdateSuccess = $ksModel->update(
-                $data["ks-id"],
-                $data["ten-ks"],
-                $data["date-start"],
-                $data["date-end"],
-                $data["su-dung"],
-                $data["nhomks-id"],
-                $data["loai-tra-loi"],
-                $data["ctdt-id"],
-                1
-            );
-            if ($isUpdateSuccess) {
-                //delete old section and question
-                $oldMucKs = $mucKhaoSatModel->getMucKhaoSatByKsId($data["ks-id"]);
-                foreach ($oldMucKs as $oldMucKsItem) {
-                    $mucKhaoSatModel->delete($oldMucKsItem["mks_id"]);
-                    $cauHoiModel->deleteByMksId($oldMucKsItem["mks_id"]);
-                }
-                //tao lại nội dung mới
-                $mucArray = $data["content"];
-                foreach ($mucArray as $mucItem) {
-                    $newMucId = $mucKhaoSatModel->create($mucItem["sectionName"], $data["ks-id"]);
-                    $cauHoiArray = $mucItem["questions"];
-                    foreach ($cauHoiArray as $cauHoiItem) {
-                        $cauHoiModel->create($cauHoiItem, $newMucId);
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'edit.survey');
+                if ($isVaid) {
+                    $data = $_POST['data'];
+                    $data = json_decode($data, true);
+                    $isUpdateSuccess = $ksModel->update(
+                        $data["ks-id"],
+                        $data["ten-ks"],
+                        $data["date-start"],
+                        $data["date-end"],
+                        $data["su-dung"],
+                        $data["nhomks-id"],
+                        $data["loai-tra-loi"],
+                        $data["ctdt-id"],
+                        1
+                    );
+                    if ($isUpdateSuccess) {
+                        //delete old section and question
+                        $oldMucKs = $mucKhaoSatModel->getMucKhaoSatByKsId($data["ks-id"]);
+                        foreach ($oldMucKs as $oldMucKsItem) {
+                            $mucKhaoSatModel->delete($oldMucKsItem["mks_id"]);
+                            $cauHoiModel->deleteByMksId($oldMucKsItem["mks_id"]);
+                        }
+                        //tao lại nội dung mới
+                        $mucArray = $data["content"];
+                        foreach ($mucArray as $mucItem) {
+                            $newMucId = $mucKhaoSatModel->create($mucItem["sectionName"], $data["ks-id"]);
+                            $cauHoiArray = $mucItem["questions"];
+                            foreach ($cauHoiArray as $cauHoiItem) {
+                                $cauHoiModel->create($cauHoiItem, $newMucId);
+                            }
+                        }
                     }
+                    $response = $isUpdateSuccess;
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
                 }
-                
             }
-            $response = $isUpdateSuccess;
             break;
         case "getAllKhaoSatFilter":
-            if (isset($_POST['ks_ids'])) {
-                $filters = [
-                    'txt_search'        => !empty($_POST['txt_search']) ? $_POST['txt_search'] : null,
-                    'ngay_bat_dau'  => !empty($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
-                    'ngay_ket_thuc' => !empty($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
-                    'nks_id'        => isset($_POST['nks_id']) && $_POST['nks_id'] !== '' ? (int)$_POST['nks_id'] : null,
-                    'nganh'        => isset($_POST['nganh']) && $_POST['nganh'] !== '' ? (int)$_POST['nganh'] : null,
-                    'chuky'       => isset($_POST['chuky']) && $_POST['chuky'] !== '' ? (int)$_POST['chuky'] : null,
-                ];
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    if (isset($_POST['ks_ids'])) {
+                        $filters = [
+                            'txt_search'        => !empty($_POST['txt_search']) ? $_POST['txt_search'] : null,
+                            'ngay_bat_dau'  => !empty($_POST['ngay_bat_dau']) ? $_POST['ngay_bat_dau'] : null,
+                            'ngay_ket_thuc' => !empty($_POST['ngay_ket_thuc']) ? $_POST['ngay_ket_thuc'] : null,
+                            'nks_id'        => isset($_POST['nks_id']) && $_POST['nks_id'] !== '' ? (int)$_POST['nks_id'] : null,
+                            'nganh'        => isset($_POST['nganh']) && $_POST['nganh'] !== '' ? (int)$_POST['nganh'] : null,
+                            'chuky'       => isset($_POST['chuky']) && $_POST['chuky'] !== '' ? (int)$_POST['chuky'] : null,
+                        ];
 
-                $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-                $ks_ids = isset($_POST['ks_ids']) ? json_decode($_POST['ks_ids'], true) : null;
-                $data = $ksModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
-                $response = [
-                    'status' => true,
-                    'data' => $data
-                ];
-            } else {
-                $response = [
-                    'status' => false,
-                    'message' => "khong nhan duoc ks_ids"
-                ];
+                        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+                        $ks_ids = isset($_POST['ks_ids']) ? json_decode($_POST['ks_ids'], true) : [];
+                        $data = $ksModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
+                        $response = [
+                            'status' => true,
+                            'data' => $data
+                        ];
+                    } else {
+                        $response = [
+                            'status' => false,
+                            'message' => "khong nhan duoc ks_ids"
+                        ];
+                    }
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
             }
             break;
         default:
@@ -159,4 +250,3 @@ if (isset($_POST['func'])) {
     }
     echo json_encode($response);
 }
-

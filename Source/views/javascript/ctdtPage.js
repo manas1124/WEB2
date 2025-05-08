@@ -58,13 +58,20 @@ async function getAllNganh() {
 
 async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null, txt_search = null) {
     const res = await getAllctdt(page, nganh_id, ck_id, la_ctdt, status, txt_search);
+    if (res?.status === false && res?.message) {
+        Swal.fire({
+            title: "Thông báo",
+            text: res.message,
+            icon: "warning"
+        });
+        return;
+    }
     if (res) {
         console.log(res);
         const ctdtList = res.data;
         const totalPages = res.totalPages;
         const currentPage = res.currentPage;
         $("#ctdt-list").empty();
-        $("#pagination").empty();
         ctdtList.forEach(item => {
             $("#ctdt-list").append(`
               <tr>
@@ -84,15 +91,28 @@ async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = nu
                 </tr>
             `);
         });
-        $("#pagination").append(`<button type="button" class="btn btn-text btn-prev">Previous</button><div class="flex items-center gap-x-1">`);
-        for (let i = 1; i <= totalPages; i++) {
-            let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
-            $("#pagination").append(`
-                <button type="button" class="btn btn-text btn-square aria-[current='page']:text-bg-primary btn-page" data-page="${i}" ${activeClass}>${i}</button>
-            `);
-        }
-        $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">Next</button>`);
+        renderPagination(totalPages, currentPage);
     }
+}
+
+function renderPagination(totalPages, currentPage) {
+    if (totalPages <= 1) {
+        $("#pagination").empty();
+        return;
+    }
+
+    $("#pagination").empty();
+
+    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><<</button><div class="flex items-center gap-x-1">`);
+
+    for (let i = 1; i <= totalPages; i++) {
+        let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
+        $("#pagination").append(`
+            <button type="button" class="btn btn-text btn-square aria-[current='page']:text-bg-primary btn-page" data-page="${i}" ${activeClass}>${i}</button>
+        `);
+    }
+
+    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">>></button>`);
 }
 
 async function loadAllNganh() {
@@ -251,8 +271,17 @@ function toggleStatus(ctdt_id) {
                         showConfirmButton: false,
                         timer: 2000
                     });
-                    const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
-                    loadAllCTDT(currentPage);
+                    const txt_search = $("#search-keyword").val().trim();
+                    const selectedNganh = $("#select-nganh").val();
+                    const nganh = selectedNganh == -1 ? null : selectedNganh;
+                    const selectedChuky = $("#select-chuky").val();
+                    const chuky = selectedChuky == -1 ? null : selectedChuky;
+                    const selectedLoai = $("#select-loai").val();
+                    const loai = selectedLoai == -1 ? null : selectedLoai;
+                    const selectedStatus = $("#select-status").val();
+                    const status = selectedStatus == -1 ? null : selectedStatus;
+
+                    loadAllCTDT(1, nganh, chuky, loai, status, txt_search);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -340,7 +369,7 @@ $(document).ready(async function () {
         }
     });
 
-    $("#btn-search").on("click", function () {
+    $("#search-keyword").on("input", function () {
         const txt_search = $("#search-keyword").val().trim();
         const selectedNganh = $("#select-nganh").val();
         const nganh = selectedNganh == -1 ? null : selectedNganh;
@@ -350,7 +379,7 @@ $(document).ready(async function () {
         const loai = selectedLoai == -1 ? null : selectedLoai;
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
-    
+
         console.log("Tìm kiếm:", txt_search);
         loadAllCTDT(1, nganh, chuky, loai, status, txt_search);
     });

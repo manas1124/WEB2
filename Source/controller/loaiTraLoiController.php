@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../models/loaiTraLoiModel.php'; 
 // header('Content-Type: application/json'); 
+require_once __DIR__ . '/../utils/JwtUtil.php';
+
+session_start();
 
 if (isset($_GET['func'])) {
     $func = $_GET['func'];
@@ -9,8 +12,17 @@ if (isset($_GET['func'])) {
     $model = new TraLoiModel();
     
     switch ($func) {
-        case "getAllTraLoi":
-            $response = $model->getAllTraLoi();
+        case "getAllTraLoi":if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+            $accessToken = $_SESSION['accessToken'];
+            $isVaid = isAuthorization($accessToken, 'view.target');
+            if ($isVaid) {
+            $response = $model->getAllTraLoi();} else {
+                $response = [
+                    'status' => false,
+                    'message' => 'Bạn không có quyền để thực hiện việc này'
+                ];
+            }
+        }
             break;
         default:
             $response = [
