@@ -5,7 +5,7 @@ const doSurvey = (obj, surveyIdInput) => {
     surveyId = surveyIdInput;
     const act = $(obj).data("act");
     $.ajax({
-        url: "/Source/handle/surveyHandler.php",
+        url: "./handle/surveyHandler.php",
         type: "GET",
         data: {
             act: act,
@@ -43,7 +43,7 @@ const sendSurvey = (obj) => {
     
     // console.log(result);
     $.ajax({
-        url: "/Source/handle/surveyHandler.php",
+        url: "./handle/surveyHandler.php",
         type: "POST",
         data: {
             act: act,

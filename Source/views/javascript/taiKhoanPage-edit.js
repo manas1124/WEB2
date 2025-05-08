@@ -183,7 +183,7 @@ $(function () {
       doiTuongList.forEach((item) => {
         const isSelected = item.dt_id == defaultData.dt_id ? "selected" : "";
         $("#select-doituong").append(
-          `<option value='${item.dt_id}' ${isSelected}>${item.dt_id}</option>`
+          `<option value='${item.dt_id}' ${isSelected}>${item.ten_dt}</option>`
         );
       });
     }
@@ -192,7 +192,7 @@ $(function () {
         const isSelected =
           item.ten_quyen == defaultData.ten_quyen ? "selected" : "";
         $("#select-quyen").append(
-          `<option value='${item.quyen_id}' ${isSelected}>${item.quyen_id}</option>`
+          `<option value='${item.quyen_id}' ${isSelected}>${item.ten_quyen}</option>`
         );
       });
     }
