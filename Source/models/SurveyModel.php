@@ -13,7 +13,7 @@ class SurveyModel
     public function getAllSurveys()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM khao_sat ");
+        $stmt = $conn->prepare("SELECT * FROM khao_sat WHERE status = 1 ");
         $stmt->execute();
         $result = $stmt->get_result();
 
