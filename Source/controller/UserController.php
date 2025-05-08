@@ -100,10 +100,10 @@ if (isset($_POST['func'])) {
                         echo json_encode($response);
                     }
                 } else {
-                    $response = [
+                    echo json_encode([
                         'status' => false,
                         'message' => 'Bạn không có quyền để thực hiện việc này'
-                    ];
+                    ]);
                 }
             }
             break;

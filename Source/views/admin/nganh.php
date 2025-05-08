@@ -10,11 +10,9 @@
     </div>
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
-            <div>
-                <input type="text" class="input w-48" id="search-keyword" name="keyword" />
-            </div>
-            <div>
-                <button type="button" class="btn btn-primary h-10" id="btn-search" name="search">Tìm kiếm</button>
+            <div class="input-floating w-96">
+                <input type="text" placeholder="Nhập nội dung tìm kiếm" class="input" id="search-keyword" name="keyword" />
+                <label class="input-floating-label" for="search-keyword">Tìm kiếm</label>
             </div>
         </div>
     </div>
