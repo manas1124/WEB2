@@ -61,14 +61,17 @@ else if (isset($_POST['act']) && $_POST['act']) {
     function doSurvey() {
         require_once '../models/AccountModel.php';
         require_once '../models/SurveyResultModel.php';
+        require_once '../utils/JwtUtil.php';
+
+        
+        $accessToken = $_SESSION['accessToken'];
         $surveyId = $_POST['surveyId'];
-        $username = $_POST['username'];
+        $dt_id = getObjectId($accessToken);
         $accountModel = new AccountModel();
-        $account = $accountModel->getAccount($username);
 
         $surveyReulstModel = new SurveyResultModel();
         $data = [
-            'dt_id' => $account['dt_id'],
+            'dt_id' => $dt_id,
             'ks_id' => $surveyId,
             'status' => 1
         ];

@@ -10,7 +10,7 @@ class ObjectModel
     public function getObjectId($id)
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM doi_tuong WHERE dt_id = ?");
+        $stmt = $conn->prepare("SELECT * FROM doi_tuong WHERE dt_id = ? AND status = 1");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -36,6 +36,25 @@ class ObjectModel
             return -1;
         }
     }
+
+
+
+    public function getEmailByNhomKS($nhom_ks_id)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT email FROM doi_tuong WHERE nhom_ks = ? AND status = 1");
+        $stmt->bind_param("i", $nhom_ks_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $emails = [];
+        while ($row = $result->fetch_assoc()) {
+            $emails[] = $row['email'];
+        }
+        $this->db->closeConnection();
+        // return data as string json
+        return $emails;
+
     public function update($dt_id, $ho_ten, $email, $dien_thoai, $diachi)
     {
         $conn = $this->db->getConnection();
@@ -48,5 +67,6 @@ class ObjectModel
         $conn->close();
 
         return $result;
+
     }
 }
