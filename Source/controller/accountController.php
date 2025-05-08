@@ -3,6 +3,10 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 header('Content-Type: application/json');
 require_once __DIR__ . '/../models/AccountModel.php';
+require_once __DIR__ . '/../utils/JwtUtil.php';
+
+session_start();
+
 // header('Content-Type: application/json'); 
 if (isset($_POST['func'])) {
     $func = $_POST['func'];
@@ -26,7 +30,7 @@ if (isset($_POST['func'])) {
         case "create":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, '.account');
+                $isVaid = isAuthorization($accessToken, 'create.account');
                 if ($isVaid) {
                     if (
                         isset($_POST["username"]) &&
@@ -60,7 +64,7 @@ if (isset($_POST['func'])) {
         case "updateAccount":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, '.account');
+                $isVaid = isAuthorization($accessToken, 'edit.account');
                 if ($isVaid) {
                     $required = ['tk_id', 'username', 'password', 'dt_id', 'quyen_id', 'status'];
                     $data = [];
@@ -103,10 +107,10 @@ if (isset($_POST['func'])) {
                         'message' => $isSuccess ? "Cập nhật thành công" : "Cập nhật thất bại"
                     ]);
                 } else {
-                    $response = [
+                    echo json_encode([
                         'status' => false,
                         'message' => 'Bạn không có quyền để thực hiện việc này'
-                    ];
+                    ]);
                 }
             }
             exit;
@@ -139,7 +143,7 @@ if (isset($_POST['func'])) {
         case "searchAccount":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, '.account');
+                $isVaid = isAuthorization($accessToken, 'view.account');
                 if ($isVaid) {
                     $keyword = $_POST['keyword'];
                     $response = $accountModel->searchAccount($keyword);
@@ -155,7 +159,7 @@ if (isset($_POST['func'])) {
         case "getAccount":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, '.account');
+                $isVaid = isAuthorization($accessToken, 'view.account');
                 if ($isVaid) {
                     $username = $_POST['username'];
                     $response = $accountModel->getAccount($username);
@@ -170,11 +174,12 @@ if (isset($_POST['func'])) {
         case "getChiTietAccountById":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, '.account');
+                $isVaid = isAuthorization($accessToken, 'view.account');
                 if ($isVaid) {
                     $id = $_POST['id'];
                     $response = $accountModel->getAccountById($id);
-                    // $response = $ksModel->getAllKhaoSat();} else {
+                    // $response = $ksModel->getAllKhaoSat();
+                } else {
                     $response = [
                         'status' => false,
                         'message' => 'Bạn không có quyền để thực hiện việc này'
@@ -185,7 +190,7 @@ if (isset($_POST['func'])) {
         case "softDeleteAccount":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, '.account');
+                $isVaid = isAuthorization($accessToken, 'edit.account');
                 if ($isVaid) {
                     $tk_id = $_POST['tk_id'] ?? null;
 
@@ -204,10 +209,10 @@ if (isset($_POST['func'])) {
                         'message' => $result ? "Xóa thành công" : "Xóa thất bại"
                     ]);
                 } else {
-                    $response = [
+                    echo json_encode( [
                         'status' => false,
                         'message' => 'Bạn không có quyền để thực hiện việc này'
-                    ];
+                    ]);
                 }
             }
             exit;
