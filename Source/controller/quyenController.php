@@ -62,7 +62,8 @@ if (isset($_POST['func'])) {
             
             $isXoaChucNangSuccess = $quyenModel->deleteAllChucNangByQuyenId($quyenId);
             
-            if (!isset($_POST["selectedChucNang"]) && !empty($_POST["selectedChucNang"]) ) {
+        
+            if (isset($_POST["selectedChucNang"]) && !empty($_POST["selectedChucNang"]) ) {
                 $selectedChucNangList = $_POST["selectedChucNang"];
                 foreach ($selectedChucNangList as $chucNangKey) {
                     $quyenModel->createChucNangQuyen($quyenId, $chucNangKey);
