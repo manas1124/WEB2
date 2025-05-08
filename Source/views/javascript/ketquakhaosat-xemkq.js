@@ -88,7 +88,7 @@ async function getAllTraLoi(kqks_ids) {
 async function loadDuLieu(ks_id) {
 
     // 0. Lấy chi tiết khảo sát
-    const khaoSat = await getKhaoSatById(ks_id);
+    var khaoSat = await getKhaoSatById(ks_id);
     if (khaoSat?.status === false && khaoSat?.message) {
         Swal.fire({
             title: "Thông báo",
@@ -99,23 +99,22 @@ async function loadDuLieu(ks_id) {
     }
 
     // 1. Lấy danh sách mục khảo sát
-    const mucKhaoSat = await getAllMucKhaoSat(ks_id);
-    const mks_ids = mucKhaoSat.map(item => item.mks_id);
+    var mucKhaoSat = await getAllMucKhaoSat(ks_id);
+    var mks_ids = mucKhaoSat.map(item => item.mks_id);
 
     // 2. Lấy danh sách câu hỏi theo mks_ids
-    const cauHoi = await getAllCauHoi(mks_ids);
+    var cauHoi = await getAllCauHoi(mks_ids);
 
     // 3. Lấy kết quả khảo sát
-    const kqks = await getAllKqks(ks_id);
-    const kqks_ids = kqks.data.map(item => item.kqks_id);
-    const doiTuong_ids = kqks.data.map(item => item.nguoi_lamks_id);
+    var kqks = await getAllKqks(ks_id);
+    var kqks_ids = kqks.data.map(item => item.kqks_id);
 
     // 4. Lấy danh sách trả lời
-    const traLoi = await getAllTraLoi(kqks_ids);
+    var traLoi = await getAllTraLoi(kqks_ids);
 
     console.log(mucKhaoSat);
     console.log(cauHoi);
-    console.log(kqks);
+    console.log(kqks.data);
     console.log(traLoi);
 
 
@@ -173,7 +172,8 @@ async function loadDuLieu(ks_id) {
 
             // Đếm số trả lời theo từng điểm
             for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
-                const count = traLoi.filter(tl => tl.ch_id === ch.ch_id && tl.ket_qua === diem).length;
+                const count = traLoi.filter(tl => Number(tl.ch_id) === Number(ch.ch_id) &&
+                                                    Number(tl.ket_qua) === Number(diem)).length;
                 const td = document.createElement('td');
                 td.textContent = count;
                 td.style.textAlign = "center";

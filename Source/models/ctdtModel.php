@@ -57,7 +57,7 @@ class CtdtDauraModel
 
     public function getAllpaging($page = 1, $nganh_id = null, $ck_id = null, $la_ctdt = null, $status = null, $txt_search = null)
     {
-        $limit = 10;
+        $limit = 8;
         $offset = ($page - 1) * $limit;
         $conn = $this->db->getConnection();
 

@@ -220,7 +220,7 @@ class KhaoSatModel
 
     public function getAllKhaoSatFilter($filters = [], $page = 1, $ks_ids)
     {
-        $limit = 10;
+        $limit = 8;
         $conn = $this->db->getConnection();
 
         if (!is_array($ks_ids)) {
