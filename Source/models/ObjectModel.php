@@ -38,6 +38,7 @@ class ObjectModel
     }
 
 
+
     public function getEmailByNhomKS($nhom_ks_id)
     {
         $conn = $this->db->getConnection();
@@ -53,5 +54,19 @@ class ObjectModel
         $this->db->closeConnection();
         // return data as string json
         return $emails;
+
+    public function update($dt_id, $ho_ten, $email, $dien_thoai, $diachi)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("UPDATE doi_tuong SET ho_ten=?, email=?, dien_thoai=?, diachi=? WHERE dt_id=?");
+        if (!$stmt) return false;
+
+        $stmt->bind_param("ssssi", $ho_ten, $email, $dien_thoai, $diachi, $dt_id);
+        $result = $stmt->execute();
+        $stmt->close();
+        $conn->close();
+
+        return $result;
+
     }
 }

@@ -55,20 +55,18 @@ class CtdtDauraModel
         return $data;
     }
 
-    public function getAllpaging($page = 1, $nganh_id = null, $ck_id = null, $la_ctdt = null, $status = null)
+    public function getAllpaging($page = 1, $nganh_id = null, $ck_id = null, $la_ctdt = null, $status = null, $txt_search = null)
     {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $conn = $this->db->getConnection();
 
-        // 1. Query chính
         $sql = "SELECT c.*, n.ten_nganh, ck.ten_ck 
             FROM ctdt_daura c
             LEFT JOIN nganh n ON c.nganh_id = n.nganh_id
             LEFT JOIN chu_ki ck ON c.ck_id = ck.ck_id
             WHERE 1=1";
 
-        // 2. Điều kiện lọc
         $conditions = "";
         $params = [];
         $types = "";
@@ -97,8 +95,23 @@ class CtdtDauraModel
             $types .= "i";
         }
 
-        // 3. Tổng số bản ghi
-        $countSql = "SELECT COUNT(*) AS total FROM ctdt_daura c WHERE 1=1" . $conditions;
+        if ($txt_search !== null && $txt_search !== "") {
+            $conditions .= " AND (ck.ten_ck LIKE ? OR n.ten_nganh LIKE ? OR c.file LIKE ? OR c.ctdt_id LIKE ?)";
+            $searchParam = "%" . $txt_search . "%";
+            $params[] = $searchParam;
+            $params[] = $searchParam;
+            $params[] = $searchParam;
+            $params[] = $searchParam;
+            $types .= "ssss";
+        }
+
+        // Đếm tổng số bản ghi
+        $countSql = "SELECT COUNT(*) AS total 
+                 FROM ctdt_daura c
+                 LEFT JOIN nganh n ON c.nganh_id = n.nganh_id
+                 LEFT JOIN chu_ki ck ON c.ck_id = ck.ck_id
+                 WHERE 1=1" . $conditions;
+
         $countStmt = $conn->prepare($countSql);
         if (!empty($params)) {
             $countStmt->bind_param($types, ...$params);
@@ -107,11 +120,9 @@ class CtdtDauraModel
         $countResult = $countStmt->get_result();
         $totalRecord = $countResult->fetch_assoc()['total'];
         $totalPage = ceil($totalRecord / $limit);
-        $page = max(1, $page);
-        $offset = ($page - 1) * $limit;
 
-        // 4. Truy vấn chính có phân trang
-        $sql .= $conditions . " LIMIT ?, ?";
+        // Truy vấn dữ liệu có phân trang
+        $sql .= $conditions . " ORDER BY c.ctdt_id DESC LIMIT ?, ?";
         $params[] = $offset;
         $params[] = $limit;
         $types .= "ii";
@@ -122,19 +133,17 @@ class CtdtDauraModel
         $result = $stmt->get_result();
 
         $data = [];
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = [
-                    "ctdt_id" => $row['ctdt_id'],
-                    "file" => $row['file'],
-                    "nganh_id" => $row['nganh_id'],
-                    "ten_nganh" => $row['ten_nganh'],
-                    "ck_id" => $row['ck_id'],
-                    "ten_ck" => $row['ten_ck'],
-                    "la_ctdt" => $row['la_ctdt'],
-                    "status" => $row['status']
-                ];
-            }
+        while ($row = $result->fetch_assoc()) {
+            $data[] = [
+                "ctdt_id" => $row['ctdt_id'],
+                "file" => $row['file'],
+                "nganh_id" => $row['nganh_id'],
+                "ten_nganh" => $row['ten_nganh'],
+                "ck_id" => $row['ck_id'],
+                "ten_ck" => $row['ten_ck'],
+                "la_ctdt" => $row['la_ctdt'],
+                "status" => $row['status']
+            ];
         }
 
         return [
@@ -143,6 +152,7 @@ class CtdtDauraModel
             "totalPages" => $totalPage
         ];
     }
+
 
 
     // Lấy dữ liệu theo ID

@@ -1,5 +1,6 @@
 
 $('#loginForm').on('submit', function(e){
+    console.log("date gui:", $('#txtUsername').val(), $('#txtPassword').val())
     e.preventDefault(); 
     $.ajax({
         type: 'POST',
@@ -22,6 +23,7 @@ $('#loginForm').on('submit', function(e){
 
         },
         error: function() {
+            console.log(response);
             alert('Có lỗi xảy ra khi gửi dữ liệu!');
         }
     });
@@ -268,7 +270,7 @@ $(function () {
     });
 
     $("#logo-login").on("click", function (event) {
-        window.location.href = "/Source/home.php";
+        window.location.href = "./Source/home.php";
         console.log("haha");
     });
         

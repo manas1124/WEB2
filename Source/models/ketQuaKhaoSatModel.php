@@ -103,7 +103,7 @@ class KqKhaoSatModel
     public function getIdKhaoSat()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT DISTINCT ks_id FROM kq_khao_sat AND status = 1");
+        $stmt = $conn->prepare("SELECT DISTINCT ks_id FROM kq_khao_sat WHERE status = 1");
         $stmt->execute();
         $result = $stmt->get_result();
         $ks_ids = [];
