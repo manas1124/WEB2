@@ -79,7 +79,10 @@ async function createKhaoSat(formData) {
       processData: false,
       dataType: "json",
     });
-    console.log("create: ", response);
+    if (response && response.status === 'error') {
+      alert("Lỗi tạo khảo sát:", response.message);
+      return response; 
+    }
     return response;
   } catch (error) {
     console.log("Lỗi khi tạo khảo sát:", error);
@@ -366,9 +369,7 @@ $(function () {
             if (response) {
               alert("Tạo khảo sát thành công");
               $("#khao-sat-page").trigger("click");
-            } else {
-              alert("Tạo khảo sát thất bại");
-            }
+            } 
           });
         });
       }
