@@ -54,7 +54,7 @@ class ObjectModel
         $this->db->closeConnection();
         // return data as string json
         return $emails;
-
+    }
     public function update($dt_id, $ho_ten, $email, $dien_thoai, $diachi)
     {
         $conn = $this->db->getConnection();
