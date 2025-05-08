@@ -10,19 +10,10 @@ session_start();
 
 const SECRET_KEY = '15ccbe8c9d449a9b63a4a4e5c8f7f087';
 
-if (isset($_POST['action']) && $_POST['action'] === 'register') {
-    require_once __DIR__ . '/../models/AccountModel.php';
-    require_once __DIR__ . '/../utils/JwtUtil.php';
-    use \Firebase\JWT\JWT;
-    use \Firebase\JWT\Key;
-
-    session_start();
-
-    const SECRET_KEY = '15ccbe8c9d449a9b63a4a4e5c8f7f087';
-
     if (isset($_POST['action']) && $_POST['action'] === 'register') {
         require_once __DIR__ . '/../models/AccountModel.php';
         require_once __DIR__ . '/../models/ObjectModel.php';
+        require_once __DIR__ . '/../utils/JwtUtil.php';
         $username = $_POST['username'];
         $password = $_POST['password'];
         $address = $_POST['address'];
@@ -32,9 +23,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'register') {
         $ctdtId = $_POST['ctdtId'];
         $loaiDoiTuongId = $_POST['loaiDoiTuongId'];
 
-        
-        
-
         $doiTuongModel = new ObjectModel();
         $doiTuongId = $doiTuongModel->create($fullName, $email, $address, $phone, $loaiDoiTuongId, $ctdtId);
         if ($doiTuongId == -1) {
@@ -43,8 +31,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'register') {
                 'message' => 'Đăng ký không thành công!'
             ]);
             exit;
-        }
-        else {
+        } else {
             $accountModel = new AccountModel();
             if ($accountModel->usernameIsExist($username)) {
                 echo json_encode([
@@ -58,7 +45,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'register') {
             if ($isSuccess) {
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Đăng ký thành công!',
+                    'message' => 'Đăng ký thành công!'
                 ]);
                 exit;
             } else {
@@ -68,59 +55,21 @@ if (isset($_POST['action']) && $_POST['action'] === 'register') {
                 ]);
                 exit;
             }
-        }
-    }
-
-
-
-
-    $doiTuongModel = new ObjectModel();
-    $doiTuongId = $doiTuongModel->create($fullName, $email, $address, $phone, $loaiDoiTuongId, $ctdtId);
-    if ($doiTuongId == -1) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Đăng ký không thành công!'
-        ]);
-        exit;
-    } else {
-        $accountModel = new AccountModel();
-        if ($accountModel->usernameIsExist($username)) {
+            
+            // var_dump($account);
+            $isSuccess = false;
+            $test = isValidAccount($account, $password);
+            if(isValidAccount($account, $password)) {
+                $accessToken = generateToken($account);
+                $_SESSION['accessToken'] = $accessToken;
+                $isSuccess = true;
+            }
             echo json_encode([
-                'status' => 'error',
-                'message' => 'Tài khoản đã tồn tại!'
-            ]);
-            exit;
+                'status' => $isSuccess ? 'success' : 'error',
+                'message' => $isSuccess ? 'Đăng nhập thành công!' : 'Mật khẩu không đúng!',
+                'accessToken' => $isSuccess ? $accessToken : null
+              ]);
         }
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        $isSuccess = $accountModel->create($username, $hashedPassword, $doiTuongId);
-        if ($isSuccess) {
-            echo json_encode([
-                'status' => 'success',
-                'message' => 'Đăng ký thành công!'
-            ]);
-            exit;
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Đăng ký không thành công!'
-            ]);
-            exit;
-        }
-        
-        // var_dump($account);
-        $isSuccess = false;
-        $test = isValidAccount($account, $password);
-        if(isValidAccount($account, $password)) {
-            $accessToken = generateToken($account);
-            $_SESSION['accessToken'] = $accessToken;
-            $isSuccess = true;
-        }
-        echo json_encode([
-            'status' => $isSuccess ? 'success' : 'error',
-            'message' => $isSuccess ? 'Đăng nhập thành công!' : 'Mật khẩu không đúng!',
-            'accessToken' => $isSuccess ? $accessToken : null
-          ]);
-
 }
 if (isset($_POST['func']) && $_POST['func'] === "updatePersonalInfor") {
     $hoTen = $_POST['ho_ten'] ?? '';
