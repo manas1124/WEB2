@@ -44,9 +44,8 @@ class AccountModel
     public function create($username, $password, $dt_id, $quyen_id = 3, $status = 1)
     {
         $conn = $this->db->getConnection();
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $conn->prepare("INSERT INTO tai_khoan (username, password, dt_id, quyen_id, status) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssiii", $username, $hashedPassword, $dt_id, $quyen_id, $status);
+        $stmt->bind_param("ssiii", $username, $password, $dt_id, $quyen_id, $status);
 
         if ($stmt->execute()) {
             return true;

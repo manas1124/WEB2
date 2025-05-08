@@ -30,25 +30,33 @@ class NganhModel
         return $data;
     }
 
-    public function getAllpaging($page = 1, $status = null)
+    public function getAllpaging($page = 1, $status = null, $txt_search = null)
     {
         $limit = 10;
-
         $conn = $this->db->getConnection();
         $sql = "SELECT * FROM nganh WHERE 1=1";
-
-        // Đếm tổng số dòng (để tính tổng số trang)
         $countSql = "SELECT COUNT(*) as total FROM nganh WHERE 1=1";
+
         $params = [];
         $types = "";
+
         if ($status !== null) {
             $sql .= " AND status = ?";
-
             $countSql .= " AND status = ?";
             $params[] = $status;
             $types .= "i";
         }
 
+        if (!empty($txt_search)) {
+            $sql .= " AND (nganh_id LIKE ? OR ten_nganh LIKE ?)";
+            $countSql .= " AND (nganh_id LIKE ? OR ten_nganh LIKE ?)";
+            $like_search = "%" . $txt_search . "%";
+            $params[] = $like_search;
+            $params[] = $like_search;
+            $types .= "ss";
+        }
+
+        // Đếm tổng số dòng
         $countStmt = $conn->prepare($countSql);
         if (!empty($params)) {
             $countStmt->bind_param($types, ...$params);
@@ -59,9 +67,9 @@ class NganhModel
         $totalPages = ceil($totalRow / $limit);
         $page = max(1, $page);
         $offset = ($page - 1) * $limit;
-        // Truy vấn dữ liệu trang hiện tại
 
-        $sql .= " LIMIT ?, ?";
+        // Truy vấn dữ liệu trang hiện tại
+        $sql .= " ORDER BY nganh_id DESC LIMIT ?, ?";
         $params[] = $offset;
         $params[] = $limit;
         $types .= "ii";
@@ -75,12 +83,12 @@ class NganhModel
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
         }
-        $finaldata = [
+
+        return [
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'data' => $data
         ];
-        return $finaldata;
     }
 
 

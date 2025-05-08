@@ -16,7 +16,8 @@ if (isset($_GET['func'])) {
         case "getAllpaging":
             $page = isset($_GET["page"]) && $_GET["page"] !== '' ? $_GET["page"] : 1;
             $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-            $response = $nganhModel->getAllpaging($page, $status);
+            $txt_search = isset($_GET["txt_search"]) ? $_GET["txt_search"] : '';
+            $response = $nganhModel->getAllpaging($page, $status, $txt_search);
             break;
         case "getById":
             if (isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '') {

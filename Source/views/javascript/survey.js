@@ -65,8 +65,12 @@ const sendSurvey = (obj) => {
         },
         dataType: "json",
         success: function (response) {
-            alert(response['message']); // Show the message from the server     
+            alert(response['message']); // Show the message from the server
             // history.pushState({}, "page", "?act=survey&surveyId=" + surveyId);
+            if (response['status'] == 'success') {
+                // Redirect to the survey page
+                window.location.href = "./home.php";
+            }
             
         },
         error: function (error) {

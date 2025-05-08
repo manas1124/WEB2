@@ -23,15 +23,15 @@ echo '<aside id="default-sidebar"
                     </a>
                 </li>
                 <li>
-                    <a href="" class="nav-item nav-link text-nowrap" data-page="qlUserPage">
-                        <span class="icon-[tabler--user] size-5"></span>
-                        Đối tượng
-                    </a>
-                </li>
-                <li>
                     <a href="" class="nav-item nav-link text-nowrap" data-page="chuky">
                         <span class="icon-[tabler--user] size-5"></span>
                         Chu kỳ
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="nav-item nav-link text-nowrap" data-page="qlUserPage">
+                        <span class="icon-[tabler--user] size-5"></span>
+                        Đối tượng
                     </a>
                 </li>
                 <li>

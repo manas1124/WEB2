@@ -1,5 +1,6 @@
 
 $('#loginForm').on('submit', function(e){
+    console.log("date gui:", $('#txtUsername').val(), $('#txtPassword').val())
     e.preventDefault(); 
     $.ajax({
         type: 'POST',
@@ -13,13 +14,16 @@ $('#loginForm').on('submit', function(e){
             console.log(response);
 
             var data = JSON.parse(response);
+            console.log(data);
             alert(data['message']); // Show the message from the server
-            if (data["status"] !=="error") {
+            if (data['status'] == "success") {
                 window.location.href = "./home.php";
-            }         
+            }
+            
 
         },
         error: function() {
+            console.log(response);
             alert('Có lỗi xảy ra khi gửi dữ liệu!');
         }
     });
@@ -63,6 +67,11 @@ $('#signUpForm').on('submit', function(e){
 
             var data = JSON.parse(response);
             alert(data.message); // Show the message from the server
+            console.log(data);
+            if (data.status == "success") {
+                $("#signUpForm").addClass("hidden")
+                $("#signInForm").removeClass("hidden")
+            }
 
 
         },
@@ -261,7 +270,7 @@ $(function () {
     });
 
     $("#logo-login").on("click", function (event) {
-        window.location.href = "/Source/home.php";
+        window.location.href = "./Source/home.php";
         console.log("haha");
     });
         

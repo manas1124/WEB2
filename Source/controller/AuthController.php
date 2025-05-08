@@ -1,16 +1,19 @@
 <?php
-    require_once __DIR__ . '/../models/AccountModel.php';
-    require_once __DIR__ . '/../utils/JwtUtil.php';
-    use \Firebase\JWT\JWT;
-    use \Firebase\JWT\Key;
+require_once __DIR__ . '/../models/AccountModel.php';
+require_once __DIR__ . '/../utils/JwtUtil.php';
+require_once __DIR__ . '/../models/ObjectModel.php';
 
-    session_start();
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 
-    const SECRET_KEY = '15ccbe8c9d449a9b63a4a4e5c8f7f087';
+session_start();
 
-    if (isset($_POST['action']) && $_POST['action'] === 'register') {
+const SECRET_KEY = '15ccbe8c9d449a9b63a4a4e5c8f7f087';
+
+if (isset($_POST['action']) && $_POST['action'] === 'register') {
         require_once __DIR__ . '/../models/AccountModel.php';
         require_once __DIR__ . '/../models/ObjectModel.php';
+        require_once __DIR__ . '/../utils/JwtUtil.php';
         $username = $_POST['username'];
         $password = $_POST['password'];
         $address = $_POST['address'];
@@ -20,8 +23,15 @@
         $ctdtId = $_POST['ctdtId'];
         $loaiDoiTuongId = $_POST['loaiDoiTuongId'];
 
-        
-        
+        $accountModel = new AccountModel();
+        if ($accountModel->usernameIsExist($username)) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Tài khoản đã tồn tại!'
+            ]);
+            exit;
+        }
+
 
         $doiTuongModel = new ObjectModel();
         $doiTuongId = $doiTuongModel->create($fullName, $email, $address, $phone, $loaiDoiTuongId, $ctdtId);
@@ -31,16 +41,8 @@
                 'message' => 'Đăng ký không thành công!'
             ]);
             exit;
-        }
+        } 
         else {
-            $accountModel = new AccountModel();
-            if ($accountModel->usernameIsExist($username)) {
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'Tài khoản đã tồn tại!'
-                ]);
-                exit;
-            }
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             $isSuccess = $accountModel->create($username, $hashedPassword, $doiTuongId);
             if ($isSuccess) {
@@ -48,132 +50,164 @@
                     'status' => 'success',
                     'message' => 'Đăng ký thành công!'
                 ]);
-                exit;
+              
             } else {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'Đăng ký không thành công!'
                 ]);
-                exit;
+             
             }
+            
         }
+}
+if (isset($_POST['func']) && $_POST['func'] === "updatePersonalInfor") {
+    $hoTen = $_POST['ho_ten'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $dienThoai = $_POST['dien_thoai'] ?? '';
+    $diaChi = $_POST['diachi'] ?? '';
 
-        // echo json_encode([
-        //     'status' => 'success',
-        //     'message' => 'Đăng ký thành công!'
-        // ]);
-        // exit;
+    if (!isset($_SESSION['accessToken']) || empty($_SESSION['accessToken'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Chưa đăng nhập!']);
+        exit;
     }
 
-    //update tai khoan - cap nhat thong tin tai khoan
-    if (isset($_POST['action']) && $_POST['action'] == 'updateAccount') {
-        $tk_id = $_POST['tk_id'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $accountModel = new AccountModel();
-            if ($accountModel->usernameIsExistByAccountId($username,$tk_id)) {
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'Tài khoản đã tồn tại!'
-                ]);
-                exit;
-            }
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $isSuccess = $accountModel->updateUsernameAndPassword($tk_id,$username, $hashedPassword, );
-            if ($isSuccess) {
-                echo json_encode([
-                    'status' => 'success',
-                    'message' => 'Cập nhật thành công!'
-                ]);
-                exit;
-            } else {
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'Cập nhật không thành công!'
-                ]);
-                exit;
-            }
+    $userInfor = validateToken($_SESSION['accessToken']);
+    if (!$userInfor || !isset($userInfor->dtId)) {
+        echo json_encode(['status' => 'error', 'message' => 'Không tìm thấy thông tin người dùng!']);
+        exit;
     }
-    if (isset($_POST['action']) && $_POST['action'] == 'login') {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        
-        $accountModel = new AccountModel();
 
-        //luc mới tạo tài khoản dùng quyền mặc định là 3
-        $isExistAccount = $accountModel->usernameIsExist($username);
-        if (!$isExistAccount) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Username không tồn tại'
-            ]);
-            exit;
-        }
-        
-        $account = $accountModel->getAccount($username);
-        if (!$account) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Lấy thông tin tài khoản ở php lỗi'
-            ]);
-            exit;
-        }
-        // var_dump($account);
-        $isSuccess = false;
-        if(isValidAccount($account, $password)) {
-            $accessToken = generateToken($account);
-            $_SESSION['accessToken'] = $accessToken;
-            $isSuccess = true;
-        }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode(['status' => 'error', 'message' => 'Email không hợp lệ!']);
+        exit;
+    }
+
+    if (!preg_match('/^[0-9\-\+]{9,15}$/', $dienThoai)) {
+        echo json_encode(['status' => 'error', 'message' => 'Số điện thoại không hợp lệ!']);
+        exit;
+    }
+
+    $objectModel = new ObjectModel();
+    $isSuccess = $objectModel->update($userInfor->dtId, $hoTen, $email, $dienThoai, $diaChi);
+
+    echo json_encode([
+        'status' => $isSuccess ? 'success' : 'error',
+        'message' => $isSuccess ? 'Cập nhật thông tin thành công!' : 'Cập nhật thông tin thất bại!'
+    ]);
+    exit;
+}
+
+
+//update tai khoan - cap nhat thong tin tai khoan
+if (isset($_POST['action']) && $_POST['action'] == 'updateAccount') {
+    $tk_id = $_POST['tk_id'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $accountModel = new AccountModel();
+    if ($accountModel->usernameIsExist($username)) {
         echo json_encode([
-            'status' => $isSuccess ? 'success' : 'error',
-            'message' => $isSuccess ? 'Đăng nhập thành công!' : "Mật khẩu không đúng! " ,
-            'accessToken' => $isSuccess ? $accessToken : 'chưa có access token'
+            'status' => 'error',
+            'message' => 'Username đã tồn tại!'
         ]);
+        exit;
     }
-
-    if (isset($_POST['action']) && $_POST['action'] == 'logout') {
-        $_SESSION = array();
-        session_destroy();
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    $isSuccess = $accountModel->updateUsernameAndPassword($tk_id, $username, $hashedPassword,);
+    if ($isSuccess) {
         echo json_encode([
             'status' => 'success',
-            'message' => 'Đăng xuất thành công',
+            'message' => 'Cập nhật thành công!'
         ]);
-    }
-
-    if (isset($_POST['func']) && $_POST['func'] == "getCurrentLoginUser") {
-        if (!isset($_SESSION['accessToken'] ) &&  $_SESSION['accessToken']== "") {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Chưa đăng nhập để lấy thông tin tài khoản !',
-            ]);
-            exit;
-        }
-        
-        $userInfor = validateToken($_SESSION['accessToken']);
-        if (!$userInfor) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Chưa đăng nhập !',
-            ]);
-            exit;
-        }
+        exit;
+    } else {
         echo json_encode([
-            'status' => "success",
-            'message' => "get user infor sucess",
-            'userInfor' => $userInfor,
-            
+            'status' => 'error',
+            'message' => 'Cập nhật không thành công!'
         ]);
+        exit;
     }
-    function isValidAccount($account, $password) {
-        if ($account != null && isValidPassword($password, $account)) {
-            return true;
-        } 
-        return false;
+}
+if (isset($_POST['action']) && $_POST['action'] == 'login') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $accountModel = new AccountModel();
+
+    //luc mới tạo tài khoản dùng quyền mặc định là 3
+    $isExistAccount = $accountModel->usernameIsExist($username);
+    if (!$isExistAccount) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Username không tồn tại'
+        ]);
+        exit;
     }
 
-    function isValidPassword($password, $account) {
-        return password_verify($password, $account['password']);
+    $account = $accountModel->getAccount($username);
+    if (!$account) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Lấy thông tin tài khoản ở php lỗi'
+        ]);
+        exit;
+    }
+    // var_dump($account);
+    $isSuccess = false;
+    if (isValidAccount($account, $password)) {
+        $accessToken = generateToken($account);
+        $_SESSION['accessToken'] = $accessToken;
+        $isSuccess = true;
+    }
+    echo json_encode([
+        'status' => $isSuccess ? 'success' : 'error',
+        'message' => $isSuccess ? 'Đăng nhập thành công!' : 'Mật khẩu không đúng!',
+        'accessToken' => $isSuccess ? $accessToken : 'chưa có access token'
+    ]);
+}
+
+if (isset($_POST['action']) && $_POST['action'] == 'logout') {
+    $_SESSION = array();
+    session_destroy();
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'Đăng xuất thành công',
+    ]);
+}
+
+if (isset($_POST['func']) && $_POST['func'] == "getCurrentLoginUser") {
+    if (!isset($_SESSION['accessToken']) &&  $_SESSION['accessToken'] == "") {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Chưa đăng nhập để lấy thông tin tài khoản !',
+        ]);
+        exit;
     }
 
-?>
+
+
+    $userInfor = validateToken($_SESSION['accessToken']);
+    if (!$userInfor) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Chưa đăng nhập !',
+        ]);
+        exit;
+    }
+    echo json_encode([
+        'status' => "success",
+        'message' => "get user infor sucess",
+        'userInfor' => $userInfor,
+    ]);
+    exit;
+}
+
+function isValidAccount($account, $password)
+{
+    return $account != null && isValidPassword($password, $account);
+}
+
+function isValidPassword($password, $account)
+{
+    return password_verify($password, $account['password']);
+}

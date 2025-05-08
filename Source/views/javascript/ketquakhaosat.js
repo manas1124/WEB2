@@ -2,9 +2,9 @@
 
 window.HSStaticMethods.autoInit(); // phải dùng câu lệnh này để dùng lại js component
 
-async function getAllKhaoSat(page = 1, ks_ids = null, ten_ks = null,
+async function getAllKhaoSat(page = 1, ks_ids = null, txt_search = null,
     ngay_bat_dau = null, ngay_ket_thuc = null,
-    nks_id = null, ltl_id = null, ctdt_id = null) {
+    nks_id = null, nganh = null, chuky = null) {
     try {
         const response = await $.ajax({
             url: "./controller/KhaoSatController.php",
@@ -13,12 +13,12 @@ async function getAllKhaoSat(page = 1, ks_ids = null, ten_ks = null,
                 func: "getAllKhaoSatFilter",
                 page: page,
                 ks_ids: ks_ids,
-                ten_ks: ten_ks,
+                txt_search: txt_search,
                 ngay_bat_dau: ngay_bat_dau,
                 ngay_ket_thuc: ngay_ket_thuc,
                 nks_id: nks_id,
-                ltl_id: ltl_id,
-                ctdt_id: ctdt_id
+                nganh: nganh,
+                chuky: chuky
 
             },
             dataType: "json",
@@ -27,7 +27,7 @@ async function getAllKhaoSat(page = 1, ks_ids = null, ten_ks = null,
         return response;
     } catch (e) {
         console.log(e.responseText)
-        console.log("loi fetchdata getAllKhaoSat")  
+        console.log("loi fetchdata getAllKhaoSat")
         return null;
     }
 }
@@ -48,11 +48,14 @@ async function getKsIds() {
     }
 }
 
-async function loadDsKhaoSat() {
+async function loadDsKhaoSat(page = 1, txt_search = null,
+    ngay_bat_dau = null, ngay_ket_thuc = null,
+    nks_id = null, nganh = null, chuky = null) {
     const ks_ids = await getKsIds();
-    const ksList = await getAllKhaoSat(1, ks_ids);
+    console.log(ks_ids);
+    const ksList = await getAllKhaoSat(page, ks_ids, txt_search, ngay_bat_dau, ngay_ket_thuc, nks_id, nganh, chuky);
 
-    console.log(ksList.data);
+    console.log(ksList);
     console.log(ks_ids);
 
     // ksList = JSON.parse(ksList)
@@ -77,21 +80,131 @@ async function loadDsKhaoSat() {
         `);
         });
 
+        renderPagination(ksList.totalPages, ksList.currentPage);
     }
+}
+
+
+function renderPagination(totalPages, currentPage) {
+    let html = '';
+
+    // Nút trước
+    html += `<button class="btn btn-sm btn-prev" ${currentPage == 1 ? 'disabled' : ''}><<</button>`;
+
+    for (let i = 1; i <= totalPages; i++) {
+        html += `
+            <button 
+                class="btn btn-sm btn-page ${i === currentPage ? 'btn-active' : ''}" 
+                data-page="${i}" 
+                ${i === currentPage ? 'aria-current="page"' : ''}>
+                ${i}
+            </button>
+        `;
+    }
+
+    html += `<button class="btn btn-sm btn-next" ${currentPage == totalPages ? 'disabled' : ''}>>></button>`;
+
+    $("#pagination").html(html);
+}
+
+async function getAllChuky() {
+    try {
+        const response = await $.ajax({
+            url: "./controller/chuKyController.php",
+            type: "GET",
+            dataType: "json",
+            data: {
+                func: "getAll",
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+async function getAllNganh() {
+    try {
+        const response = await $.ajax({
+            url: "./controller/nganhController.php",
+            type: "GET",
+            dataType: "json",
+            data: {
+                func: "getAll",
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+async function getAllNhomKhaoSat() {
+    try {
+        const response = await $.ajax({
+            url: "./controller/nhomKsController.php",
+            type: "GET",
+            dataType: "json",
+            data: {
+                func: "getAllNhomKs",
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+async function loadAllNhomKhaoSat() {
+    const response = await getAllNhomKhaoSat();
+    $("#select-nhom").empty();
+    $("#select-nhom").append(`<option value="-1">Chọn nhóm khảo sát</option>`);
+    if (response) {
+        response.forEach(item => {
+            $("#select-nhom").append(`<option value="${item.nks_id}">${item.ten_nks}</option>`);
+        });
+    }
+}
+
+async function loadAllNganh() {
+    const response = await getAllNganh();
+    $("#select-nganh").empty();
+    $("#select-nganh").append(`<option value="-1">Chọn ngành</option>`);
+    if (response) {
+        response.forEach(item => {
+            $("#select-nganh").append(`<option value="${item.nganh_id}">${item.ten_nganh}</option>`);
+        });
+    }
+}
+
+async function loadAllChuky() {
+    const response = await getAllChuky();
+    console.log(response);
+    $("#select-chuky").empty();
+    $("#select-chuky").append(`<option value="-1">Chọn chu kỳ</option>`);
+    if (response) {
+        response.forEach(item => {
+            $("#select-chuky").append(`<option value="${item.ck_id}">${item.ten_ck}</option>`);
+        });
+    }
+
 }
 
 function xuatExel(ks_id) {
     $.ajax({
         url: './controller/ketQuaKhaoSatController.php',
         type: 'GET',
-        data: { 
+        data: {
             func: "xuatExel",
-            ks_id: ks_id 
+            ks_id: ks_id
         },
         xhrFields: {
             responseType: 'blob'
         },
-        success: function(response) {
+        success: function (response) {
             var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             var link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -100,19 +213,23 @@ function xuatExel(ks_id) {
             link.click();
             document.body.removeChild(link);
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error("Đã xảy ra lỗi khi xuất Excel:", error);
         }
     });
 }
 
+
 $(document).ready(function () {
     loadDsKhaoSat();
+    loadAllChuky();
+    loadAllNganh();
+    loadAllNhomKhaoSat();
 
     $(".main-content").on("click", ".action-item", function (e) {
         e.preventDefault();
         let action = $(this).data("act");
-        console.log(action) 
+        console.log(action)
     });
 
     $('.btnExcel').on('click', function () {
@@ -120,5 +237,47 @@ $(document).ready(function () {
         xuatExel(ks_id);
     });
 
+    // Hàm lấy dữ liệu bộ lọc từ các trường
+    function getFilterData() {
+        const nhom = $("#select-nhom").val();
+        const nganh = $("#select-nganh").val();
+        const chuky = $("#select-chuky").val();
+
+        return {
+            txt_search: $("#search-keyword").val().trim(),
+            ngay_bat_dau: $("#from-date").val(),
+            ngay_ket_thuc: $("#to-date").val(),
+            nks_id: nhom !== "-1" ? nhom : null,
+            nganh: nganh !== "-1" ? nganh : null,
+            chuky: chuky !== "-1" ? chuky : null, 
+            page: 1, 
+        };
+    }
+
+    // Nút Tìm kiếm
+    $("#btn-search").on("click", function () {
+        const filters = getFilterData();
+        console.log("Tìm kiếm với:", filters);
+        loadDsKhaoSat(filters.page, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);  // Gọi hàm loadDsKhaoSat với bộ lọc
+    });
+
+    // Nút Lọc
+    $("#btn-filter").on("click", function () {
+        const filters = getFilterData();
+        console.log("Lọc với:", filters);
+        loadDsKhaoSat(filters.page, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);  // Gọi hàm loadDsKhaoSat với bộ lọc
+    });
+
+    // Nút Reset
+    $("#btn-reset").on("click", function () {
+        $("#from-date").val('');
+        $("#to-date").val('');
+        $("#select-nhom").val('-1');
+        $("#select-nganh").val('-1');
+        $("#select-chuky").val('-1');
+        const txt_search = $("#search-keyword").val().trim();
+        console.log("Reset lọc");
+        loadDsKhaoSat(1, txt_search, null, null, null, null, null);
+    });
 });
 

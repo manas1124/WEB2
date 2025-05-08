@@ -1,4 +1,4 @@
-async function getAllctdt(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null) {
+async function getAllctdt(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null, txt_search = null) {
     try {
         const response = await $.ajax({
             url: "./controller/CTDTController.php",
@@ -7,6 +7,7 @@ async function getAllctdt(page = 1, nganh_id = null, ck_id = null, la_ctdt = nul
             data: {
                 func: "getAllpaging",
                 page: page,
+                txt_search: txt_search,
                 nganh_id: nganh_id,
                 ck_id: ck_id,
                 la_ctdt: la_ctdt,
@@ -55,8 +56,8 @@ async function getAllNganh() {
 }
 
 
-async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null) {
-    const res = await getAllctdt(page, nganh_id, ck_id, la_ctdt, status);
+async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null, txt_search = null) {
+    const res = await getAllctdt(page, nganh_id, ck_id, la_ctdt, status, txt_search);
     if (res) {
         console.log(res);
         const ctdtList = res.data;
@@ -71,7 +72,7 @@ async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = nu
                     <td>${item.ten_nganh}</td>
                     <td>${item.ten_ck}</td>
                     <td>${item.la_ctdt == 1 ? "Chương trình đào tạo" : "Chuẩn đầu ra"}</td>
-                    <td>${item.file}</td>
+                    <td><a href="${item.file}" target="_blank">Xem file</a></td>
                     <td>${item.status == 1
                     ? '<span class="badge badge-soft badge-success ">Đang sử dụng</span>'
                     : '<span class="badge badge-soft badge-error ">Đã khóa</span>'
@@ -287,14 +288,14 @@ $(document).ready(async function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Bạn quên chọn ngành rồi kìa!'
+                text: 'Ngành không được để trống!'
             });
         }
         else if ($("#select-chuky").val() == -1) {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Bạn quên chọn chu kỳ rồi kìa!'
+                text: 'Chu kỳ không được để trống!'
             });
         }
         else {
@@ -314,22 +315,48 @@ $(document).ready(async function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Bạn quên chọn ngành rồi kìa!'
+                text: 'Ngành không được để trống!'
             });
         }
         else if ($("#select-chuky").val() == -1) {
             Swal.fire({
                 icon: 'error',
                 title: 'Lỗi',
-                text: 'Bạn quên chọn chu kỳ rồi kìa!'
+                text: 'Chu kỳ không được để trống!'
             });
         }
         else {
-            update();
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn sửa ctdt?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Có, sửa ngay',
+                cancelButtonText: 'Không'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    update();
+                }
+            });
         }
     });
 
+    $("#btn-search").on("click", function () {
+        const txt_search = $("#search-keyword").val().trim();
+        const selectedNganh = $("#select-nganh").val();
+        const nganh = selectedNganh == -1 ? null : selectedNganh;
+        const selectedChuky = $("#select-chuky").val();
+        const chuky = selectedChuky == -1 ? null : selectedChuky;
+        const selectedLoai = $("#select-loai").val();
+        const loai = selectedLoai == -1 ? null : selectedLoai;
+        const selectedStatus = $("#select-status").val();
+        const status = selectedStatus == -1 ? null : selectedStatus;
+    
+        console.log("Tìm kiếm:", txt_search);
+        loadAllCTDT(1, nganh, chuky, loai, status, txt_search);
+    });
+
     $("#btn-loc").on("click", function () {
+        const txt_search = $("#search-keyword").val().trim();
         const selectedNganh = $("#select-nganh").val();
         const nganh = selectedNganh == -1 ? null : selectedNganh;
         const selectedChuky = $("#select-chuky").val();
@@ -339,7 +366,16 @@ $(document).ready(async function () {
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
         console.log("nganh: " + nganh + "; chuky: " + chuky + "; loai: " + loai + "; status: " + status);
-        loadAllCTDT(1, nganh, chuky, loai, status);
+        loadAllCTDT(1, nganh, chuky, loai, status, txt_search);
+    });
+
+    $("#btn-reset").on("click", function () {
+        $("#select-nganh").val("-1");
+        $("#select-chuky").val("-1");
+        $("#select-loai").val("-1");
+        $("#select-status").val("-1");
+        const txt_search = $("#search-keyword").val().trim();
+        loadAllCTDT(1, null, null, null, null, txt_search);
     });
 
     $("#pagination").on("click", ".btn-page", function () {

@@ -8,19 +8,26 @@
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
             <div>
-                <label class="label-text" for="select-nganh">Ngành </label>
+                <input type="text" class="input w-48" id="search-keyword" name="keyword" />
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary h-10" id="btn-search" name="search">Tìm kiếm</button>
+            </div>
+        </div>
+    </div>
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-4">
+            <div>
                 <select class="select" id="select-nganh">
                     <option value="-1">Chọn ngành</option>
                 </select>
             </div>
             <div>
-                <label class="label-text" for="select-chuky">Chu kỳ </label>
                 <select class="select" id="select-chuky">
                     <option value="-1">Chọn chu kỳ</option>
                 </select>
             </div>
             <div>
-                <label class="label-text" for="select-loai">Loại </label>
                 <select class="select" id="select-loai">
                     <option value="-1">Chọn loại</option>
                     <option value="1">Chương trình đào tạo</option>
@@ -28,14 +35,14 @@
                 </select>
             </div>
             <div>
-                <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
-                    <option value="-1">Chọn status</option>
+                    <option value="-1">Chọn trạng thái</option>
                     <option value="1">Đang sử dụng</option>
                     <option value="0">Đã khóa</option>
                 </select>
             </div>
-            <button class="btn btn-primary" id="btn-loc" data-act="ctdt-loc">Lọc</button>
+            <button type="button" class="btn btn-primary" id="btn-loc" data-act="ctdt-loc">Lọc</button>
+            <button type="button" class="btn btn-primary" id="btn-reset" data-act="reset">Reset</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto">
@@ -46,7 +53,7 @@
                     <th>Ngành</th>
                     <th>Chu kỳ</th>
                     <th>Loại</th>
-                    <th>File</th>
+                    <th>Đề cương</th>
                     <th>Trạng thái</th>
                     <th>Action</th>
                 </tr>
