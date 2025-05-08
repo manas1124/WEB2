@@ -14,8 +14,12 @@ $('#loginForm').on('submit', function(e){
             console.log(response);
 
             var data = JSON.parse(response);
+            console.log(data);
             alert(data['message']); // Show the message from the server
-            window.location.href = "./home.php";
+            if (data['status'] == "success") {
+                window.location.href = "./home.php";
+            }
+            
 
         },
         error: function() {
@@ -63,6 +67,11 @@ $('#signUpForm').on('submit', function(e){
 
             var data = JSON.parse(response);
             alert(data.message); // Show the message from the server
+            console.log(data);
+            if (data.status == "success") {
+                $("#signUpForm").addClass("hidden")
+                $("#signInForm").removeClass("hidden")
+            }
 
 
         },

@@ -22,7 +22,7 @@
                     <label class="input-floating-label" for="floatingLabelLarge">Tên đăng nhập</label>
                 </div>
                 <div class="input-floating">
-                    <input name="password" type="text" placeholder="Mật khẩu" class="input input-lg" id="txtPassword" />
+                    <input name="password" type="password" placeholder="Mật khẩu" class="input input-lg" id="txtPassword" />
                     <label class="input-floating-label" for="floatingLabelLarge">Mật khẩu</label>
                 </div>
                 <button type="submit" class="w-full bg-[#304CA2] text-white py-2 rounded hover:bg-[#4B66C2] cursor-pointer">Đăng nhập</button>

@@ -6,9 +6,9 @@ use PHPMailer\PHPMailer\Exception;
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 $mail = new PHPMailer(true);
-$email = ''; //  email 
-$password = ''; // password
-$nameMail = ''; // tên người gửi
+$email = 'quangdeeptry1911@gmail.com'; //  email 
+$password = 'hmayehbweofjrkzu'; // password
+$nameMail = 'Quang tèo'; // tên người gửi
 
 if (isset($_POST['act']) && $_POST['act']) {
     $listEmail = $_POST['listEmail'];
@@ -18,7 +18,7 @@ if (isset($_POST['act']) && $_POST['act']) {
 }
 
 
-function sendMail($listEmail, $subject, $body)
+function sendMail($listEmail, $subject, $body, $file = null)
 {
     global $mail;
     global $email;
@@ -43,11 +43,22 @@ function sendMail($listEmail, $subject, $body)
         foreach ($listEmail as $emailSendTo) {
             $mail->addAddress($emailSendTo);
         }
+
+        if ($file != null) {
+            $mail->addAttachment($file['tmp_name'], $file['name']);
+        }   
+
         $mail->Subject = $subject;
         $mail->Body    = '<b>' . $body . '</b>';
         $mail->send();
-        echo 'Gửi mail thành công';
+        return json_encode([
+            'status' => 'success',
+            'message' => 'Gửi khảo sát thành công!'
+        ]);
     } catch (Exception $e) {
-        echo "Không gửi được. Lỗi: {$mail->ErrorInfo}";
+        return json_encode([
+            'status' => 'failed',
+            'message' => 'Gửi khảo sát không thành công!',
+        ]);
     }
 }

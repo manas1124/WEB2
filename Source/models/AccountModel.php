@@ -22,15 +22,30 @@ class AccountModel
             return false; 
         }
     }
-
+    public function usernameIsExistByAccountId($username,$accountId)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM tai_khoan WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows == 1 && $result->fetch_assoc()['tk_id'] == $accountId) {
+            return false;
+        }
+        if ($result->num_rows > 0 ) {
+            return true; 
+        } else {
+            return false; 
+        }
+    }
 
     // Database operations
     public function create($username, $password, $dt_id, $quyen_id = 3, $status = 1)
     {
         $conn = $this->db->getConnection();
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $conn->prepare("INSERT INTO tai_khoan (username, password, dt_id, quyen_id, status) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssiii", $username, $hashedPassword, $dt_id, $quyen_id, $status);
+        $stmt->bind_param("ssiii", $username, $password, $dt_id, $quyen_id, $status);
 
         if ($stmt->execute()) {
             return true;
