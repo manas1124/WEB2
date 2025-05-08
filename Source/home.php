@@ -8,6 +8,18 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="assets/css/output.css" />
     <link rel="stylesheet" href="assets/css/user.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        input:disabled {
+            opacity: 1; /* Make the text fully visible */
+            background-color:rgb(255, 255, 255); /* Match the background color */
+            color:rgb(0, 0, 0);  /* Keep original text color */
+            border: 1px solid black; /* Keep original border color */
+            cursor: not-allowed; /* Optional: change cursor */
+        }
+    </style>
 </head>
 
 <body>
