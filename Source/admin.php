@@ -111,8 +111,6 @@
     <script src="../node_modules/flyonui/flyonui.js"></script>
 
     <!-- <script src="./views/javascript/indexAdmin.js"></script> -->
-    <script src="../path/to/lodash/lodash.js"></script>
-    <script src="../path/to/dropzone/dist/dropzone-min.js"></script>
     <script src="./views/javascript/indexAdmin.js"></script>
     <script src="./views/javascript/survey.js"></script>
     <script src="./views/javascript/jquery-3.7.1.min.js"></script>
