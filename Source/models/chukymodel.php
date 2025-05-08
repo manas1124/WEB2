@@ -45,7 +45,7 @@ class ChuKyModel
 
     public function getAllpaging($page = 1, $status = null, $txt_search = null)
     {
-        $limit = 10;
+        $limit = 8;
         $offset = ($page - 1) * $limit;
         $conn = $this->db->getConnection();
 

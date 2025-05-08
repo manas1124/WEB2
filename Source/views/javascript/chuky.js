@@ -289,7 +289,7 @@ $(document).ready(function () {
             return;
         }
         currentPage -= 1;
-        console, log(currentPage);
+        console.log(currentPage);
         loadAllChuky(currentPage, status, txtSearch);
     });
 
@@ -304,7 +304,7 @@ $(document).ready(function () {
             return;
         }
         currentPage += 1;
-        console, log(currentPage);
+        console.log(currentPage);
         loadAllChuky(currentPage, status, txtSearch);
     });
 });

@@ -226,12 +226,48 @@ function xuatExel(ks_id) {
     });
 }
 
+async function getNhomKs() {
+    try {
+      const response = await $.ajax({
+        url: "./controller/nhomKsController.php",
+        type: "GET",
+        data: { func: "getAllNhomKs" },
+        dataType: "json",
+      });
+      console.log("fect", response);
+      return response;
+    } catch (error) {
+      console.log(error);
+      console.log("loi fetchdata getAllKhaoSat 1");
+      return null;
+    }
+  }
+
+async function loadNhomKsToSelectModal() {
+    const nhomKsList = await getNhomKs(); 
+    const selectElement = $("#nhom-ks-select-modal"); 
+  
+    selectElement.empty(); 
+    selectElement.append('<option value="">Tất cả</option>'); 
+    if (nhomKsList != null) {
+      nhomKsList.map((item) => {
+        selectElement.append(`
+          <option value="${item.nks_id}">${item.ten_nks}</option>
+        `);
+      });
+    } else {
+      selectElement.append('<option value="">Không có nhóm khảo sát</option>');
+    }
+  }
+
 
 $(document).ready(function () {
     loadDsKhaoSat();
     loadAllChuky();
     loadAllNganh();
     loadAllNhomKhaoSat();
+    loadNhomKsToSelectModal();
+    
     $(".main-content").on("click", ".action-item", function (e) {
         e.preventDefault();
         let action = $(this).data("act");
@@ -256,7 +292,6 @@ $(document).ready(function () {
             nks_id: nhom !== "-1" ? nhom : null,
             nganh: nganh !== "-1" ? nganh : null,
             chuky: chuky !== "-1" ? chuky : null, 
-            page: 1, 
         };
     }
 
@@ -264,14 +299,14 @@ $(document).ready(function () {
     $("#search-keyword").on("input", function () {
         const filters = getFilterData();
         console.log("Tìm kiếm với:", filters);
-        loadDsKhaoSat(filters.page, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);  // Gọi hàm loadDsKhaoSat với bộ lọc
+        loadDsKhaoSat(1, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
     });
 
     // Nút Lọc
     $("#btn-filter").on("click", function () {
         const filters = getFilterData();
         console.log("Lọc với:", filters);
-        loadDsKhaoSat(filters.page, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);  // Gọi hàm loadDsKhaoSat với bộ lọc
+        loadDsKhaoSat(1, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
     });
 
     // Nút Reset
@@ -284,6 +319,36 @@ $(document).ready(function () {
         const txt_search = $("#search-keyword").val().trim();
         console.log("Reset lọc");
         loadDsKhaoSat(1, txt_search, null, null, null, null, null);
+    });
+
+    $("#pagination").on("click", ".btn-page", function () {
+        const currentPage = Number($("#pagination .btn-page[aria-current='page']").data("page"));
+        const selectedPage = Number($(this).data("page"));
+        if (currentPage == selectedPage) {
+            return;
+        }
+        const filters = getFilterData();
+        loadDsKhaoSat(selectedPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
+    });
+
+    $("#pagination").on("click", ".btn-prev", function () {
+        const currentPage = Number($("#pagination .btn-prev[aria-current='page']").data("page"));
+        if (currentPage == 1) {
+            return;
+        }
+        const filters = getFilterData();
+        const selectedPage = currentPage + 1;
+        loadDsKhaoSat(selectedPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
+    });
+
+    $("#pagination").on("click", ".btn-next", function () {
+        const currentPage = Number($("#pagination .btn-next[aria-current='page']").data("page"));
+        if (currentPage == $("#pagination .btn-page]").length) {
+            return;
+        }
+        const filters = getFilterData();
+        const selectedPage = currentPage + 1;
+        loadDsKhaoSat(selectedPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
     });
 });
 

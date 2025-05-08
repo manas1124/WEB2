@@ -32,7 +32,7 @@ class NganhModel
 
     public function getAllpaging($page = 1, $status = null, $txt_search = null)
     {
-        $limit = 10;
+        $limit = 8;
         $conn = $this->db->getConnection();
         $sql = "SELECT * FROM nganh WHERE 1=1";
         $countSql = "SELECT COUNT(*) as total FROM nganh WHERE 1=1";

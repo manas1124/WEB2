@@ -13,7 +13,7 @@
             'dtId' =>$account['dt_id'],
             'sub' => $account['username'],
             'iat' => time(), 
-            'exp' => time() + (60 * 15),  // 15 mins
+            'exp' => time() + (60 * 24 * 60),  // 15 mins
             'permission' => $account['keys'] 
         ];
         return JWT::encode($payload, KEY, 'HS256');
