@@ -42,6 +42,18 @@ const sendSurvey = (obj) => {
     }
     
     // console.log(result);
+    let username = null;
+    (async () => {
+        const account = await getCurrentLoginAccount();
+        if (account && account.sub !== null) {
+            console.log(account);
+            username = account.sub;
+        } else {
+            alert("Không thể lấy thông tin người làm khảo sát")
+            return;
+        }
+    })();
+    
     $.ajax({
         url: "/Source/handle/surveyHandler.php",
         type: "POST",
@@ -49,6 +61,7 @@ const sendSurvey = (obj) => {
             act: act,
             data: JSON.stringify(result),
             surveyId: surveyId,
+            username: username
         },
         dataType: "json",
         success: function (response) {
@@ -69,3 +82,24 @@ const sendSurvey = (obj) => {
 function convertScore(value) {
     return Number(value);
 }
+
+async function getCurrentLoginAccount() {
+    try {
+      const response = await $.ajax({
+        url: "./controller/AuthController.php",
+        type: "POST",
+        dataType: "json",
+        data: { func: "getCurrentLoginUser" },
+      });
+      if (response.status == "error") {
+        console.log(response.message);
+        return null;
+      }
+      return response.userInfor;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  

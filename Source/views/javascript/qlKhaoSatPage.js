@@ -78,6 +78,10 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
                 }
                 </td>
                 <td>
+                <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-chi-tiet" data-id="${
+                    item.ks_id
+                  }" aria-label="xem chi tiết"> <span class="icon-[solar--eye-linear] size-5"></span></button>
+               
                   <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-sua" data-id="${
                     item.ks_id
                   }" aria-label="sua khao sat"><span class="icon-[tabler--pencil] size-5"></span></button>
