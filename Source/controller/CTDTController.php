@@ -144,7 +144,7 @@ if (isset($_GET['func'])) {
         case "toggleStatus":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'delete.program');
+                $isVaid = isAuthorization($accessToken, 'edit.program');
                 if ($isVaid) {
                     if (isset($_GET["ctdt_id"])) {
                         $ctdt_id = $_GET["ctdt_id"];

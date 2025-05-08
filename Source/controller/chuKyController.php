@@ -1,8 +1,14 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+header('Content-Type: application/json');
+
 require_once __DIR__ . '/../models/chuKyModel.php';
 require_once __DIR__ . '/../utils/JwtUtil.php';
-// header('Content-Type: application/json'); 
+
 session_start();
+
+// var_dump($_SESSION);
 
 if (isset($_GET['func'])) {
     $func = $_GET['func'];
@@ -67,7 +73,7 @@ if (isset($_GET['func'])) {
                 if ($isVaid) {
                     if (isset($_GET["ten_ck"]) && $_GET["ten_ck"] !== '') {
                         $ten_ck = $_GET["ten_ck"];
-                        if ($chukyModel->isExist($ten_ck)) {
+                        if ($chukyModel->isExist($ten_ck, null)) {
                             $response = [
                                 'status' => false,
                                 'message' => 'Chu kỳ đã tồn tại'
@@ -100,7 +106,7 @@ if (isset($_GET['func'])) {
                     ) {
                         $ck_id = $_GET["ck_id"];
                         $ten_ck = $_GET["ten_ck"];
-                        if ($chukyModel->isExist($ten_ck)) {
+                        if ($chukyModel->isExist($ten_ck, $ck_id)) {
                             $response = [
                                 'status' => false,
                                 'message' => 'Chu kỳ đã tồn tại'
@@ -125,7 +131,7 @@ if (isset($_GET['func'])) {
         case "toggleStatus":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'delete.program');
+                $isVaid = isAuthorization($accessToken, 'edit.program');
                 if ($isVaid) {
                     if (isset($_GET["ck_id"]) && $_GET["ck_id"] !== '') {
                         $ck_id = $_GET["ck_id"];

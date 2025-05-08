@@ -52,15 +52,28 @@ async function loadAllNganh(page = 1, status = null, txt_search = null) {
             `);
 
         });
-        $("#pagination").append(`<button type="button" class="btn btn-text btn-prev">Previous</button><div class="flex items-center gap-x-1">`);
-        for (let i = 1; i <= totalPages; i++) {
-            let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
-            $("#pagination").append(`
-                <button type="button" class="btn btn-text btn-square aria-[current='page']:text-bg-primary btn-page" data-page="${i}" ${activeClass}>${i}</button>
-            `);
-        }
-        $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">Next</button>`);
+        renderPagination(totalPages, currentPage);
     }
+}
+
+function renderPagination(totalPages, currentPage) {
+    if (totalPages <= 1) {
+        $("#pagination").empty();
+        return;
+    }
+
+    $("#pagination").empty();
+
+    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><<</button><div class="flex items-center gap-x-1">`);
+
+    for (let i = 1; i <= totalPages; i++) {
+        let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
+        $("#pagination").append(`
+            <button type="button" class="btn btn-text btn-square aria-[current='page']:text-bg-primary btn-page" data-page="${i}" ${activeClass}>${i}</button>
+        `);
+    }
+
+    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">>></button>`);
 }
 
 function create() {
@@ -171,8 +184,10 @@ function toggleStatus(nganh_id) {
                     showConfirmButton: false,
                     timer: 2000
                 });
-                const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
-                loadAllNganh(currentPage);
+                const txtSearch = $("#search-keyword").val().trim();
+                    const selectedValue = $("#select-status").val();
+                    const status = selectedValue == -1 ? null : selectedValue;
+                loadAllNganh(1, status, txtSearch);
             }
 
         },
@@ -227,7 +242,7 @@ $(document).ready(function () {
         loadAllNganh(1, status, txtSearch);
     });
 
-    $("#btn-search").on("click", function () {
+    $("#search-keyword").on("input", function () {
         const txtSearch = $("#search-keyword").val().trim();
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;

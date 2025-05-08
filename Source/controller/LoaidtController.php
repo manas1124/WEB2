@@ -1,7 +1,10 @@
 <?php
 
 require_once __DIR__ . '/../models/LoaidtModel.php'; 
-// header('Content-Type: application/json'); 
+// header('Content-Type: application/json');
+require_once __DIR__ . '/../utils/JwtUtil.php';
+
+session_start();
 
 if (isset($_GET['func'])) {
     $func = $_GET['func'];
@@ -9,9 +12,18 @@ if (isset($_GET['func'])) {
     $ksModel = new LoaidtModel();
 
     switch ($func) {
-        case 'getAllLoaidt':
+        case 'getAllLoaidt':if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+            $accessToken = $_SESSION['accessToken'];
+            $isVaid = isAuthorization($accessToken, 'view.target');
+            if ($isVaid) {
             
-            $response = $ksModel->getAllLoaidt();
+            $response = $ksModel->getAllLoaidt();} else {
+                $response = [
+                    'status' => false,
+                    'message' => 'Bạn không có quyền để thực hiện việc này'
+                ];
+            }
+        }
             break;
 
         default:

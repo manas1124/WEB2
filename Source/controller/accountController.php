@@ -62,10 +62,10 @@ if (isset($_POST['func'])) {
             echo json_encode($response);
             exit;
         case "updateAccount":
-            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
-                $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'edit.account');
-                if ($isVaid) {
+            // if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+            //     $accessToken = $_SESSION['accessToken'];
+            //     $isVaid = isAuthorization($accessToken, 'edit.account');
+            //     if ($isVaid) {
                     $required = ['tk_id', 'username', 'password', 'dt_id', 'quyen_id', 'status'];
                     $data = [];
 
@@ -106,13 +106,13 @@ if (isset($_POST['func'])) {
                         'status' => $isSuccess,
                         'message' => $isSuccess ? "Cập nhật thành công" : "Cập nhật thất bại"
                     ]);
-                } else {
-                    echo json_encode([
-                        'status' => false,
-                        'message' => 'Bạn không có quyền để thực hiện việc này'
-                    ]);
-                }
-            }
+            //     } else {
+            //         echo json_encode([
+            //             'status' => false,
+            //             'message' => 'Bạn không có quyền để thực hiện việc này'
+            //         ]);
+            //     }
+            // }
             exit;
         case "checkExistAccount":
             $data = $_POST['data'];

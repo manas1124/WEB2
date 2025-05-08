@@ -4,12 +4,11 @@ require_once __DIR__ . '/../models/mucKhaoSatModel.php';
 require_once __DIR__ . '/../models/cauHoiModel.php';
 require_once __DIR__ . '/../models/traLoiModel.php';
 require_once __DIR__ . '/../utils/JwtUtil.php';
-
-session_start();
-
 require '../../vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+session_start();
 
 // header('Content-Type: application/json'); 
 

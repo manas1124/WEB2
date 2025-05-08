@@ -4,6 +4,7 @@ require_once __DIR__ . '/../utils/JwtUtil.php';
 // header('Content-Type: application/json'); 
 session_start();
 
+
 if (isset($_GET['func'])) {
     $func = $_GET['func'];
     // $data = $_GET['data'];
@@ -67,7 +68,7 @@ if (isset($_GET['func'])) {
                 if ($isVaid) {
                     if (isset($_GET["ten_nganh"]) && $_GET["ten_nganh"] !== '') {
                         $ten_nganh = $_GET["ten_nganh"];
-                        if ($nganhModel->isExist($ten_nganh)) {
+                        if ($nganhModel->isExist($ten_nganh, null)) {
                             $response = [
                                 'status' => false,
                                 'message' => 'Ngành đã tồn tại'
@@ -99,7 +100,7 @@ if (isset($_GET['func'])) {
                     ) {
                         $nganh_id = $_GET["nganh_id"];
                         $ten_nganh = $_GET["ten_nganh"];
-                        if ($nganhModel->isExist($ten_nganh)) {
+                        if ($nganhModel->isExist($ten_nganh, $nganh_id)) {
                             $response = [
                                 'status' => false,
                                 'message' => 'Ngành đã tồn tại'
@@ -124,7 +125,7 @@ if (isset($_GET['func'])) {
         case "toggleStatus":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'delete.program');
+                $isVaid = isAuthorization($accessToken, 'edit.program');
                 if ($isVaid) {
                     if (isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '') {
                         $nganh_id = $_GET["nganh_id"];
