@@ -61,6 +61,11 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
     const ksList = res.data;
     const totalPages = res.totalPages;
     const currentPage = res.currentPage;
+    const surveyUsedStatus = {
+      0: '<span class="badge badge-soft badge-error ">Kết thúc</span>',
+      1: '<span class="badge badge-soft badge-success ">Đang thực hiện</span>',
+      2: '<span class="badge badge-soft badge-warning ">Chưa bắt đầu</span>',
+    }
     $("#ks-list").empty();
     $("#pagination").empty();
     if (ksList != null) {
@@ -71,11 +76,7 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
                 <td>${item.ngay_bat_dau}</td>
                 <td>${item.ngay_ket_thuc}</td>
                 <td class="text-center">
-                ${
-                  item.su_dung == 1
-                    ? '<span class="badge badge-soft badge-success ">Đang thực hiện</span>'
-                    : '<span class="badge badge-soft badge-error ">Kết thúc</span>'
-                }
+                  ${surveyUsedStatus[item.su_dung] }
                 </td>
                 <td>
                 <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-chi-tiet" data-id="${

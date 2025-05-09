@@ -79,7 +79,16 @@ async function createKhaoSat(formData) {
       processData: false,
       dataType: "json",
     });
-    console.log("create: ", response);
+    if (response.status === 'error') {
+      console.log(response)
+      alert("Lỗi tạo khảo sát phía server: " + response.message );
+      return response; 
+    }
+    if ( response.status == "success") {
+        alert("Tạo khảo sát thành công");
+        $("#khao-sat-page").trigger("click");
+        
+    }
     return response;
   } catch (error) {
     console.log("Lỗi khi tạo khảo sát:", error);
@@ -358,18 +367,10 @@ $(function () {
             formData.append("excelFile", file);
           } else {
             formData.append("content", surveyContent);
-            console.log("không có import file excel!");
             formData.append("content", JSON.stringify(surveyContent));
           }
 
-          createKhaoSat(formData).then((response) => {
-            if (response) {
-              alert("Tạo khảo sát thành công");
-              $("#khao-sat-page").trigger("click");
-            } else {
-              alert("Tạo khảo sát thất bại");
-            }
-          });
+          createKhaoSat(formData);
         });
       }
     });

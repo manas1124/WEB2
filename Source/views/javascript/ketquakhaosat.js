@@ -9,10 +9,11 @@ async function getAllKhaoSat(page = 1, ks_ids = null, txt_search = null,
         const response = await $.ajax({
             url: "./controller/KhaoSatController.php",
             type: "POST",
+            dataType: "json",
             data: {
                 func: "getAllKhaoSatFilter",
                 page: page,
-                ks_ids: ks_ids,
+                ks_ids: JSON.stringify(ks_ids),
                 txt_search: txt_search,
                 ngay_bat_dau: ngay_bat_dau,
                 ngay_ket_thuc: ngay_ket_thuc,
@@ -20,8 +21,7 @@ async function getAllKhaoSat(page = 1, ks_ids = null, txt_search = null,
                 nganh: nganh,
                 chuky: chuky
 
-            },
-            dataType: "json",
+            }
         });
         // console.log("fect",response)
         return response;
@@ -37,7 +37,7 @@ async function getKsIds() {
         const response = await $.ajax({
             url: "./controller/ketQuaKhaoSatController.php",
             type: "GET",
-            datatype: "json",
+            dataType: "json",
             data: {
                 func: "getIdKhaoSat"
             }
@@ -53,6 +53,11 @@ async function loadDsKhaoSat(page = 1, txt_search = null,
     nks_id = null, nganh = null, chuky = null) {
     const ks_ids = await getKsIds();
     console.log(ks_ids);
+    if (!ks_ids || ks_ids.length === 0) {
+        $("#ks-list").html("<tr><td colspan='7' class='text-center text-gray-500 italic py-4 bg-gray-100 rounded'>Không có kết quả khảo sát nào.</td></tr>");
+        $("#pagination").empty();
+        return;
+    }
     const ksList = await getAllKhaoSat(page, ks_ids, txt_search, ngay_bat_dau, ngay_ket_thuc, nks_id, nganh, chuky);
 
     if (ksList?.status === false && ksList?.message) {
@@ -71,6 +76,11 @@ async function loadDsKhaoSat(page = 1, txt_search = null,
     if (ksList.status) {
         // console.log(ksList)
         $("#ks-list").empty();
+        if (ksList.data.data.length == 0) {
+            $("#ks-list").html("<tr><td colspan='7' class='text-center text-gray-500 italic py-4 bg-gray-100 rounded'>Không có kết quả khảo sát nào.</td></tr>");
+            $("#pagination").empty();
+            return;
+        }
         ksList.data.data.map((item) => {
             $("#ks-list").append(`
             <tr>
@@ -81,8 +91,12 @@ async function loadDsKhaoSat(page = 1, txt_search = null,
                 <td>${item.ten_nganh}</td>
                 <td>${item.ten_ck}</td>
                 <td>
-                    <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua"><span class="icon-[tabler--eye] size-5"></span></button>
-                    <button class="btn btn-primary btnExcel" data-id="${item.ks_id}>Xuất Excel</button>
+                    <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua">
+                        <span class="icon-[tabler--eye] size-5"></span>
+                    </button>
+                    <button class="btnExcel btn btn-circle btn-text btn-sm" data-id="${item.ks_id}" aria-label="xuất excel">
+                        <span class="icon-[tabler--file-spreadsheet] size-5"></span>
+                    </button>
                 </td>
             </tr>
   
@@ -104,7 +118,7 @@ function renderPagination(totalPages, currentPage) {
 
     $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><<</button><div class="flex items-center gap-x-1">`);
 
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
         let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
         $("#pagination").append(`
             <button type="button" class="btn btn-text btn-square aria-[current='page']:text-bg-primary btn-page" data-page="${i}" ${activeClass}>${i}</button>
@@ -201,6 +215,14 @@ async function loadAllChuky() {
 }
 
 function xuatExel(ks_id) {
+    Swal.fire({
+        title: 'Đang xử lý...',
+        text: 'Vui lòng chờ trong giây lát',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
     $.ajax({
         url: './controller/ketQuaKhaoSatController.php',
         type: 'GET',
@@ -212,13 +234,22 @@ function xuatExel(ks_id) {
             responseType: 'blob'
         },
         success: function (response) {
-            var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `survey_export_${ks_id}.xlsx`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            Swal.close();
+            if (response?.status === false && response?.message) {
+                Swal.fire({
+                    title: "Thông báo",
+                    text: response.message,
+                    icon: "warning"
+                });
+            } else {
+                var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `survey_export_${ks_id}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         },
         error: function (xhr, status, error) {
             console.error("Đã xảy ra lỗi khi xuất Excel:", error);
@@ -226,25 +257,8 @@ function xuatExel(ks_id) {
     });
 }
 
-async function getNhomKs() {
-    try {
-        const response = await $.ajax({
-            url: "./controller/nhomKsController.php",
-            type: "GET",
-            data: { func: "getAllNhomKs" },
-            dataType: "json",
-        });
-        console.log("fect", response);
-        return response;
-    } catch (error) {
-        console.log(error);
-        console.log("loi fetchdata getAllKhaoSat 1");
-        return null;
-    }
-}
-
 async function loadNhomKsToSelectModal() {
-    const nhomKsList = await getNhomKs();
+    const nhomKsList = await getAllNhomKhaoSat();
     const selectElement = $("#nhom-ks-select-modal");
 
     selectElement.empty();
@@ -274,7 +288,7 @@ $(function () {
         console.log(action)
     });
 
-    $('.btnExcel').on('click', function () {
+    $(document).on('click', '.btnExcel', function () {
         let ks_id = $(this).data("id");
         xuatExel(ks_id);
     });
@@ -332,17 +346,17 @@ $(function () {
     });
 
     $("#pagination").on("click", ".btn-prev", function () {
-        const currentPage = Number($("#pagination .btn-prev[aria-current='page']").data("page"));
+        const currentPage = Number($("#pagination .btn-page[aria-current='page']").data("page"));
         if (currentPage == 1) {
             return;
         }
         const filters = getFilterData();
-        const selectedPage = currentPage + 1;
+        const selectedPage = currentPage - 1;
         loadDsKhaoSat(selectedPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
     });
 
     $("#pagination").on("click", ".btn-next", function () {
-        const currentPage = Number($("#pagination .btn-next[aria-current='page']").data("page"));
+        const currentPage = Number($("#pagination .btn-page[aria-current='page']").data("page"));
         if (currentPage == $("#pagination .btn-page]").length) {
             return;
         }

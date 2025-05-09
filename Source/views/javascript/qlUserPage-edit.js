@@ -32,6 +32,24 @@ async function getNhomKs() {
       return null;
     }
   }
+  async function getAllCTDT() {
+    try {
+      const response = await $.ajax({
+        url: "./controller/CTDTController.php",
+        type: "GET",
+        data: { func: "getAll" },
+        dataType: "json",
+      });
+      if (response.error) {
+        console.log("fect", response.error);
+      }
+      return response;
+    } catch (error) {
+      console.log(error);
+      console.log("loi fetchdata getAllKhaoSat 1");
+      return null;
+    }
+  }
   async function updateUser(data) {
     try {
       console.log("Sending data:", data); // kiểm tra dữ liệu gửi đi
@@ -97,10 +115,11 @@ $(".main-content").on("click", ".action-item", function (e) {
       console.log(" ID lấy từ URL:", currentuserId);
       const res = await getUserById(currentuserId);
       const defaultData = res?.data;
-      console.log("📦 Dữ liệu user:", defaultData);
+
       const nhomKsList = await getNhomKs();
       const LoaidtList = await getAllLoaidt();
-      
+      const ctdtList = await getAllCTDT();
+  
   
       
       if (LoaidtList != null) {
@@ -123,6 +142,28 @@ $(".main-content").on("click", ".action-item", function (e) {
               ${item.ten_nks}
             </option>
           `);
+        });
+      }
+      // if(LoaidtList !=null){
+      //   LoaidtList.map((item)=>{
+      //     $("#loai-doituong").append(
+      //       `<option value='${item.dt_id}'>${item.ten_dt}</option>`
+      //     );
+      //   });
+      // }
+      // if(nhomKsList !=null){
+      //   nhomKsList.map((item) => {
+      //     $("nhom-ks").append(
+      //       `<option value =' ${item.nks_id}'>${item.ten_nks}</option>`
+      //     );
+      //   });
+      // }
+
+      if (ctdtList != null) {
+        ctdtList.map((item) => {
+          $("#ctdt_id").append(
+            `<option value='${item.ctdt_id}'>${item.ten_nganh} - ${item.ten_ck}</option>`
+          );
         });
       }
      

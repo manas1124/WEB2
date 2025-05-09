@@ -55,7 +55,7 @@ if (isset($_POST['func'])) {
         case "deleteUser":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'view.target');
+                $isVaid = isAuthorization($accessToken, 'delete.target');
                 if ($isVaid) {
                     $id = $_POST['id'];
                     $response = $ksModel->deleteUser($id);
@@ -96,7 +96,7 @@ if (isset($_POST['func'])) {
         case "updateUser":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'view.target');
+                $isVaid = isAuthorization($accessToken, 'edit.target');
                 if ($isVaid) {
                     $data = isset($_POST['data']) ? $_POST['data'] : null;
                     if ($data) {
@@ -131,7 +131,7 @@ if (isset($_POST['func'])) {
         case "addUser":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'view.target');
+                $isVaid = isAuthorization($accessToken, 'create.target');
                 if ($isVaid) {
                     $data = isset($_POST['data']) ? $_POST['data'] : null;
                     if ($data) {
@@ -165,7 +165,7 @@ if (isset($_POST['func'])) {
         case "importExcel":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'view.target');
+                $isVaid = isAuthorization($accessToken, 'create.target');
                 if ($isVaid) {
                     if (isset($_FILES['file'])) {
                         $fileTmpPath = $_FILES['file']['tmp_name'];
