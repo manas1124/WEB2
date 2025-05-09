@@ -270,7 +270,7 @@ $(function () {
     });
 
     $("#logo-login").on("click", function (event) {
-        window.location.href = "./Source/home.php";
+        window.location.href = "./home.php";
         console.log("haha");
     });
         

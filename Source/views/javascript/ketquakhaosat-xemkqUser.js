@@ -186,13 +186,6 @@ async function loadDuLieu(ks_id) {
 }
 
 function xuatExel(ks_id) {
-    Swal.fire({
-        title: 'Đang xử lý...',
-        text: 'Vui lòng chờ trong giây lát',
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-    }});
     $.ajax({
         url: './controller/ketQuaKhaoSatController.php',
         type: 'GET',
@@ -204,7 +197,6 @@ function xuatExel(ks_id) {
             responseType: 'blob'
         },
         success: function (response) {
-            Swal.close();
             if (response?.status === false && response?.message) {
                 Swal.fire({
                     title: "Thông báo",

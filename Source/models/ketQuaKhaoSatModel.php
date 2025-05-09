@@ -114,6 +114,23 @@ class KqKhaoSatModel
         return $ks_ids;
     }
 
+    public function getIdKhaoSatByIdUser($user_id)
+    {
+        if (!$user_id) return [];
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT DISTINCT ks_id FROM kq_khao_sat WHERE status = 1 AND nguoi_lamks_id = ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $ks_ids = [];
+        while ($row = $result->fetch_assoc()) {
+            $ks_ids[] = $row['ks_id'];
+        }
+
+        return $ks_ids;
+    }
+
     function exportSurveyToExcel($ks_id, $outputFile = 'survey_export.xlsx')
     {
         try {
@@ -297,5 +314,61 @@ class KqKhaoSatModel
                 $conn->close();
             }
         }
+    }
+    public function getAllByNguoiLamKsId($nguoi_lamks_id)
+    {
+        if ($nguoi_lamks_id == null) {
+            return [
+                'error' => 'Thiếu tham số nguoi_lamks_id',
+                'data' => []
+            ];
+        }
+
+        $conn = $this->db->getConnection();
+
+        $sql = "SELECT * FROM kq_khao_sat WHERE status = 1 AND nguoi_lamks_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $nguoi_lamks_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+
+        $stmt->close();
+
+        return [
+            'data' => $data
+        ];
+    }
+
+    public function getIdKhaoSatByNguoiLamKsId($nguoi_lamks_id)
+    {
+        // Kiểm tra tham số
+        if ($nguoi_lamks_id === null) {
+            return [
+                'error' => 'Thiếu tham số nguoi_lamks_id',
+                'data' => []
+            ];
+        }
+
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT DISTINCT ks_id FROM kq_khao_sat WHERE status = 1 AND nguoi_lamks_id = ?");
+        $stmt->bind_param("i", $nguoi_lamks_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $ks_ids = [];
+        while ($row = $result->fetch_assoc()) {
+            $ks_ids[] = $row['ks_id'];
+        }
+
+        return [
+            'data' => $ks_ids
+        ];
     }
 }

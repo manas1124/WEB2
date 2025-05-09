@@ -158,6 +158,21 @@ if (isset($_GET['func'])) {
                 }
             }
             break;
+        case "getIdKhaoSatByIdUser":
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    $userid = isset($_GET['user_id']) ? $_GET : -1;
+                    $response = $KqKhaoSatModel->getIdKhaoSatByIdUser($userid);
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
+            break;
         case "xuatExel":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];

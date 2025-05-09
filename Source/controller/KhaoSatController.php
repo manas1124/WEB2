@@ -201,7 +201,7 @@ if (isset($_POST['func'])) {
                 ];
 
                 $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-                $ks_ids = isset($_POST['ks_ids']) ? json_decode($_POST['ks_ids'], true) : null;
+                $ks_ids = json_decode($_POST['ks_ids'], true);
                 $data = $ksModel->getAllKhaoSatFilter($filters, $page, $ks_ids);
                 $response = [
                     'status' => true,
