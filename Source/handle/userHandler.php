@@ -26,7 +26,7 @@ if ($page) {
             break;
         case "result-survey":
             ob_start();
-            require_once("../views/admin/ketQuaKhaoSat.php");
+            require_once("../views/user/ketQuaKhaoSatUser.php");
             $response["html"] = ob_get_clean();
             break;
         case "login":
