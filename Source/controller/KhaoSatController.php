@@ -4,12 +4,12 @@ require_once __DIR__ . '/../models/khaoSatModel.php';
 require_once __DIR__ . '/../models/cauHoiModel.php';
 require_once __DIR__ . '/../models/mucKhaoSatModel.php';
 require_once __DIR__ . '/../models/SurveyModel.php';
-
+require_once __DIR__ . '/../utils/JwtUtil.php';
 header('Content-Type: application/json');
 
 if (isset($_POST['func'])) {
+    session_start();
     $func = $_POST['func'];
-
     $ksModel = new KhaoSatModel();
     $mucKhaoSatModel = new MucKhaoSatModel();
     $cauHoiModel = new CauHoiModel();
@@ -34,8 +34,8 @@ if (isset($_POST['func'])) {
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
                 $isVaid = isAuthorization($accessToken, 'create.survey');
+                $isCreateKsSuccess = false;
                 if ($isVaid) {
-
                     $tenKhaoSat = $_POST['ten-ks'];
                     $nhomKsId = $_POST['nhomks-id'];
                     $dateStart = $_POST['date-start'];
@@ -49,16 +49,17 @@ if (isset($_POST['func'])) {
                         $tmpExcelPath = $_FILES['excelFile']['tmp_name'];
                         require 'xuly_import.php';
                         $convertResult = survey_content_excel_to_json($tmpExcelPath);             
-                if ($convertResult["status"] == "error") {
-                    $response = [
-                        "status" => 'error',
-                        "message" => $convertResult["message"] 
-                    ];
-                    echo json_encode($response);
-                    exit;
-                }
-                $content = $convertResult["data"];
-                    } else {
+                        if ($convertResult["status"] == "error") {
+                            $response = [
+                                "status" => 'error',
+                                "message" =>'Lỗi file import'. $convertResult["message"]
+                            ];
+                            echo json_encode($response);
+                            exit;
+                        }
+                        $content = $convertResult["data"];
+                    }
+                    else {
                         $content = json_decode($_POST['content'], true);
                     }
 
@@ -72,21 +73,42 @@ if (isset($_POST['func'])) {
                         $ctdtId,
                         1
                     );
-
-            // tao ra bai khao sat moi thanh cong thi moi tao nội dung
-            if ($idNewKs >= 0) {
-                $mucArray = $content;
-                foreach ($mucArray as $mucItem) {
-                    $newMucId = $mucKhaoSatModel->create($mucItem["sectionName"], $idNewKs);
-                    $cauHoiArray = $mucItem["questions"];
-                    foreach ($cauHoiArray as $cauHoiItem) {
-                        $cauHoiModel->create($cauHoiItem, $newMucId);
-                    }
+                    // tao ra bai khao sat moi thanh cong thi moi tao nội dung
+                    if ($idNewKs >= 0) {
+                        $mucArray = $content;
+                        foreach ($mucArray as $mucItem) {
+                            $newMucId = $mucKhaoSatModel->create($mucItem["sectionName"], $idNewKs);
+                            $cauHoiArray = $mucItem["questions"];
+                            foreach ($cauHoiArray as $cauHoiItem) {
+                                $cauHoiModel->create($cauHoiItem, $newMucId);
+                            }
+                        }
+                        echo json_encode([
+                                "status" => "success",
+                                "message" => "Tạo khảo sát thành công"
+                            ]);
+                        exit;
+                    } else {
+                        echo json_encode([
+                                "status" => "error",
+                                "message" => "Tạo khảo sát lỗi, model tạo câu hỏi, mục"
+                            ]);
+                        exit;
+                    } 
+                }else {
+                    echo json_encode([
+                        "status" => "error",
+                        "message" => "không có quyền tạo khảo sát"
+                    ]);
+                    exit;
                 }
-            }        
-            
-            $response = true;
-            break;
+            } else {
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "chưa có đăng nhập hoặc không lấy được accessToken trong session :".$_SESSION['accessToken']
+                ]);
+                exit;
+            }
         case "checkExistCtdt":
             $data = $_POST['data'];
             $data = json_decode($data, true);

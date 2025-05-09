@@ -76,7 +76,7 @@ class KhaoSatModel
             $params[] = "%" . $searchKeyWord . "%";
             $types .= "s";
         }
-        $sql .= " ORDER BY ngay_bat_dau DESC";
+        $sql .= " ORDER BY ks_id DESC";
 
         $countStmt = $conn->prepare($countSql);
         if (!empty($params)) {
