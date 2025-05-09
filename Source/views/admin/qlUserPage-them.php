@@ -45,9 +45,9 @@
                 <label class="label-text" for="ctdt">CTĐT</label>
                 <select class="select" id="ctdt">
                     <option value="-1">Chọn CTĐT</option>
-                    <option value="1">1</option>
+                    <!-- <option value="1">1</option>
                     <option value="2">2</option>
-                
+                 -->
                 </select>
             </div>
         </div>
