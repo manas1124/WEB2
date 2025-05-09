@@ -169,7 +169,17 @@ class KhaoSatModel
             return false;
         }
     }
-
+    public function updateSurveyTrangThaiSuDung($ks_id, $su_dung)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("UPDATE khao_sat SET su_dung = ? WHERE ks_id = ?");
+        $stmt ->bind_param("ii", $su_dung, $ks_id);
+         if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function delete($ks_id)
     {
         $conn = $this->db->getConnection();

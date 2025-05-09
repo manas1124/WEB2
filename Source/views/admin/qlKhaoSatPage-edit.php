@@ -34,9 +34,10 @@
                 </div>
                 <div class="w-96">
                     <label class="label-text" for="select-su-dung">Trạng thái bài khảo sát </label>
-                    <select class="select" id="select-su-dung">
-                        <option selected value="1">Đang thực hiện</option>
+                    <select class="select" id="select-su-dung" disabled>
+                        <option value="1" >Đang thực hiện</option>
                         <option value="0">Kết thúc</option>
+                        <option value="2">Chưa bắt đầu</option>
                     </select>
                 </div>
             </div>

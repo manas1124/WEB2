@@ -140,18 +140,17 @@ if (isset($_POST['func'])) {
             $ksId = $_POST['ks-id'];
             $suDungStatus = $_POST['su-dung-status'];
 
-            $data = json_decode($data, true);
-            if (!$ksId || !$suDungStatus) {
+            if (!isset($_POST['ks-id']) || !isset($_POST['su-dung-status'])) {
                  echo json_encode( 
                 [
                     'status' => 'error',
-                    'message' => 'Lỗi khi nh thông tin cập nhật trạng thái sử dụng',
+                    'message' => "Lỗi khi nhận thông tin cập nhật trạng thái sử dụng của khảo sát '$ksId $suDungStatus'",
                 ]);
                 exit;
             }
             $isUpdateSuccess = $ksModel->updateSurveyTrangThaiSuDung(
-                $data["ks-id"],
-                $data["su-dung-status"],
+                $ksId,
+                $suDungStatus,
             );
             if ($isUpdateSuccess) {
                 echo json_encode( 

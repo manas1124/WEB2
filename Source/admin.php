@@ -17,12 +17,12 @@
         background-color: #0056b3;
         /* Màu nền khi hover */
     }
-    input:disabled {
-            opacity: 1; /* Make the text fully visible */
-            background-color:rgb(255, 255, 255); /* Match the background color */
-            color:rgb(0, 0, 0);  /* Keep original text color */
-            border: 1px solid black; /* Keep original border color */
-            cursor: not-allowed; /* Optional: change cursor */
+    input:disabled, select:disabled {
+        opacity: 1; /* Make the text fully visible */
+        background-color:rgb(255, 255, 255); /* Match the background color */
+        color:rgb(86, 86, 86);  /* Keep original text color */
+        border: 1px solid rgb(216, 216, 216); /* Keep original border color */
+        cursor: not-allowed; /* Optional: change cursor */
     }
     </style>
 </head>
