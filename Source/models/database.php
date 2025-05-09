@@ -4,8 +4,9 @@ class MyConnection
     private $connection;
     private $server = "localhost";
     private $username = "root";
-    private $password = "123456789";
-    private $database = "web3";
+    private $password = "";
+    private $database = "student_survey_management";
+
 
     // private $server = "localhost:3307";
     // private $username = "root";

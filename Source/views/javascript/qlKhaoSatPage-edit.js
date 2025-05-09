@@ -195,9 +195,6 @@ $(function () {
             `<option selected="selected" value='${item.ltl_id}'>${item.thang_diem}</option>`
           );
         }
-        $("#select-loai-tra-loi").append(
-          `<option value='${item.ltl_id}'>${item.thang_diem}</option>`
-        );
       });
     }
     //xu li gia tri mac dinh

@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../models/nganhModel.php';
+require_once __DIR__ . '/../utils/JwtUtil.php';
 // header('Content-Type: application/json'); 
+session_start();
+
 
 if (isset($_GET['func'])) {
     $func = $_GET['func'];
@@ -11,40 +14,129 @@ if (isset($_GET['func'])) {
 
     switch ($func) {
         case "getAll":
-            $response = $nganhModel->getAll();
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.program');
+                if ($isVaid) {
+                    $response = $nganhModel->getAll();
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
             break;
         case "getAllpaging":
-            $page = isset($_GET["page"]) && $_GET["page"] !== '' ? $_GET["page"] : 1;
-            $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-            $response = $nganhModel->getAllpaging($page, $status);
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.program');
+                if ($isVaid) {
+                    $page = isset($_GET["page"]) && $_GET["page"] !== '' ? $_GET["page"] : 1;
+                    $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                    $txt_search = isset($_GET["txt_search"]) ? $_GET["txt_search"] : '';
+                    $response = $nganhModel->getAllpaging($page, $status, $txt_search);
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
             break;
         case "getById":
-            if (isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '') {
-                $nganhId = $_GET["nganh_id"];
-                $response = $nganhModel->getById($nganhId);
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.program');
+                if ($isVaid) {
+                    if (isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '') {
+                        $nganhId = $_GET["nganh_id"];
+                        $response = $nganhModel->getById($nganhId);
+                    }
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
             }
             break;
         case "create":
-            if (isset($_GET["ten_nganh"]) && $_GET["ten_nganh"] !== '') {
-                $ten_nganh = $_GET["ten_nganh"];
-                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-                $response = $nganhModel->create($ten_nganh, $status);
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'create.program');
+                if ($isVaid) {
+                    if (isset($_GET["ten_nganh"]) && $_GET["ten_nganh"] !== '') {
+                        $ten_nganh = $_GET["ten_nganh"];
+                        if ($nganhModel->isExist($ten_nganh, null)) {
+                            $response = [
+                                'status' => false,
+                                'message' => 'Ngành đã tồn tại'
+                            ];
+                        } else {
+                            $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                            $data = $nganhModel->create($ten_nganh, $status);
+                            $response = [
+                                'status' => true,
+                                'data' => $data
+                            ];
+                        }
+                    }
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
             }
             break;
         case "update":
-            if (
-                isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '' && isset($_GET["ten_nganh"]) && $_GET["ten_nganh"] !== ''
-            ) {
-                $nganh_id = $_GET["nganh_id"];
-                $ten_nganh = $_GET["ten_nganh"];
-                $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
-                $response = $nganhModel->update($nganh_id, $ten_nganh, $status);
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'edit.program');
+                if ($isVaid) {
+                    if (
+                        isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '' && isset($_GET["ten_nganh"]) && $_GET["ten_nganh"] !== ''
+                    ) {
+                        $nganh_id = $_GET["nganh_id"];
+                        $ten_nganh = $_GET["ten_nganh"];
+                        if ($nganhModel->isExist($ten_nganh, $nganh_id)) {
+                            $response = [
+                                'status' => false,
+                                'message' => 'Ngành đã tồn tại'
+                            ];
+                        } else {
+                            $status = isset($_GET["status"]) && $_GET["status"] !== '' ? $_GET["status"] : null;
+                            $data = $nganhModel->update($nganh_id, $ten_nganh, $status);
+                            $response = [
+                                'status' => true,
+                                'data' => $data
+                            ];
+                        }
+                    }
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
             }
             break;
         case "toggleStatus":
-            if (isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '') {
-                $nganh_id = $_GET["nganh_id"];
-                $response = $nganhModel->toggleStatus($nganh_id);
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'edit.program');
+                if ($isVaid) {
+                    if (isset($_GET["nganh_id"]) && $_GET["nganh_id"] !== '') {
+                        $nganh_id = $_GET["nganh_id"];
+                        $response = $nganhModel->toggleStatus($nganh_id);
+                    }
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
             }
             break;
         default:

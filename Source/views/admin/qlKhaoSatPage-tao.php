@@ -45,7 +45,7 @@
                 <div class="w-96 mb-2">
                     <label class="label-text" for="select-loai-tra-loi">Loại câu trả lời </label>
                     <select class="select" id="select-loai-tra-loi">
-                        <option>Chọn loại</option>
+                        <option value="-1">Chọn loại</option>
                     </select>
                 </div>
                 <div class="w-96 mb-2">

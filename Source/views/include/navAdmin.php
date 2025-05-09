@@ -23,15 +23,15 @@ echo '<aside id="default-sidebar"
                     </a>
                 </li>
                 <li>
-                    <a href="" class="nav-item nav-link text-nowrap" data-page="qlUserPage">
-                        <span class="icon-[tabler--user] size-5"></span>
-                        Đối tượng
-                    </a>
-                </li>
-                <li>
                     <a href="" class="nav-item nav-link text-nowrap" data-page="chuky">
                         <span class="icon-[tabler--user] size-5"></span>
                         Chu kỳ
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="nav-item nav-link text-nowrap" data-page="qlUserPage">
+                        <span class="icon-[tabler--user] size-5"></span>
+                        Đối tượng
                     </a>
                 </li>
                 <li>
@@ -47,6 +47,12 @@ echo '<aside id="default-sidebar"
                     </a>
                 </li>
                 <li>
+                    <a id="quyen-page" href="#" class="nav-item nav-link" data-page="quyenPage">
+                        <span class="icon-[tabler--message] size-5"></span>
+                        Quyền
+                    </a>
+                </li>
+                <li>
                     <a href="#" class="nav-item nav-link" data-page="surveyPage">
                         <span class="icon-[tabler--message] size-5"></span>
                         Khảo sát - client
@@ -59,9 +65,9 @@ echo '<aside id="default-sidebar"
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span class="icon-[tabler--logout-2] size-5"></span>
-                        Sign Out
+                    <a class=" btn-logout">
+                        <span class=" icon-[tabler--logout-2] size-5"></span>
+                        Đăng xuất
                     </a>
                 </li>
             </ul>

@@ -43,7 +43,7 @@ class UserModel {
     }
     public function getUserById($id) {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM doi_tuong WHERE dt_id = ?");
+        $stmt = $conn->prepare("SELECT * FROM doi_tuong,loai_doi_tuong WHERE doi_tuong.dt_id = ? AND loai_doi_tuong.dt_id = doi_tuong.loai_dt_id");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();

@@ -6,17 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./assets/css/output.css" rel="stylesheet">
     <style>
-        button[aria-current="page"] {
-            background-color: var(--color-primary);
-            /* Màu nền khi là trang hiện tại */
-            color: white;
-            /* Màu chữ */
-        }
+    button[aria-current="page"] {
+        background-color: var(--color-primary);
+        /* Màu nền khi là trang hiện tại */
+        color: white;
+        /* Màu chữ */
+    }
 
-        button[aria-current="page"]:hover {
-            background-color: #0056b3;
-            /* Màu nền khi hover */
-        }
+    button[aria-current="page"]:hover {
+        background-color: #0056b3;
+        /* Màu nền khi hover */
+    }
+    input:disabled {
+            opacity: 1; /* Make the text fully visible */
+            background-color:rgb(255, 255, 255); /* Match the background color */
+            color:rgb(0, 0, 0);  /* Keep original text color */
+            border: 1px solid black; /* Keep original border color */
+            cursor: not-allowed; /* Optional: change cursor */
+    }
     </style>
 </head>
 
@@ -35,17 +42,16 @@
         <div class="navbar-end flex items-center gap-4">
 
             <div class="dropdown relative inline-flex [--placement:bottom-end]">
-                <button id="dropdown-bottom-start" type="button" class="dropdown-toggle btn btn-primary"
-                    aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-                    Bottom end
+                <button id="dropdown-bottom-infor" type="button"
+                    class="dropdown-toggle btn btn-soft px-4 py-2 text-base-300" aria-haspopup="menu"
+                    aria-expanded="false" aria-label="Dropdown">
+                    Chưa đăng nhập
                     <span class="icon-[tabler--chevron-down] dropdown-open:rotate-180 size-4"></span>
                 </button>
-                <ul class="dropdown-menu dropdown-open:opacity-100 hidden min-w-60" role="menu"
-                    aria-orientation="vertical" aria-labelledby="dropdown-bottom-start">
-                    <li><a class="dropdown-item" href="#"> My Profile </a></li>
-                    <li><a class="dropdown-item" href="#"> Settings </a></li>
-                    <li><a class="dropdown-item" href="#"> Billing </a></li>
-                    <li><a class="dropdown-item" href="#"> FAQs </a></li>
+                <ul class="dropdown-menu dropdown-open:opacity-100 bg-[#e6e7e8] hidden min-w-60" role="menu"
+                    aria-orientation="vertical" aria-labelledby="dropdown-bottom-infor">
+                    <li><a href="#" class="dropdown-item nav-item" data-page="user-infor">Trang cá nhân</a></li>
+                    <li><a class="btn-logout dropdown-item" href="#"> Đăng xuất </a></li>
                 </ul>
             </div>
         </div>
@@ -92,14 +98,14 @@
 
     </div>
     <script>
-        // active nav link
-        // $.noConflict();
-        // jQuery( document ).ready(function() {
-        //     $(".nav-link").click(function () {
-        //         $(".nav-link").removeClass("bg-primary");
-        //         $(this).addClass("bg-primary");   
-        //     });
-        // });
+    // active nav link
+    // $.noConflict();
+    // jQuery( document ).ready(function() {
+    //     $(".nav-link").click(function () {
+    //         $(".nav-link").removeClass("bg-primary");
+    //         $(this).addClass("bg-primary");   
+    //     });
+    // });
     </script>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/flyonui/flyonui.js"></script>

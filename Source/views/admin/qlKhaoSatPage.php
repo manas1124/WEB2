@@ -1,16 +1,24 @@
 <div id="ctdt-content" class="container h-full">
+    <h1>Tìm kiếm bài khảo sát</h1>
     <div class="flex items-center justify-between mb-4">
-        <h1>Quản lý khảo sát</h1>
+        <div class="inline-flex gap-3">
+        <div class="relative">
+            <input id="input-search-ks" class="input ps-8" type="text" placeholder="Tìm kiếm..." 
+                aria-expanded="false" value=""  />
+            <span class="icon-[tabler--search] text-base-content absolute start-3 top-1/2 size-4 shrink-0 -translate-y-1/2"></span>
+        </div>
+        <button id="btn-search-ks" class="btn btn-outline">Tìm</button>
+        </div>
         <div class="flex items-center gap-4">
             <button class="action-item btn btn-primary" data-act="ks-tao">Tạo khảo sát</button>
         </div>
     </div>
 
-    <div class="w-full overflow-x-auto ">
-        <table class="table">
+    <div class="w-full overflow-x-auto h-[400px] ">
+        <table class="table ">
             <thead>
                 <tr>
-                    <th>Tên bài khảo sát</th>
+                    <th class="w-2/5">Tên bài khảo sát</th>
                     <th>Ngày bắt đầu</th>
                     <th>Ngày kết thúc</th>
                     <th class="text-center">Trạng thái</th>
@@ -33,8 +41,11 @@
                     </td>
                 </tr> -->
 
-            </tbody>        </table>
-    </div>   
-   
+            </tbody>
+        </table>
+
+    </div>
+    <div id="pagination" class="flex justify-center space-x-3 mt-3"></div>
+
 </div>
- <script src="views/javascript/qlKhaoSatPage.js"></script>
+<script src="views/javascript/qlKhaoSatPage.js"></script>

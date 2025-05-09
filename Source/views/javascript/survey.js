@@ -5,7 +5,7 @@ const doSurvey = (obj, surveyIdInput) => {
     surveyId = surveyIdInput;
     const act = $(obj).data("act");
     $.ajax({
-        url: "/Source/handle/surveyHandler.php",
+        url: "./handle/surveyHandler.php",
         type: "GET",
         data: {
             act: act,
@@ -33,7 +33,7 @@ const sendSurvey = (obj) => {
         const score = convertScore(radio.val());
         // console.log(question, idQuestion);
         // console.log(score);
-        if (score == 0) {
+        if (isNaN(score)) {
             alert("Phải hoàn thành tất cả các câu hỏi trước khi gửi!");
             return;
         }
@@ -42,19 +42,35 @@ const sendSurvey = (obj) => {
     }
     
     // console.log(result);
+    let username = null;
+    (async () => {
+        const account = await getCurrentLoginAccount();
+        if (account && account.sub !== null) {
+            console.log(account);
+            username = account.sub;
+        } else {
+            alert("Không thể lấy thông tin người làm khảo sát")
+            return;
+        }
+    })();
+    
     $.ajax({
-        url: "/Source/handle/surveyHandler.php",
+        url: "./handle/surveyHandler.php",
         type: "POST",
         data: {
             act: act,
             data: JSON.stringify(result),
             surveyId: surveyId,
-            username: 'vana'
+            username: username
         },
         dataType: "json",
-        success: function (data) {
-            alert(data.message);            
+        success: function (response) {
+            alert(response['message']); // Show the message from the server
             // history.pushState({}, "page", "?act=survey&surveyId=" + surveyId);
+            if (response['status'] == 'success') {
+                // Redirect to the survey page
+                window.location.href = "./home.php";
+            }
             
         },
         error: function (error) {
@@ -64,18 +80,26 @@ const sendSurvey = (obj) => {
 }
 
 function convertScore(value) {
-    switch (value) {
-        case "rkhl":
-            return 1;
-        case "khl":
-            return 2;
-        case "bt":
-            return 3;
-        case "hl":
-            return 4;
-        case "rhl":
-            return 5;
-        default:
-            return 0;
-    }
+    return Number(value);
 }
+
+async function getCurrentLoginAccount() {
+    try {
+      const response = await $.ajax({
+        url: "./controller/AuthController.php",
+        type: "POST",
+        dataType: "json",
+        data: { func: "getCurrentLoginUser" },
+      });
+      if (response.status == "error") {
+        console.log(response.message);
+        return null;
+      }
+      return response.userInfor;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  

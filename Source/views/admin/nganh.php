@@ -10,19 +10,27 @@
     </div>
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
+            <div class="w-96 relative">
+                <input type="text" placeholder="Nhập nội dung tìm kiếm" class="input ps-8" id="search-keyword" name="keyword" aria-expanded="false" />
+                <span class="icon-[tabler--search] text-base-content absolute start-3 top-1/2 size-4 shrink-0 -translate-y-1/2"></span>
+            </div>
+        </div>
+    </div>
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-4">
             <div>
-                <label class="label-text" for="select-status">Status </label>
                 <select class="select" id="select-status">
-                    <option value="-1">Chọn status</option>
+                    <option value="-1">Chọn trạng thái</option>
                     <option value="1">Đang sử dụng</option>
                     <option value="0">Đã khóa</option>
                 </select>
             </div>
             <button type="button" class="btn btn-primary" id="btn-loc" data-act="nganh-loc">Lọc</button>
+            <button type="button" class="btn btn-primary " id="btn-reset" data-act="reset">Reset</button>
         </div>
     </div>
-    <div class="w-full overflow-x-auto">
-        <table class="table">
+    <div class="w-full overflow-x-auto h-[500px]">
+        <table class="table-striped table">
             <thead>
                 <tr>
                     <th>Mã Ngành</th>
@@ -34,7 +42,7 @@
             <tbody id="nganh-list">
             </tbody>
         </table>
-        <div id="pagination" class="flex justify-center space-x-2"></div>
     </div>
+    <div id="pagination" class="flex justify-center space-x-2"></div>
 </div>
 <script src="./views/javascript/nganh.js"></script>

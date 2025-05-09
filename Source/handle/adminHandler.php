@@ -52,6 +52,11 @@ if ($page) {
             require_once("../views/admin/taiKhoanPage.php");
             $response["html"] = ob_get_clean();
             break;
+        case "quyenPage":
+            ob_start();
+            require_once("../views/admin/quyenPage.php");
+            $response["html"] = ob_get_clean();
+            break;
         case "surveyPage":
             ob_start();
             require_once("../views/user/survey.php");
@@ -62,6 +67,11 @@ if ($page) {
             require_once("../views/admin/ketQuaKhaoSat.php");
             $response["html"] = ob_get_clean();
             break;
+        case "user-infor":
+            ob_start();
+            require_once("../views/user/userInfor.php");
+            $response["html"] = ob_get_clean();
+            break;    
         default:
             $response["html"] = `loi trang handle`;
             $response["error"] = "Invalid page requested.";
@@ -80,6 +90,18 @@ if ($act) {
         case "ks-sua":
             ob_start();
             $filePath = "../views/admin/qlKhaoSatPage-edit.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "ks-chi-tiet":
+            ob_start();
+            $filePath = "../views/admin/qlKhaoSatPage-detail.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "xem-kqks":
+            ob_start();
+            $filePath = "../views/admin/ketQuaKhaoSat-ct.php";
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;
@@ -140,6 +162,36 @@ if ($act) {
         case "chuky-sua":
             ob_start();
             $filePath = "../views/admin/chuky-sua.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "tk-them":
+            ob_start();
+            $filePath = "../views/admin/taikhoanPage-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "tk-edit":
+            ob_start();
+            $filePath = "../views/admin/taikhoanPage-edit.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "tk-xoa":
+            ob_start();
+            $filePath = "../views/admin/taikhoanPage.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "quyen-them":
+            ob_start();
+            $filePath = "../views/admin/quyenPage-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "quyen-edit":
+            ob_start();
+            $filePath = "../views/admin/quyenPage-edit.php";
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;

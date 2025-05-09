@@ -1,4 +1,4 @@
-async function getAllNganh(page = 1, status = null) {
+async function getAllNganh(page = 1, status = null, txt_search = null) {
     try {
         const response = await $.ajax({
             url: "./controller/nganhController.php",
@@ -7,7 +7,8 @@ async function getAllNganh(page = 1, status = null) {
             data: {
                 func: "getAllpaging",
                 page: page,
-                status: status
+                status: status,
+                txt_search: txt_search
             },
         });
         return response;
@@ -17,8 +18,16 @@ async function getAllNganh(page = 1, status = null) {
     }
 }
 
-async function loadAllNganh(page = 1, status = null) {
-    const res = await getAllNganh(page, status);
+async function loadAllNganh(page = 1, status = null, txt_search = null) {
+    const res = await getAllNganh(page, status, txt_search);
+    if (res?.status === false && res?.message) {
+        Swal.fire({
+            title: "Thông báo",
+            text: res.message,
+            icon: "warning"
+        });
+        return;
+    }
     if (res) {
         console.log(res);
         const nganhList = res.data;
@@ -43,15 +52,28 @@ async function loadAllNganh(page = 1, status = null) {
             `);
 
         });
-        $("#pagination").append(`<button type="button" class="btn btn-text btn-prev">Previous</button><div class="flex items-center gap-x-1">`);
-        for (let i = 1; i <= totalPages; i++) {
-            let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
-            $("#pagination").append(`
-                <button type="button" class="btn btn-text btn-square aria-[current='page']:text-bg-primary btn-page" data-page="${i}" ${activeClass}>${i}</button>
-            `);
-        }
-        $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">Next</button>`);
+        renderPagination(totalPages, currentPage);
     }
+}
+
+function renderPagination(totalPages, currentPage) {
+    if (totalPages <= 1) {
+        $("#pagination").empty();
+        return;
+    }
+
+    $("#pagination").empty();
+
+    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><<</button><div class="flex items-center gap-x-1">`);
+
+    for (let i = 1; i <= totalPages; i++) {
+        let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
+        $("#pagination").append(`
+            <button type="button" class="btn btn-text btn-square aria-[current='page']:text-bg-primary btn-page" data-page="${i}" ${activeClass}>${i}</button>
+        `);
+    }
+
+    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">>></button>`);
 }
 
 function create() {
@@ -67,19 +89,28 @@ function create() {
             status: status
         },
         success: function (response) {
-            if (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Tạo thành công!',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            } else {
+            if (!response.status) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Tạo không thành công!'
+                    text: response.message
                 });
+            }
+            else {
+                if (response.data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Tạo thành công!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Tạo không thành công!'
+                    });
+                }
             }
             history.back();
         },
@@ -105,19 +136,28 @@ function update() {
             status: status
         },
         success: function (response) {
-            if (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Đã lưu thay đổi!',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            } else {
+            if (!response.status) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: 'Lưu thay đổi thất bại!'
+                    text: response.message
                 });
+            }
+            else {
+                if (response.data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Lưu thay đổi thành công!',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: 'Lưu thay dổi thất bại!'
+                    });
+                }
             }
             history.back();
         },
@@ -144,8 +184,10 @@ function toggleStatus(nganh_id) {
                     showConfirmButton: false,
                     timer: 2000
                 });
-                const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
-                loadAllNganh(currentPage);
+                const txtSearch = $("#search-keyword").val().trim();
+                    const selectedValue = $("#select-status").val();
+                    const status = selectedValue == -1 ? null : selectedValue;
+                loadAllNganh(1, status, txtSearch);
             }
 
         },
@@ -170,14 +212,49 @@ $(document).ready(function () {
         }
     });
     $("#btn-save").on("click", function () {
-        update();
+        const tenNganh = $("#ten-nganh").val().trim();
+        if (!tenNganh) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Tên ngành không được để trống!'
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn sửa ngành?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có, sửa ngay',
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                update(); // Gọi hàm cập nhật khi xác nhận
+            }
+        });
     });
 
     $("#btn-loc").on("click", function () {
+        const txtSearch = $("#search-keyword").val().trim();
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        loadAllNganh(1, status);
+        loadAllNganh(1, status, txtSearch);
     });
+
+    $("#search-keyword").on("input", function () {
+        const txtSearch = $("#search-keyword").val().trim();
+        const selectedValue = $("#select-status").val();
+        const status = selectedValue == -1 ? null : selectedValue;
+        loadAllNganh(1, status, txtSearch); 
+    });
+
+    $("#btn-reset").on("click", function () {
+        $("#select-status").val(-1);
+        const txtSearch = $("#search-keyword").val().trim();
+        loadAllNganh(1, null, txtSearch);
+    });
+    
 
     $("#pagination").on("click", ".btn-page", function () {
         const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
@@ -191,7 +268,7 @@ $(document).ready(function () {
     });
 
     $("#pagination").on("click", ".btn-prev", function () {
-        const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+        let currentPage = Number($("#pagination button[aria-current='page']").data("page"));
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
         if (currentPage == 1) {
@@ -202,10 +279,11 @@ $(document).ready(function () {
     });
 
     $("#pagination").on("click", ".btn-next", function () {
-        const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+        let currentPage = Number($("#pagination button[aria-current='page']").data("page"));
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        if (currentPage == $("#pagination .btn-page]").length) {
+        const totalPages = $("#pagination .btn-page").length; // lấy tổng số trang
+        if (currentPage == totalPages) {
             return;
         }
         currentPage += 1;

@@ -43,26 +43,35 @@ class ChuKyModel
         return $data;
     }
 
-    public function getAllpaging($page = 1, $status = null)
+    public function getAllpaging($page = 1, $status = null, $txt_search = null)
     {
-        $limit = 10;
+        $limit = 8;
         $offset = ($page - 1) * $limit;
         $conn = $this->db->getConnection();
 
         $sql = "SELECT * FROM chu_ki WHERE 1=1";
-
-        // Đếm tổng số dòng (để tính tổng số trang)
         $countSql = "SELECT COUNT(*) as total FROM chu_ki WHERE 1=1";
+
         $params = [];
         $types = "";
+
         if ($status !== null) {
             $sql .= " AND status = ?";
-
             $countSql .= " AND status = ?";
             $params[] = $status;
             $types .= "i";
         }
 
+        if (!empty($txt_search)) {
+            $sql .= " AND (ck_id LIKE ? OR ten_ck LIKE ?)";
+            $countSql .= " AND (ck_id LIKE ? OR ten_ck LIKE ?)";
+            $like_search = "%" . $txt_search . "%";
+            $params[] = $like_search;
+            $params[] = $like_search;
+            $types .= "ss";
+        }
+
+        // Đếm tổng số dòng
         $countStmt = $conn->prepare($countSql);
         if (!empty($params)) {
             $countStmt->bind_param($types, ...$params);
@@ -75,8 +84,7 @@ class ChuKyModel
         $offset = ($page - 1) * $limit;
 
         // Truy vấn dữ liệu trang hiện tại
-
-        $sql .= " LIMIT ?, ?";
+        $sql .= " ORDER BY ck_id DESC LIMIT ?, ?";
         $params[] = $offset;
         $params[] = $limit;
         $types .= "ii";
@@ -90,12 +98,12 @@ class ChuKyModel
         while ($row = $result->fetch_assoc()) {
             $data[] = $row;
         }
-        $finaldata = [
+
+        return [
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'data' => $data
         ];
-        return $finaldata;
     }
 
 
@@ -140,5 +148,25 @@ class ChuKyModel
         } else {
             return false;
         }
+    }
+
+    public function isExist($ten_ck, $ck_id = null)
+    {
+        $conn = $this->db->getConnection();
+        $sql = "SELECT 1 FROM chu_ki WHERE ten_ck = ?";
+
+        if ($ck_id !== null) {
+            $sql .= " AND ck_id != ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $ten_ck, $ck_id);
+        } else {
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $ten_ck);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows > 0;
     }
 }
