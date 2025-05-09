@@ -22,21 +22,6 @@
                 <input type="date" class="input" name="to_date" id="to-date" />
             </div>
             <div>
-                <select class="select" id="select-nhom" name="nhom_khao_sat">
-                    <option value="-1">Chọn nhóm khảo sát</option>
-                </select>
-            </div>
-            <div>
-                <select class="select" id="select-nganh" name="nganh">
-                    <option value="-1">Chọn ngành</option>
-                </select>
-            </div>
-            <div>
-                <select class="select" id="select-chuky" name="chuky">
-                    <option value="-1">Chọn chu kỳ</option>
-                </select>
-            </div>
-            <div>
                 <button type="button" class="btn btn-primary" id="btn-filter" name="loc" data-act="kqks-loc">Lọc</button>
                 <button type="button" class="btn btn-primary" id="btn-reset" data-act="reset">Reset</button>
             </div>

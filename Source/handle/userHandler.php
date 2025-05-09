@@ -29,6 +29,11 @@ if ($page) {
             require_once("../views/user/ketQuaKhaoSatUser.php");
             $response["html"] = ob_get_clean();
             break;
+        case "result-survey-ct":
+            ob_start();
+            require_once("../views/user/ketQuaKhaoSatUser.php");
+            $response["html"] = ob_get_clean();
+            break;
         case "login":
             ob_start();
             require_once("../login.php");
@@ -48,72 +53,11 @@ if ($page) {
 
 if ($act) {
     switch ($act) {
-        // case "ks-tao":
-        //     ob_start();
-        //     $filePath = "../views/admin/qlKhaoSatPage-tao.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "ks-sua":
-        //     ob_start();
-        //     $filePath = "../views/admin/qlKhaoSatPage-edit.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "ctdt-them":
-        //     ob_start();
-        //     $filePath = "../views/admin/ctdtPage-them.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "ctdt-sua":
-        //     ob_start();
-        //     $filePath = "../views/admin/ctdtPage-sua.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "nganh-them":
-        //     ob_start();
-        //     $filePath = "../views/admin/nganh-them.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "nganh-sua":
-        //     ob_start();
-        //     $filePath = "../views/admin/nganh-sua.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "chuky-them":
-        //     ob_start();
-        //     $filePath = "../views/admin/chuky-them.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "chuky-sua":
-        //     ob_start();
-        //     $filePath = "../views/admin/chuky-sua.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "tk-them":
-        //     ob_start();
-        //     $filePath = "../views/admin/taikhoanPage-them.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "tk-edit":
-        //     ob_start();
-        //     $filePath = "../views/admin/taikhoanPage-edit.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
-        // case "tk-xoa":
-        //     ob_start();
-        //     $filePath = "../views/admin/taikhoanPage.php";
-        //     require_once($filePath);
-        //     $response["html"] = ob_get_clean();
-        //     break;
+        case "xem-kqks":
+            ob_start();
+            require_once("../views/user/ketQuaKhaoSat-ctUser.php");
+            $response["html"] = ob_get_clean();
+            break;
         default:
             $response["html"] = "load trang bi";
             $response["error"] = "Invalid action requested.";
