@@ -146,9 +146,15 @@ $(function () {
   window.HSStaticMethods.autoInit();
   (async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    
-    const currentKsId = urlParams.get('id');
+
+    const currentKsId = urlParams.get("id");
     const defaultData = await getChiTietKsById(currentKsId);
+
+    if ( defaultData.su_dung == 1) {
+      alert("Bài khảo sát đã bị đã đang được thực hiện, không được chỉnh sửa !")
+      window.location.href = "./admin.php?page=qlKhaoSatPage";
+      return;
+    }
     const nhomKsList = await getNhomKs();
     const nganhList = await getAllNganh();
     const chuKiList = await getAllChuKi();
@@ -189,13 +195,11 @@ $(function () {
       });
     }
     if (answerTypeList != null) {
-      answerTypeList.map((item) => {
-        if (defaultData.ltl_id == item.ltl_id) {
+      answerTypeList.map((item) => {   
           $("#select-loai-tra-loi").append(
-            `<option selected="selected" value='${item.ltl_id}'>${item.thang_diem}</option>`
-          );
-        }
-      });
+            `<option ${defaultData.ltl_id == item.ltl_id ? 'selected="selected" ' : "" }  
+              value='${item.ltl_id}'>${item.thang_diem}</option>`
+          );});
     }
     //xu li gia tri mac dinh
     $("#select-su-dung").val(defaultData.su_dung);
@@ -275,7 +279,7 @@ $(function () {
       );
 
       const sectionTitle = document.createElement("h3");
-      sectionTitle.textContent =  "Tên mục:";
+      sectionTitle.textContent = "Tên mục:";
       section.appendChild(sectionTitle);
 
       const sectionNameInput = document.createElement("input");
@@ -335,7 +339,7 @@ $(function () {
         <button class="deleteQuestion btn btn-square btn-outline btn-error">
           <span class="icon-[tabler--x]"></span>
         </button>
-      `;  
+      `;
       questionContainer.appendChild(question);
 
       const deleteQuestionButton = question.querySelector(".deleteQuestion");
@@ -393,8 +397,8 @@ $(function () {
         "date-start": dateStart,
         "date-end": dateEnd,
         "loai-tra-loi": loaiTraLoi,
-        "content": surveyContent,
-        "su-dung": isSuDung
+        content: surveyContent,
+        "su-dung": isSuDung,
       };
 
       let isValideData = () => {
@@ -431,14 +435,18 @@ $(function () {
             return;
           }
           editSurveyData["ctdt-id"] = isExistCtdt;
-          updateKhaoSat(editSurveyData).then((response) => {
-            if (response) {
-              $("#khao-sat-page").trigger("click");
-              alert("Cập nhật thành công");
-            } else {
-              alert("Cập nhật thất bại");
-            }
-          });
+          if (
+            confirm("Nếu cập nhật sẽ mất kết quả của bài khảo sát cũ (nếu có) ??")
+          ) {
+            updateKhaoSat(editSurveyData).then((response) => {
+              if (response) {
+                $("#khao-sat-page").trigger("click");
+                alert("Cập nhật thành công");
+              } else {
+                alert("Cập nhật thất bại");
+              }
+            });
+          }
         });
       }
     });

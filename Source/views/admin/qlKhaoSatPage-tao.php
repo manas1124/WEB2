@@ -36,8 +36,9 @@
                 <div class="w-96">
                     <label class="label-text" for="select-su-dung">Trạng thái bài khảo sát </label>
                     <select class="select" id="select-su-dung">
-                        <option selected value="1">Đang thực hiện</option>
-                        <option value="0">Kết thúc</option>
+                        <option selected value="2">Chưa bắt đầu</option>
+                        <option  value="1">Đang thực hiện</option>
+                        <option value="0" disabled>Kết thúc</option>
                     </select>
                 </div>
             </div>
@@ -49,7 +50,7 @@
                     </select>
                 </div>
                 <div class="w-96 mb-2">
-                    <label class="label-text" for="select-nganh">Ngành </label>
+                    <label class="label-te  xt" for="select-nganh">Ngành </label>
                     <select class="select" id="select-nganh">
                         <option value="-1">Chọn ngành</option>
                     </select>

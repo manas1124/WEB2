@@ -12,7 +12,7 @@ class LoaidtModel {
 
     public function getAllLoaidt() {
         $con = $this->db->getConnection();
-        $sql = "SELECT * FROM loai_doi_tuong ";
+        $sql = "SELECT dt_id,ten_dt FROM loai_doi_tuong ";
         $result = $con->query($sql);
        
         if ($result) {

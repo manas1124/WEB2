@@ -15,6 +15,14 @@ function survey_content_excel_to_json($filePath)
         $sheet = $spreadsheet->getActiveSheet();
         $data = $sheet->toArray();
 
+        if (empty($data)) {
+            return ['status' => 'error', 'message' => "File excel rỗng "];
+        }
+
+        if (!isset($data[0]) || count($data[0]) < 2) {
+            return ['status' => 'error', 'message' =>"File Excel không có dòng tiêu đề mục hoặc có quá ít mục."];
+        }
+        
         $sectionNames = $data[0]; // dòng 1 chứa tên mục
         $jsonOutput = [];
 
@@ -31,14 +39,15 @@ function survey_content_excel_to_json($filePath)
             }
 
             $jsonOutput[] = [
+
                 'sectionName' => trim($section),
                 'questions' => $questions
             ];
         }
 
-        return $jsonOutput;
+        return [ "status" => "success", "data" => $jsonOutput];
 
     } catch (Exception $e) {
-        return ['error' => $e->getMessage()];
+        return ['status' => 'error', 'message' => "Lỗi đọc file excel: " . $e->getMessage()];
     }
 }
