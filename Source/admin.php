@@ -6,24 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./assets/css/output.css" rel="stylesheet">
     <style>
-    button[aria-current="page"] {
-        background-color: var(--color-primary);
-        /* Màu nền khi là trang hiện tại */
-        color: white;
-        /* Màu chữ */
-    }
+        button[aria-current="page"] {
+            background-color: var(--color-primary);
+            /* Màu nền khi là trang hiện tại */
+            color: white;
+            /* Màu chữ */
+        }
 
-    button[aria-current="page"]:hover {
-        background-color: #0056b3;
-        /* Màu nền khi hover */
-    }
-    input:disabled, select:disabled {
-        opacity: 1; /* Make the text fully visible */
-        background-color:rgb(255, 255, 255); /* Match the background color */
-        color:rgb(86, 86, 86);  /* Keep original text color */
-        border: 1px solid rgb(216, 216, 216); /* Keep original border color */
-        cursor: not-allowed; /* Optional: change cursor */
-    }
+        button[aria-current="page"]:hover {
+            background-color: #0056b3;
+            /* Màu nền khi hover */
+        }
+
+        input:disabled,
+        select:disabled {
+            opacity: 1;
+            /* Make the text fully visible */
+            background-color: rgb(255, 255, 255);
+            /* Match the background color */
+            color: rgb(86, 86, 86);
+            /* Keep original text color */
+            border: 1px solid rgb(216, 216, 216);
+            /* Keep original border color */
+            cursor: not-allowed;
+            /* Optional: change cursor */
+        }
     </style>
 </head>
 
@@ -34,10 +41,13 @@
             aria-expanded="false" aria-controls="default-sidebar" data-overlay="#default-sidebar">
             <span class="icon-[tabler--menu-2] size-5"></span>
         </button>
-        <div class="flex flex-1 items-center">
-            <a class="link text-base-content link-neutral text-xl font-semibold no-underline" href="#">
-                FlyonUI
+        <div class="flex flex-1 items-center sm:flex hidden mr-4">
+            <a class="h-2 link text-base-content text-xl font-bold flex items-center" href="./admin.php">
+                <img class="h-10 sm:h-12 md:h-14 w-auto object-contain" src="./assets/image/sgu.png" alt="logo" />
             </a>
+            <h3 class="ml-3 text-nowrap font-bold text-lg flex items-center justify-center">
+                Trường đại học Sài Gòn
+            </h3>
         </div>
         <div class="navbar-end flex items-center gap-4">
 
@@ -56,7 +66,7 @@
             </div>
         </div>
     </nav>
-    <?php include("views/include/navAdmin.php") ?>
+    <?php require_once "views/include/navAdmin.php" ?>
     <!--  
     <aside id="default-sidebar"
         class="overlay sm:shadow-none overlay-open:translate-x-0 drawer drawer-start hidden max-w-64 sm:absolute sm:z-0 sm:flex sm:translate-x-0 pt-16"
@@ -98,14 +108,14 @@
 
     </div>
     <script>
-    // active nav link
-    // $.noConflict();
-    // jQuery( document ).ready(function() {
-    //     $(".nav-link").click(function () {
-    //         $(".nav-link").removeClass("bg-primary");
-    //         $(this).addClass("bg-primary");   
-    //     });
-    // });
+        // active nav link
+        // $.noConflict();
+        // jQuery( document ).ready(function() {
+        //     $(".nav-link").click(function () {
+        //         $(".nav-link").removeClass("bg-primary");
+        //         $(this).addClass("bg-primary");   
+        //     });
+        // });
     </script>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/flyonui/flyonui.js"></script>

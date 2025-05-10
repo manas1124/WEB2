@@ -1,4 +1,4 @@
-<div id="kqks-content" class="container h-full">
+<div id="kqks-content" class="container w-full h-full">
     <a href="" class="back-link btn btn-soft ">Quay lại</a>
     <div class="flex items-center justify-between mb-4">
         <h1>Kết quả khảo sát</h1>
