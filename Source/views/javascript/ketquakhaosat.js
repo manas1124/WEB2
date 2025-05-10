@@ -81,27 +81,29 @@ async function loadDsKhaoSat(page = 1, txt_search = null,
             $("#pagination").empty();
             return;
         }
-        ksList.data.data.map((item) => {
-            $("#ks-list").append(`
-            <tr>
-                <td>${item.ten_ks}</td>
-                <td>${item.ngay_bat_dau}</td>
-                <td>${item.ngay_ket_thuc}</td>
-                <td>${item.ten_nks}</td>
-                <td>${item.ten_nganh}</td>
-                <td>${item.ten_ck}</td>
-                <td>
-                    <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua">
-                        <span class="icon-[tabler--eye] size-5"></span>
-                    </button>
-                    <button class="btnExcel btn btn-circle btn-text btn-sm" data-id="${item.ks_id}" aria-label="xuất excel">
-                        <span class="icon-[tabler--file-spreadsheet] size-5"></span>
-                    </button>
-                </td>
-            </tr>
-  
-        `);
-        });
+        if (ksList.data?.data?.length > 0) {
+            ksList.data.data.map((item) => {
+                $("#ks-list").append(`
+                <tr>
+                    <td>${item.ten_ks}</td>
+                    <td>${item.ngay_bat_dau}</td>
+                    <td>${item.ngay_ket_thuc}</td>
+                    <td>${item.ten_nks}</td>
+                    <td>${item.ten_nganh}</td>
+                    <td>${item.ten_ck}</td>
+                    <td>
+                        <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua">
+                            <span class="icon-[tabler--eye] size-5"></span>
+                        </button>
+                        <button class="btnExcel btn btn-circle btn-text btn-sm" data-id="${item.ks_id}" aria-label="xuất excel">
+                            <span class="icon-[tabler--file-spreadsheet] size-5"></span>
+                        </button>
+                    </td>
+                </tr>
+    
+            `);
+            });
+        }
 
         renderPagination(ksList.data.totalPages, ksList.data.currentPage);
     }
