@@ -75,6 +75,26 @@ if (isset($_GET['func'])) {
                 }
             }
             break;
+        case "getByIdKhaoSatAndIdUser":
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    $id = $_GET['ks_id'] ?? null;
+                    $nguoi_lamks_id = getObjectId($accessToken);
+                    if ($id === null) {
+                        $response = ['error' => 'Thiếu tham số kqks_id'];
+                    } else {
+                        $response = $KqKhaoSatModel->getByIdKhaoSatAndIdUser((int)$id, (int)$nguoi_lamks_id);
+                    }
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
+            break;
         case "getMucKhaoSat":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
@@ -114,6 +134,21 @@ if (isset($_GET['func'])) {
                 if ($isVaid) {
                     $kqks_ids = $_GET['kqks_ids'];
                     $response = $traloiModel->getByKqksIds($kqks_ids);
+                    break;
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
+        case "getTraLoiByKqksId":
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if ($isVaid) {
+                    $kqks_id = $_GET['kqks_id'];
+                    $response = $traloiModel->getByKqksId($kqks_id);
                     break;
                 } else {
                     $response = [
@@ -163,7 +198,7 @@ if (isset($_GET['func'])) {
                 $accessToken = $_SESSION['accessToken'];
                 $isVaid = isAuthorization($accessToken, 'view.survey');
                 if ($isVaid) {
-                    $userid = isset($_GET['user_id']) ? $_GET : -1;
+                    $userid = getObjectId($accessToken);
                     $response = $KqKhaoSatModel->getIdKhaoSatByIdUser($userid);
                 } else {
                     $response = [

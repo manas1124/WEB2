@@ -30,7 +30,7 @@ async function getAllKhaoSat(page = 1, ks_ids = null, txt_search = null,
     }
 }
 
-async function getKsIds(user_id) {
+async function getKsIds() {
     try {
         const response = await $.ajax({
             url: "./controller/ketQuaKhaoSatController.php",
@@ -38,7 +38,6 @@ async function getKsIds(user_id) {
             dataType: "json",
             data: {
                 func: "getIdKhaoSatByIdUser",
-                user_id: user_id
             }
         });
         return response;
@@ -65,7 +64,7 @@ async function getCurrentLoginUser() {
 async function loadDsKhaoSat(page = 1, txt_search = null, ngay_bat_dau = null, ngay_ket_thuc = null) {
     const currentLoginUser = await getCurrentLoginUser();
     if (currentLoginUser && currentLoginUser?.dtId) {
-        const ks_ids = await getKsIds(currentLoginUser.dtId);
+        const ks_ids = await getKsIds();
         console.log(ks_ids);
         if (!ks_ids || ks_ids.length === 0) {
             $("#ks-list").html("<tr><td colspan='7' class='text-center text-gray-500 italic py-4 bg-gray-100 rounded'>Không có kết quả khảo sát nào.</td></tr>");
@@ -95,30 +94,39 @@ async function loadDsKhaoSat(page = 1, txt_search = null, ngay_bat_dau = null, n
                 $("#pagination").empty();
                 return;
             }
-            ksList.data.data.map((item) => {
-                $("#ks-list").append(`
-                <tr>
-                    <td>${item.ten_ks}</td>
-                    <td>${item.ngay_bat_dau}</td>
-                    <td>${item.ngay_ket_thuc}</td>
-                    <td>${item.ten_nks}</td>
-                    <td>${item.ten_nganh}</td>
-                    <td>${item.ten_ck}</td>
-                    <td>
-                        <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua">
-                            <span class="icon-[tabler--eye] size-5"></span>
-                        </button>
-                        <button class="btnExcel btn btn-circle btn-text btn-sm" data-id="${item.ks_id}" aria-label="xuất excel">
-                            <span class="icon-[tabler--file-spreadsheet] size-5"></span>
-                        </button>
-                    </td>
-                </tr>
-      
-            `);
-            });
+            if (ksList.data?.data?.length > 0) {
+                ksList.data.data.map((item) => {
+                    $("#ks-list").append(`
+                    <tr>
+                        <td>${item.ten_ks}</td>
+                        <td>${item.ngay_bat_dau}</td>
+                        <td>${item.ngay_ket_thuc}</td>
+                        <td>${item.ten_nks}</td>
+                        <td>${item.ten_nganh}</td>
+                        <td>${item.ten_ck}</td>
+                        <td>
+                            <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua">
+                                <span class="icon-[tabler--eye] size-5"></span>
+                            </button>
+                            <button class="btnExcel btn btn-circle btn-text btn-sm" data-id="${item.ks_id}" aria-label="xuất excel">
+                                <span class="icon-[tabler--file-spreadsheet] size-5"></span>
+                            </button>
+                        </td>
+                    </tr>
+        
+                `);
+                });
+            }
 
             renderPagination(ksList.data.totalPages, ksList.data.currentPage);
         }
+    }
+    else {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Bạn chưa đăng nhập",
+            icon: "warning"
+        });
     }
 }
 
@@ -203,7 +211,7 @@ $(function () {
             loadDsKhaoSat(currentPage - 1, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc);
         }
     });
-    
+
     $("#pagination").on("click", ".btn-next", function () {
         const currentPage = Number($("#pagination .btn-page[aria-current='page']").data("page"));
         const totalPages = $("#pagination .btn-page").length;

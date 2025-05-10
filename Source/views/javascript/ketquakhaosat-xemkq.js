@@ -88,7 +88,7 @@ async function getAllTraLoi(kqks_ids) {
 async function loadDuLieu(ks_id) {
 
     // 0. Lấy chi tiết khảo sát
-    var khaoSat = await getKhaoSatById(ks_id);
+    const khaoSat = await getKhaoSatById(ks_id);
     if (khaoSat?.status === false && khaoSat?.message) {
         Swal.fire({
             title: "Thông báo",
@@ -97,20 +97,28 @@ async function loadDuLieu(ks_id) {
         });
         return;
     }
+    
+    document.getElementById('ks-ten').textContent = khaoSat.ten_ks || 'Không rõ';
+    document.getElementById('ks-thangdiem').textContent = khaoSat.thang_diem || 'Chưa có';
+    document.getElementById('ks-ngaybatdau').textContent = khaoSat.ngay_bat_dau || 'Chưa có';
+    document.getElementById('ks-ngayketthuc').textContent = khaoSat.ngay_ket_thuc || 'Chưa có';
+    document.getElementById('ks-nganh').textContent = khaoSat.ten_nganh || 'Chưa có';
+    document.getElementById('ks-chuky').textContent = khaoSat.ten_ck || 'Chưa có';
+    document.getElementById('ks-nhom').textContent = khaoSat.ten_nks || 'Chưa có';
 
     // 1. Lấy danh sách mục khảo sát
-    var mucKhaoSat = await getAllMucKhaoSat(ks_id);
-    var mks_ids = mucKhaoSat.map(item => item.mks_id);
+    const mucKhaoSat = await getAllMucKhaoSat(ks_id);
+    const mks_ids = mucKhaoSat.map(item => item.mks_id);
 
     // 2. Lấy danh sách câu hỏi theo mks_ids
-    var cauHoi = await getAllCauHoi(mks_ids);
+    const cauHoi = await getAllCauHoi(mks_ids);
 
     // 3. Lấy kết quả khảo sát
-    var kqks = await getAllKqks(ks_id);
-    var kqks_ids = kqks.data.map(item => item.kqks_id);
+    const kqks = await getAllKqks(ks_id);
+    const kqks_ids = kqks.data.map(item => item.kqks_id);
 
     // 4. Lấy danh sách trả lời
-    var traLoi = await getAllTraLoi(kqks_ids);
+    const traLoi = await getAllTraLoi(kqks_ids);
 
     console.log(mucKhaoSat);
     console.log(cauHoi);
@@ -173,10 +181,10 @@ async function loadDuLieu(ks_id) {
             // Đếm số trả lời theo từng điểm
             for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
                 const count = traLoi.filter(tl => Number(tl.ch_id) === Number(ch.ch_id) &&
-                                                    Number(tl.ket_qua) === Number(diem)).length;
+                    Number(tl.ket_qua) === Number(diem)).length;
                 const td = document.createElement('td');
                 td.textContent = count;
-                td.style.textAlign = "center";
+                td.classList.add("text-center");
                 row.appendChild(td);
             }
 
@@ -191,8 +199,9 @@ function xuatExel(ks_id) {
         text: 'Vui lòng chờ trong giây lát',
         allowOutsideClick: false,
         didOpen: () => {
-          Swal.showLoading();
-    }});
+            Swal.showLoading();
+        }
+    });
     $.ajax({
         url: './controller/ketQuaKhaoSatController.php',
         type: 'GET',

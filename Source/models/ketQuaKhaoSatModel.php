@@ -371,4 +371,14 @@ class KqKhaoSatModel
             'data' => $ks_ids
         ];
     }
+    public function getByIdKhaoSatAndIdUser($kqks_id, $nguoi_lamks_id) 
+{
+    $conn = $this->db->getConnection();
+    $stmt = $conn->prepare("SELECT * FROM kq_khao_sat WHERE ks_id = ? AND nguoi_lamks_id = ?");
+    $stmt->bind_param("ii", $kqks_id, $nguoi_lamks_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result->fetch_assoc();
+}
 }

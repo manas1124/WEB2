@@ -1,3 +1,18 @@
+async function getCurrentLoginUser() {
+    try {
+        const response = await $.ajax({
+            url: "./controller/AuthController.php",
+            type: "POST",
+            dataType: "json",
+            data: { func: "getCurrentLoginUser" },
+        });
+        return response.userInfor;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
 async function getKhaoSatById(ks_id) {
     try {
         const response = await $.ajax({
@@ -50,15 +65,16 @@ async function getAllCauHoi(mks_ids) {
         return null;
     }
 }
-async function getAllKqks(ks_id) {
+async function getKqksByUserId(ks_id, user_id) {
     try {
         const response = await $.ajax({
             url: "./controller/ketQuaKhaoSatController.php",
             type: "GET",
             dataType: "json",
             data: {
-                func: "getAllByKsId",
-                ks_id: ks_id
+                func: "getByIdKhaoSatAndIdUser",
+                ks_id: ks_id,
+                user_id: user_id
             },
         });
         return response;
@@ -67,15 +83,16 @@ async function getAllKqks(ks_id) {
         return null;
     }
 }
-async function getAllTraLoi(kqks_ids) {
+
+async function getTraLoiByKqksId(kqks_id) {
     try {
         const response = await $.ajax({
             url: "./controller/ketQuaKhaoSatController.php",
             type: "GET",
             dataType: "json",
             data: {
-                func: "getTraLoi",
-                kqks_ids: kqks_ids
+                func: "getTraLoiByKqksId",
+                kqks_id: kqks_id
             },
         });
         return response;
@@ -87,8 +104,18 @@ async function getAllTraLoi(kqks_ids) {
 
 async function loadDuLieu(ks_id) {
 
+    const currentLoginUser = await getCurrentLoginUser();
+    if (!currentLoginUser || !currentLoginUser.dtId) {
+        Swal.fire({
+            title: "Thông báo",
+            text: "Bạn chưa đăng nhập!",
+            icon: "warning"
+        });
+        return;
+    }
+
     // 0. Lấy chi tiết khảo sát
-    var khaoSat = await getKhaoSatById(ks_id);
+    const khaoSat = await getKhaoSatById(ks_id);
     if (khaoSat?.status === false && khaoSat?.message) {
         Swal.fire({
             title: "Thông báo",
@@ -99,22 +126,22 @@ async function loadDuLieu(ks_id) {
     }
 
     // 1. Lấy danh sách mục khảo sát
-    var mucKhaoSat = await getAllMucKhaoSat(ks_id);
-    var mks_ids = mucKhaoSat.map(item => item.mks_id);
+    const mucKhaoSat = await getAllMucKhaoSat(ks_id);
+    const mks_ids = mucKhaoSat.map(item => item.mks_id);
 
     // 2. Lấy danh sách câu hỏi theo mks_ids
-    var cauHoi = await getAllCauHoi(mks_ids);
+    const cauHoi = await getAllCauHoi(mks_ids);
 
     // 3. Lấy kết quả khảo sát
-    var kqks = await getAllKqks(ks_id);
-    var kqks_ids = kqks.data.map(item => item.kqks_id);
+    const kqks = await getKqksByUserId(ks_id, currentLoginUser.dtId);
 
     // 4. Lấy danh sách trả lời
-    var traLoi = await getAllTraLoi(kqks_ids);
+    const traLoi = await getTraLoiByKqksId(kqks.kqks_id);
 
+    console.log(currentLoginUser);
     console.log(mucKhaoSat);
     console.log(cauHoi);
-    console.log(kqks.data);
+    console.log(kqks);
     console.log(traLoi);
 
 
@@ -166,17 +193,36 @@ async function loadDuLieu(ks_id) {
         relatedQuestions.forEach(ch => {
             const row = document.createElement('tr');
             row.classList.add('hover');
+
+            // Cột câu hỏi
             const cauHoiTd = document.createElement('td');
             cauHoiTd.textContent = ch.noi_dung;
             row.appendChild(cauHoiTd);
 
-            // Đếm số trả lời theo từng điểm
+            // Tạo các ô radio tương ứng với mỗi mức điểm
             for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
-                const count = traLoi.filter(tl => Number(tl.ch_id) === Number(ch.ch_id) &&
-                                                    Number(tl.ket_qua) === Number(diem)).length;
                 const td = document.createElement('td');
-                td.textContent = count;
                 td.style.textAlign = "center";
+
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `ch_${ch.ch_id}`;
+                // radio.disabled = true;
+                radio.className = 'radio radio-accent';
+
+                // Nếu có ít nhất 1 người chọn mức điểm này
+                const count = traLoi.filter(tl =>
+                    Number(tl.ch_id) === Number(ch.ch_id) &&
+                    Number(tl.ket_qua) === diem
+                ).length;
+
+                if (count > 0) {
+                    radio.checked = true;
+                } else {
+                    radio.disabled = true;
+                }
+
+                td.appendChild(radio);
                 row.appendChild(td);
             }
 

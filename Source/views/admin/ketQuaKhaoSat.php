@@ -10,12 +10,11 @@
             </div>
         </div>
         <div class="flex items-center gap-4">
-            <button type="button" class="btn btn-primary" aria-haspopup="dialog" 
-                    aria-expanded="false" aria-controls="slide-down-animated-modal" 
-                    data-overlay="#slide-down-animated-modal">Gửi kết quả</button>
+            <button type="button" class="btn btn-primary" aria-haspopup="dialog"
+                aria-expanded="false" aria-controls="slide-down-animated-modal"
+                data-overlay="#slide-down-animated-modal">Gửi kết quả</button>
         </div>
     </div>
-
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
             <div>
