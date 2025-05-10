@@ -11,7 +11,7 @@ Class NhomKsModel {
 
     public function getAllNhomKs() {
         $con = $this->db->getConnection();
-        $sql = "SELECT nks_id,ten_nks FROM nhom_khao_sat ";
+        $sql = "SELECT nks_id,ten_nks FROM nhom_khao_sat WHERE status = 1";
         $result = $con->query($sql);
        
         if ($result) {

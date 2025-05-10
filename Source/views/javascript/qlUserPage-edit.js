@@ -199,15 +199,15 @@ $(".main-content").on("click", ".action-item", function (e) {
         email: email,
         diachi: diachi,
         dien_thoai: dien_thoai,
-        nks_id: nhom_ks,
-        dt_id: loai_dt_id,
+        nhom_ks: nhom_ks, //nhom-ks-id
+        loai_dt_id: loai_dt_id, 
         ctdt_id: ctdt_id,
       };
       console.log("Dữ liệu gửi đi:", data);
       const result = await updateUser(data);
       if (result && result.success) {
         alert("Cập nhật thành công!");
-       
+        window.location.href = "./admin.php?page=qlUserPage";
       } else {
         alert("Cập nhật thất bại. Vui lòng thử lại.");
       }

@@ -71,19 +71,17 @@ class UserModel {
             }
     }
     
-    public function updateUser($dt_id,$ho_ten,$email,$diachi,$dien_thoai,$loai_dt_id,$ctdt_id ) {
-        $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("UPDATE doi_tuong SET ho_ten = ?, diachi = ?, dien_thoai = ?, nhom_ks = ?, loai_dt_id = ?, ctdt_id = ? WHERE email = ?");
-        $stmt->bind_param(
-            "sssssss",$dt_id,$ho_ten,$email,$diachi,$dien_thoai,$loai_dt_id,$ctdt_id 
-           
-        );
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            return false;
-        }
+    public function updateUser($dt_id, $ho_ten, $email, $diachi, $dien_thoai, $nhom_ks_id, $loai_dt_id, $ctdt_id) {
+    $conn = $this->db->getConnection();
+    $stmt = $conn->prepare("UPDATE doi_tuong SET ho_ten = ?, email = ?, diachi = ?, dien_thoai = ?, nhom_ks = ?, loai_dt_id = ?, ctdt_id = ? WHERE dt_id = ?");
+    $stmt->bind_param("sssssssi", $ho_ten, $email, $diachi, $dien_thoai, $nhom_ks_id, $loai_dt_id, $ctdt_id, $dt_id);
+
+    if ($stmt->execute()) {
+        return true;
+    } else {
+        return false;
     }
+}
     public function deleteUser($id) {
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("DELETE FROM doi_tuong WHERE dt_id = ?");
