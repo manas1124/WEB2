@@ -1,4 +1,4 @@
-<div id="kqks-content" class="container h-full p-5">
+<div id="kqks-content" class="w-full h-full mx-auto container p-5">
     <div class="flex items-center justify-between mb-4">
         <h1>Kết quả khảo sát</h1>
     </div>

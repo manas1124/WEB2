@@ -4,18 +4,18 @@ $(function () {
         let acc = await getCurrentLoginAccount();
         console.log(acc);
         if (acc == null) {
-          window.location.href = "./logad.php";
-          return; 
+            window.location.href = "./logad.php";
+            return;
         } else {
-            console.log("admin",acc)
+            console.log("admin", acc)
             const userInfor = await getUserById(acc.dtId)
-            console.log("infor",userInfor)
-            let username = "Xin chào "+ userInfor.ho_ten + " !"
+            console.log("infor", userInfor)
+            let username = "Xin chào " + userInfor.ho_ten + " !"
             $("#dropdown-bottom-infor").text(username)
             $("#dropdown-bottom-infor").removeClass("hidden")
-           
+
         }
-      })();
+    })();
 
     //navigate
     // Function to update content and URL
@@ -35,7 +35,7 @@ $(function () {
             },
             error: function (error) {
                 console.error("Error navigate page:", error);
-             
+
             }
         });
     }
@@ -62,14 +62,14 @@ $(function () {
         event.preventDefault();
         let act = $(this).data("act");
         let currentParams = getUrlParams();
-        let newParams = { ...currentParams, act: act};
+        let newParams = { ...currentParams, act: act };
 
         // xử lí này sẽ truyền param lên url vd: ..act="them"&id=3
         let id = $(this).data("id");
-        if (id !=null) {
-            newParams = { ...currentParams, act: act, id:id};
+        if (id != null) {
+            newParams = { ...currentParams, act: act, id: id };
         }
-        
+
         updateContent(newParams);
     });
 
@@ -126,17 +126,41 @@ $(function () {
     }
 
     // xu ly sau
-    
-    $(".btn-logout").on("click",function () {
-        logout()
+
+    $(".btn-logout").on("click", function () {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            text: "Bạn sẽ phải đăng nhập lại nếu muốn tiếp tục sử dụng.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đăng xuất',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logout();
+            }
+        });
     })
+    $(document).on('click', function (e) {
+        var sidebar = $('#default-sidebar');
+        var toggleBtn = $('[data-overlay="#default-sidebar"]');
+
+        // Nếu click không nằm trong sidebar và không phải nút mở
+        if (!sidebar.is(e.target) && sidebar.has(e.target).length === 0 &&
+            !toggleBtn.is(e.target) && toggleBtn.has(e.target).length === 0) {
+            sidebar.removeClass('open opened');
+            toggleBtn.attr('aria-expanded', 'false');
+        }
+    });
 });
 
 function logout() {
     $.ajax({
         type: 'POST',
-        url: './controller/AuthController.php', 
-        data: {action: 'logout'}, 
+        url: './controller/AuthController.php',
+        data: { action: 'logout' },
         success: function (response) {
             console.log(response);
 
@@ -145,7 +169,7 @@ function logout() {
             window.location.href = "./logad.php";
 
         },
-        error: function() {
+        error: function () {
             alert('Có lỗi xảy ra khi gửi dữ liệu!');
         }
     });
@@ -153,35 +177,35 @@ function logout() {
 
 async function getCurrentLoginAccount() {
     try {
-      const response = await $.ajax({
-        url: "./controller/AuthController.php",
-        type: "POST",
-        dataType: "json",
-        data: { func :"getCurrentLoginUser"},
-      });
-      if (response.status == 'error') {
-        console.log(response.message)
-        return null;
-      }
-      return response.userInfor;
+        const response = await $.ajax({
+            url: "./controller/AuthController.php",
+            type: "POST",
+            dataType: "json",
+            data: { func: "getCurrentLoginUser" },
+        });
+        if (response.status == 'error') {
+            console.log(response.message)
+            return null;
+        }
+        return response.userInfor;
     } catch (error) {
-      console.error(error);
-      return null;
+        console.error(error);
+        return null;
     }
 }
 async function getUserById(id) {
     try {
-      const response = await $.ajax({
-        
-        url: "./controller/UserController.php",
-        type: "POST",
-        data: { func: "getUserById", id: id },
-        dataType: "json",
-      });
-      console.log(" Phản hồi getUserById:", response.data);
-      return response.data;
+        const response = await $.ajax({
+
+            url: "./controller/UserController.php",
+            type: "POST",
+            data: { func: "getUserById", id: id },
+            dataType: "json",
+        });
+        console.log(" Phản hồi getUserById:", response.data);
+        return response.data;
     } catch (error) {
-      console.log("Lỗi khi lấy dữ liệu người dùng", error);
-      return null;
+        console.log("Lỗi khi lấy dữ liệu người dùng", error);
+        return null;
     }
 }
