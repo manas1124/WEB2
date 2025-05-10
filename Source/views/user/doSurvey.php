@@ -1,7 +1,10 @@
 <?php
 require_once __DIR__ . '/../../models/SurveyModel.php';
+require_once __DIR__ . '/../../models/loaiTraLoiModel.php';
 $surveyModel = new SurveyModel();
+$answerType = new TraLoiModel();
 $listSurveyFieldAndQuestion = json_decode($surveyModel->getSurveyFieldAndQuestion($_GET['surveyId']), true);
+$typeScore = $answerType->getTraLoiByIdKhaoSat($_GET['surveyId']);
 
 ?>
 <form action="" name="survey-form">
@@ -16,33 +19,22 @@ $listSurveyFieldAndQuestion = json_decode($surveyModel->getSurveyFieldAndQuestio
                                 </tr>';
                     $sttSurveyField = 1;
                     foreach ($listSurveyFieldAndQuestion as $surveyField) {
+                        $phanSo = 1 / 2 / $typeScore['thang_diem'];
                         echo    '<tr>
                                         <th class="normal-case w-1/2">' . $sttSurveyField . '. ' . $surveyField['ten_muc'] . '</th>
-                                        <th class="normal-case w-1/20 text-center">1</th>
-                                        <th class="normal-case w-1/20 text-center">2</th>
-                                        <th class="normal-case w-1/20 text-center">3</th>
-                                        <th class="normal-case w-1/20 text-center">4</th>
-                                        <th class="normal-case w-1/20 text-center">5</th>
-                                        <th class="normal-case w-1/20 text-center">6</th>
-                                        <th class="normal-case w-1/20 text-center">7</th>
-                                        <th class="normal-case w-1/20 text-center">8</th>
-                                        <th class="normal-case w-1/20 text-center">9</th>
-                                        <th class="normal-case w-1/20 text-center">10</th>
-                                    </tr>';
+                                ';
+                        for ($i = 1; $i <= $typeScore['thang_diem']; $i++) {
+                            echo '<th class="normal-case w-1/' . $phanSo . ' text-center">' . $i . '</th>';
+                        }
+                        echo '</tr>';
                         foreach ($surveyField['cau_hoi'] as $question) {
                             echo    '<tr>
                                             <td name="txt-' . $question['ch_id'] . '">' . $question['noi_dung'] . '</td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="1" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="2" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="3" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="4" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="5" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="6" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="7" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="8" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="9" class="radio radio-primary" /></td>
-                                            <td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value="10" class="radio radio-primary" /></td>
-                                        </tr>';
+                                    ';
+                            for ($i = 1; $i <= $typeScore['thang_diem']; $i++) {
+                                echo '<td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value='. $i .' class="radio radio-primary" /></td>';
+                            }
+                            echo '</tr>';
                         }
                         $sttSurveyField++;
                     }
