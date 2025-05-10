@@ -37,6 +37,7 @@
                 </select>
             </div>
             <div>
+                <label class="label-text" for="from-date"></label>
                 <select class="select" id="select-chuky" name="chuky">
                     <option value="-1">Chọn chu kỳ</option>
                 </select>
