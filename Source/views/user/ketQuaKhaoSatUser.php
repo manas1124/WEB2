@@ -11,20 +11,25 @@
         </div>
     </div>
 
-    <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-4">
-            <div>
-                <label class="label-text" for="from-date">Từ ngày</label>
-                <input type="date" class="input" name="from_date" id="from-date" />
-            </div>
-            <div>
-                <label class="label-text" for="to-date">Đến ngày</label>
-                <input type="date" class="input" name="to_date" id="to-date" />
-            </div>
-            <div>
-                <button type="button" class="btn btn-primary" id="btn-filter" name="loc" data-act="kqks-loc">Lọc</button>
-                <button type="button" class="btn btn-primary" id="btn-reset" data-act="reset">Reset</button>
-            </div>
+    <div class="flex flex-wrap items-end gap-4 mb-4">
+        <div class="flex flex-col">
+            <label class="label-text mb-1" for="from-date">Từ ngày</label>
+            <input type="date" class="input input-bordered h-10 min-w-[140px]" id="from-date" />
+        </div>
+
+        <div class="flex flex-col">
+            <label class="label-text mb-1" for="to-date">Đến ngày</label>
+            <input type="date" class="input input-bordered h-10 min-w-[140px]" id="to-date" />
+        </div>
+
+        <div class="flex flex-col">
+            <label class="label-text mb-1 invisible">Lọc</label>
+            <button type="button" class="btn btn-primary h-10" id="btn-filter">Lọc</button>
+        </div>
+
+        <div class="flex flex-col">
+            <label class="label-text mb-1 invisible">Reset</label>
+            <button type="button" class="btn btn-primary h-10" id="btn-reset">Reset</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto h-[500]">
