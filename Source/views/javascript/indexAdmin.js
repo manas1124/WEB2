@@ -7,13 +7,18 @@ $(function () {
             window.location.href = "./logad.php";
             return;
         } else {
-            console.log("admin", acc)
-            const userInfor = await getUserById(acc.dtId)
-            console.log("infor", userInfor)
-            let username = "Xin chào " + userInfor.ho_ten + " !"
-            $("#dropdown-bottom-infor").text(username)
-            $("#dropdown-bottom-infor").removeClass("hidden")
-
+            console.log("admin", acc);
+            const userInfor = await getUserById(acc.dtId);
+            console.log("infor", userInfor);
+            let username = userInfor.ho_ten;
+            $("#dropdown-bottom-infor").text(username);
+            $("#dropdown-bottom-infor").removeClass("hidden");
+            acc.permission.forEach(element => {
+                if (element.startsWith("create.")) {
+                    let className = ".menu-" + element.replace("create.", "");
+                    $(className).removeClass("hidden");
+                }
+            });
         }
     })();
 
