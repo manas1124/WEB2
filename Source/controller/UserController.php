@@ -102,22 +102,27 @@ if (isset($_POST['func'])) {
                     if ($data) {
                         $data = json_decode($data, true);
                         $success = $ksModel->updateUser(
-
-                            $data["email"],
+                            $data["id"],    
+                            $data["email"],    
                             $data["ho_ten"],
-
                             $data["diachi"],
                             $data["dien_thoai"],
-                            $data["nhom_ks"],
-                            $data["loai_dt_id"],
-                            $data["ctdt_id"]
+                            $data["nhom_ks"],  
+                            $data["loai_dt_id"], 
+                            $data["ctdt_id"]   
                         );
                         if ($success) {
-                            $response = ['success' => true];
+                            $response = ['success' => true, 'message' => "User updated successfully"];
                         } else {
                             $response = ['success' => false, 'message' => 'Failed to update user'];
                         }
                         echo json_encode($response);
+                        exit;
+                    } else {
+                         echo json_encode([
+                            'status' => false,
+                            'message' => 'Data is missing'
+                        ]);
                     }
                 } else {
                     echo json_encode([
