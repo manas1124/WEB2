@@ -13,8 +13,7 @@ window.AppState = {
 $(function () {
     //check login, xu ly neu da dang nhap
     (async () => {
-        const acc = await getCurrentLoginAccount();
-        console.log(acc);
+        let acc = await getCurrentLoginAccount();
         if (acc == null) {
             window.location.href = "./logad.php";
             return;
@@ -181,7 +180,7 @@ function logout() {
             var data = JSON.parse(response);
             alert(data['message']); // Show the message from the server
             window.location.href = "./logad.php";
-
+            localStorage.clear();
         },
         error: function () {
             alert('Có lỗi xảy ra khi gửi dữ liệu!');

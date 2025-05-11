@@ -73,8 +73,8 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
         $("#ks-list").append(`
             <tr>
                 <td>${item.ten_ks}</td>
-                <td>${item.ngay_bat_dau}</td>
-                <td>${item.ngay_ket_thuc}</td>
+                <td class="text-center">${item.ngay_bat_dau}</td>
+                <td class="text-center">${item.ngay_ket_thuc}</td>
                 <td class="text-center">
                   ${surveyUsedStatus[item.su_dung] }
                 </td>
