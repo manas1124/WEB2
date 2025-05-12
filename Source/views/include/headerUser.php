@@ -16,8 +16,8 @@ echo '<nav class="navbar rounded-box shadow-base-300/20 shadow-sm">
 
                     <li><a href="./home.php">Trang chủ</a></li>
 
-                    <li><a href="#" class="nav-item" data-page="survey">Thực hiện khảo sát</a></li>
-                    <li><a href="#" class="nav-item" data-page="result-survey">Xem kết quả khảo sát</a></li>
+                    <li><a href="#" class="nav-item view-survey" data-page="survey">Thực hiện khảo sát</a></li>
+                    <li><a href="#" class="nav-item view-survey" data-page="result-survey">Xem kết quả khảo sát</a></li>
 
                     <div class="dropdown relative inline-flex [--placement:bottom-end]">
                         <button id="dropdown-bottom-infor" type="button"

@@ -1,15 +1,15 @@
 
-$('#loginForm').on('submit', function(e){
+$('#loginForm').on('submit', function (e) {
     console.log("date gui:", $('#txtUsername').val(), $('#txtPassword').val())
-    e.preventDefault(); 
+    e.preventDefault();
     $.ajax({
         type: 'POST',
-        url: './controller/AuthController.php', 
+        url: './controller/AuthController.php',
         data: {
             action: 'login',
-            username: $('#txtUsername').val(), 
+            username: $('#txtUsername').val(),
             password: $('#txtPassword').val()
-        }, 
+        },
         success: function (response) {
             console.log(response);
 
@@ -19,20 +19,20 @@ $('#loginForm').on('submit', function(e){
             if (data['status'] == "success") {
                 window.location.href = "./home.php";
             }
-            
+
 
         },
-        error: function() {
+        error: function () {
             console.log(response);
             alert('Có lỗi xảy ra khi gửi dữ liệu!');
         }
     });
 });
 
-$('#signUpForm').on('submit', function(e){
-    e.preventDefault(); 
+$('#signUpForm').on('submit', function (e) {
+    e.preventDefault();
     data = {
-        username: $('#signUpForm #txtUsername').val(), 
+        username: $('#signUpForm #txtUsername').val(),
         password: $('#signUpForm #txtPassword').val(),
         passwordConfirm: $('#signUpForm #txtConfirmPassword').val(),
         fullName: $('#signUpForm #txtFullName').val(),
@@ -49,10 +49,10 @@ $('#signUpForm').on('submit', function(e){
 
     $.ajax({
         type: 'POST',
-        url: './controller/AuthController.php', 
+        url: './controller/AuthController.php',
         data: {
             action: 'register',
-            username: data.username, 
+            username: data.username,
             password: data.password,
             fullName: data.fullName,
             address: data.address,
@@ -75,7 +75,7 @@ $('#signUpForm').on('submit', function(e){
 
 
         },
-        error: function() {
+        error: function () {
             alert('Có lỗi xảy ra khi gửi dữ liệu!');
         }
     });
@@ -186,38 +186,39 @@ function vadlidate(data) {
 // });
 async function getCurrentLoginAccount() {
     try {
-      const response = await $.ajax({
-        url: "./controller/AuthController.php",
-        type: "POST",
-        dataType: "json",
-        data: { func :"getCurrentLoginUser"},
-      });
-      if (response.status == 'error') {
-        console.log(response.message)
-        return null;
-      }
-      return response.userInfor;
+        const response = await $.ajax({
+            url: "./controller/AuthController.php",
+            type: "POST",
+            dataType: "json",
+            data: { func: "getCurrentLoginUser" },
+        });
+        if (response.status == 'error') {
+            console.log(response.message)
+            return null;
+        }
+        return response.userInfor;
     } catch (error) {
-      console.error(error);
-      return null;
+        console.error(error);
+        return null;
     }
 }
 async function getUserById(id) {
     try {
-      const response = await $.ajax({
-        
-        url: "./controller/UserController.php",
-        type: "POST",
-        data: { func: "getUserById", id: id },
-        dataType: "json",
-      });
-      console.log(" Phản hồi getUserById:", response);
-      return response.data;
+        const response = await $.ajax({
+
+            url: "./controller/UserController.php",
+            type: "POST",
+            data: { func: "getUserById", id: id },
+            dataType: "json",
+        });
+        console.log(" Phản hồi getUserById:", response);
+        return response.data;
     } catch (error) {
-      console.log("Lỗi khi lấy dữ liệu người dùng", error);
-      return null;
+        console.log("Lỗi khi lấy dữ liệu người dùng", error);
+        return null;
     }
 }
+
 $(function () {
     //xu ly lay du lieu nguoi dang dung trong session
     //getuserinfor
@@ -225,10 +226,10 @@ $(function () {
         const account = await getCurrentLoginAccount();
         if (account) {
             console.log(account)
-           const userInfor = await getUserById(account.dtId)
-           let username = "Xin chào "+ userInfor.ho_ten + " !"
-           $("#dropdown-bottom-infor").text(username)
-           $("#dropdown-bottom-infor").removeClass("hidden")
+            const userInfor = await getUserById(account.dtId)
+            let username = "Xin chào " + userInfor.ho_ten + " !"
+            $("#dropdown-bottom-infor").text(username)
+            $("#dropdown-bottom-infor").removeClass("hidden")
         } else {
             $("#btn-login").removeClass("hidden")
         }
@@ -244,15 +245,16 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 $("#main-content").html(response.html);
+                
                 let queryString = $.param(params);
                 queryString = cleanQueryString(queryString);
                 // Update the URL
                 history.pushState(params, "", "home.php?" + queryString);
-                
+
             },
             error: function (error) {
                 console.error("Error navigate page:", error);
-             
+
             }
         });
     }
@@ -273,7 +275,7 @@ $(function () {
         window.location.href = "./home.php";
         console.log("haha");
     });
-        
+
 
 
     $("#main-content").on("click", ".back-link", function (event) {
@@ -286,14 +288,14 @@ $(function () {
         event.preventDefault();
         let act = $(this).data("act");
         let currentParams = getUrlParams();
-        let newParams = { ...currentParams, act: act};
+        let newParams = { ...currentParams, act: act };
 
         // xử lí này sẽ truyền param lên url vd: ..act="them"&id=3
         let id = $(this).data("id");
-        if (id !=null) {
-            newParams = { ...currentParams, act: act, id:id};
+        if (id != null) {
+            newParams = { ...currentParams, act: act, id: id };
         }
-        
+
         updateContent(newParams);
     });
 

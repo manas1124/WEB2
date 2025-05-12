@@ -10,7 +10,7 @@
         <button id="btn-search-ks" class="btn btn-outline">Tìm</button>
         </div>
         <div class="flex items-center gap-4">
-            <button class="action-item btn btn-primary" data-act="ks-tao">Tạo khảo sát</button>
+            <button class="action-item btn btn-primary create-survey hidden" data-act="ks-tao">Tạo khảo sát</button>
         </div>
     </div>
 

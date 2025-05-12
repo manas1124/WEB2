@@ -2,7 +2,7 @@
     <div class="flex items-center justify-between mb-4">
         <h1>Quản lý chương trình đào tạo</h1>
         <div class="flex items-center gap-4">
-            <button class="action-item btn btn-primary" data-act="ctdt-them">Thêm Ctdt</button>
+            <button class="action-item btn btn-primary create-program hidden" data-act="ctdt-them">Thêm Ctdt</button>
         </div>
     </div>
     <div class="flex items-center justify-between mb-4">

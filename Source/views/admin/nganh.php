@@ -5,7 +5,7 @@
             <!-- <button type="button" class="action-item btn btn-primary" data-act="ks-tao"
                 data-aria-haspopup="dialog" aria-expanded="false"
                 aria-controls="create-ks-modal" data-overlay="#create-ks-modal">Tạo bài khảo sát</button> -->
-            <button type="button" class="action-item btn btn-primary" data-act="nganh-them">Thêm ngành</button>
+            <button type="button" class="action-item btn btn-primary create-program hidden" data-act="nganh-them">Thêm ngành</button>
         </div>
     </div>
     <div class="flex items-center justify-between mb-4">

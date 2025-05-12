@@ -1,24 +1,32 @@
+window.AppState = {
+    acc: null,
+    applyPermissionControl: function () {
+        if (!this.acc || !this.acc.permission) return;
+
+        this.acc.permission.forEach(permission => {
+            let className = "." + permission.replaceAll(".", "-");
+            $(className).removeClass("hidden");
+        });
+    }
+};
+
 $(function () {
     //check login, xu ly neu da dang nhap
     (async () => {
-        let acc = await getCurrentLoginAccount();
+        const acc = await getCurrentLoginAccount();
         console.log(acc);
         if (acc == null) {
             window.location.href = "./logad.php";
             return;
         } else {
+            window.AppState.acc = acc;
             console.log("admin", acc);
             const userInfor = await getUserById(acc.dtId);
             console.log("infor", userInfor);
             let username = userInfor.ho_ten;
             $("#dropdown-bottom-infor").text(username);
             $("#dropdown-bottom-infor").removeClass("hidden");
-            acc.permission.forEach(element => {
-                if (element.startsWith("create.")) {
-                    let className = ".menu-" + element.replace("create.", "");
-                    $(className).removeClass("hidden");
-                }
-            });
+            window.AppState.applyPermissionControl();
         }
     })();
 
@@ -34,6 +42,7 @@ $(function () {
             success: function (response) {
                 $("#main-content").html(response.html);
                 // Update the URL
+                window.AppState.applyPermissionControl();
                 let queryString = $.param(params);
                 queryString = cleanQueryString(queryString);
                 history.pushState(params, "", "admin.php?" + queryString);

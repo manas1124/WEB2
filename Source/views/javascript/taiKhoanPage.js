@@ -69,16 +69,17 @@ async function loadAllTaiKhoan() {
             ${statusBadge}
           </td>
           <td>
-            <button class="btn btn-circle btn-text btn-sm action-item" data-act="tk-edit" data-id="${item.tk_id}" aria-label="Sửa tài khoản">
+            <button class="btn btn-circle btn-text btn-sm action-item edit-account hidden" data-act="tk-edit" data-id="${item.tk_id}" aria-label="Sửa tài khoản">
               <span class="icon-[tabler--pencil] size-5"></span>
             </button>
-            <button class="btn btn-circle btn-text btn-sm action-item" id="tk-xoa" data-id="${item.tk_id}" aria-label="Xoá tài khoản">
+            <button class="btn btn-circle btn-text btn-sm action-item delete-account hidden" id="tk-xoa" data-id="${item.tk_id}" aria-label="Xoá tài khoản">
               <span class="icon-[tabler--trash] size-5"></span>
             </button>
           </td>
         </tr>
       `);
     });
+    window.AppState.applyPermissionControl();
   }
 }
 async function loadAllDoiTuong() {

@@ -232,16 +232,17 @@ async function loadNhomKsToSelectModal() {
               </td> 
               <td>${item.ten_nks?? "Không rõ"}</td>
               <td>
-                <button class="action-item btn btn-circle btn-text btn-sm" data-act="user-sua" aria-label="Action button" data-id="${item.dt_id}">
+                <button class="action-item btn btn-circle btn-text btn-sm edit-target hidden" data-act="user-sua" aria-label="Action button" data-id="${item.dt_id}">
                   <span class="icon-[tabler--pencil] size-5"></span>
                 </button>
-                <button onclick="deleteUser(${item.dt_id})" class="btn btn-circle btn-text btn-sm" aria-label="Action button">
+                <button onclick="deleteUser(${item.dt_id})" class="btn btn-circle btn-text btn-sm delete-target hidden" aria-label="Action button">
                   <span class="icon-[tabler--trash] size-5"></span>
                 </button>
               </td>
             </tr>
           `);
         });
+        window.AppState.applyPermissionControl();
       }
     });
 }

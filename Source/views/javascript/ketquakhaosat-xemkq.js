@@ -117,6 +117,8 @@ async function loadDuLieu(ks_id) {
     const kqks = await getAllKqks(ks_id);
     const kqks_ids = kqks.data.map(item => item.kqks_id);
 
+    document.getElementById('ks-soluongthamgia').textContent = kqks_ids.length || 'Chưa có';
+
     // 4. Lấy danh sách trả lời
     const traLoi = await getAllTraLoi(kqks_ids);
 
