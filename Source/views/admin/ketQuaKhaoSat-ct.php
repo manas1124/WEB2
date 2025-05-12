@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between mb-4">
         <h1>Kết quả khảo sát</h1>
         <div class="flex items-center gap-4">
-            <button id="excel" class="btn btn-primary">Xuất Excel</button>
+            <button id="excel" class="btn btn-primary view-survey hidden">Xuất Excel</button>
         </div>
     </div>
     <div id="info-khaosat" class="mb-4 p-5 border rounded-lg bg-gray-100 shadow-md">

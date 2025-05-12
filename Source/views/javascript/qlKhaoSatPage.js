@@ -79,21 +79,22 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
                   ${surveyUsedStatus[item.su_dung] }
                 </td>
                 <td>
-                <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-chi-tiet" data-id="${
+                <button class="action-item btn btn-circle btn-text btn-sm view-survey hidden" data-act="ks-chi-tiet" data-id="${
                     item.ks_id
                   }" aria-label="xem chi tiết"> <span class="icon-[solar--eye-linear] size-5"></span></button>
                
-                  <button class="action-item btn btn-circle btn-text btn-sm" data-act="ks-sua" data-id="${
+                  <button class="action-item btn btn-circle btn-text btn-sm edit-survey hidden" data-act="ks-sua" data-id="${
                     item.ks_id
                   }" aria-label="sua khao sat"><span class="icon-[tabler--pencil] size-5"></span></button>
                   <button onclick="deleteKs(${
                     item.ks_id
-                  })" class="btn btn-circle btn-text btn-sm" aria-label="xoa khao sat"><span class="icon-[tabler--trash] size-5"></span></button>
+                  })" class="btn btn-circle btn-text btn-sm delete-survey hidden" aria-label="xoa khao sat"><span class="icon-[tabler--trash] size-5"></span></button>
                 </td>
             </tr>
     
           `);
       });
+      window.AppState.applyPermissionControl();
     }
     $("#pagination").append(
       `<button type="button" class="btn btn-text btn-prev">Previous</button><div class="flex items-center gap-x-1">`

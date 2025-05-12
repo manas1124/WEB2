@@ -1,3 +1,5 @@
+window.HSStaticMethods.autoInit();
+
 async function getAllChuky(page = 1, status = null, txt_search = null) {
     try {
         const response = await $.ajax({
@@ -44,12 +46,13 @@ async function loadAllChuky(page = 1, status = null, txt_search = null) {
                     : '<span class="badge badge-soft badge-error ">Đã khóa</span>'
                 }</td>
                     <td>
-                        <button class="action-item btn btn-circle btn-text btn-sm" aria-label="Action button" data-act="chuky-sua" data-id="${item.ck_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
-                        <button class="btn btn-circle btn-text btn-sm" aria-label="Action button" onclick="toggleStatus(${item.ck_id})"><span class="icon-[tabler--trash] size-5"></span></button>
+                        <button class="action-item btn btn-circle btn-text btn-sm edit-program hidden" aria-label="Action button" data-act="chuky-sua" data-id="${item.ck_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
+                        <button class="btn btn-circle btn-text btn-sm delete-program hidden" aria-label="Action button" onclick="toggleStatus(${item.ck_id})"><span class="icon-[tabler--trash] size-5"></span></button>
                     </td>
                 </tr>
             `);
         });
+        window.AppState.applyPermissionControl();
         renderPagination(totalPages, currentPage);
     }
 }

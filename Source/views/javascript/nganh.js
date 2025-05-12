@@ -1,3 +1,5 @@
+window.HSStaticMethods.autoInit();
+
 async function getAllNganh(page = 1, status = null, txt_search = null) {
     try {
         const response = await $.ajax({
@@ -45,13 +47,14 @@ async function loadAllNganh(page = 1, status = null, txt_search = null) {
                     : '<span class="badge badge-soft badge-error ">Đã khóa</span>'
                 }</td>
                     <td>
-                        <button class="action-item btn btn-circle btn-text btn-sm" aria-label="Action button" data-act="nganh-sua" data-id="${item.nganh_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
-                        <button class="btn btn-circle btn-text btn-sm" aria-label="Action button" onclick=toggleStatus(${item.nganh_id})><span class="icon-[tabler--trash] size-5"></span></button>
+                        <button class="action-item btn btn-circle btn-text btn-sm edit-program hidden" aria-label="Action button" data-act="nganh-sua" data-id="${item.nganh_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
+                        <button class="btn btn-circle btn-text btn-sm delete-program hidden" aria-label="Action button" onclick=toggleStatus(${item.nganh_id})><span class="icon-[tabler--trash] size-5"></span></button>
                     </td>
                 </tr>
             `);
 
         });
+        window.AppState.applyPermissionControl();
         renderPagination(totalPages, currentPage);
     }
 }

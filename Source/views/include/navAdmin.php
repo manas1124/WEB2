@@ -13,61 +13,61 @@ echo '  <aside id="default-sidebar"
             <div class="drawer-body px-2 pt-16">
 
                 <ul class=" menu  p-0">
-                    <li class="hidden nav-menu menu-survey">
+                    <li class="nav-menu view-survey hidden">
                         <a href="" class="nav-item nav-link text-nowrap" id="khao-sat-page" data-page="qlKhaoSatPage">
                             <span class="icon-[tabler--home] size-5"></span>
                             Khảo sát
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-program">
+                    <li class="nav-menu view-progra hiddenm">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="ctdtPage">
                             <span class="icon-[tabler--school] size-5"></span>
                             Chương trình đào tạo
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-program">
+                    <li class="nav-menu view-progra hiddenm">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="nganh">
                             <span class="icon-[tabler--book] size-5"></span>
                             Ngành
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-program">
+                    <li class="nav-menu view-progra hiddenm">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="chuky">
                             <span class="icon-[tabler--calendar-time] size-5"></span>
                             Chu kỳ
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-target">
+                    <li class="nav-menu view-target hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="qlUserPage">
                             <span class="icon-[tabler--user] size-5"></span>
                             Đối tượng
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-target">
+                    <li class="nav-menu view-target hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="nhomks">
                             <span class="icon-[tabler--users-group] size-5"></span>
                             Nhóm Khảo sát
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-account">
+                    <li class="nav-menu view-accoun hiddent">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="taiKhoanPage">
                             <span class="icon-[tabler--user] size-5"></span>
                             Tài khoản
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-permission">
+                    <li class="nav-menu view-permis hiddension">
                         <a href="" class="nav-item nav-link text-nowrap" id="quyen-page" data-page="quyenPage">
                             <span class="icon-[tabler--key] size-5"></span>
                             Quyền
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-survey">
+                    <li class="nav-menu view-survey hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="surveyPage">
                             <span class="icon-[tabler--message] size-5"></span>
                             Khảo sát - client
                         </a>
                     </li>
-                    <li class="hidden nav-menu menu-survey">
+                    <li class="nav-menu view-survey hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="ketQuaKhaoSat">
                             <span class="icon-[tabler--notes] size-5"></span>
                             Kết quả khảo sát

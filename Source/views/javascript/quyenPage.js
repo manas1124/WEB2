@@ -27,16 +27,17 @@ async function loadAllQuyen() {
             <td>${item.quyen_id}</td>
             <td>${item.ten_quyen}</td>
             <td>
-              <button class="btn btn-circle btn-text btn-sm action-item" data-act="quyen-edit" data-id="${item.quyen_id}" aria-label="Sửa tài khoản">
+              <button class="btn btn-circle btn-text btn-sm action-item edit-permission hidden" data-act="quyen-edit" data-id="${item.quyen_id}" aria-label="Sửa tài khoản">
                 <span class="icon-[tabler--pencil] size-5"></span>
               </button>
-              <button class="btn btn-circle btn-text btn-sm action-item" id="quyen-xoa" data-id="${item.quyen_id}" aria-label="Xoá tài khoản">
+              <button class="btn btn-circle btn-text btn-sm action-item delete-permission hidden" id="quyen-xoa" data-id="${item.quyen_id}" aria-label="Xoá tài khoản">
                 <span class="icon-[tabler--trash] size-5"></span>
               </button>
             </td>
           </tr>
         `);
     });
+    window.AppState.applyPermissionControl();
   }
 }
 function updatepage(params) {

@@ -1,3 +1,5 @@
+window.HSStaticMethods.autoInit();
+
 async function getAllctdt(page = 1, nganh_id = null, ck_id = null, la_ctdt = null, status = null, txt_search = null) {
     try {
         const response = await $.ajax({
@@ -85,12 +87,13 @@ async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = nu
                     : '<span class="badge badge-soft badge-error ">Đã khóa</span>'
                 }</td>
                     <td>
-                        <button class="action-item btn btn-circle btn-text btn-sm" aria-label="Action button" data-act="ctdt-sua" data-id="${item.ctdt_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
-                        <button class="btn btn-circle btn-text btn-sm" aria-label="Action button" onclick="toggleStatus(${item.ctdt_id})"><span class="icon-[tabler--trash] size-5"></span></button>
+                        <button class="action-item btn btn-circle btn-text btn-sm edit-program hidden" aria-label="Action button" data-act="ctdt-sua" data-id="${item.ctdt_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
+                        <button class="btn btn-circle btn-text btn-sm delete-program hidden" aria-label="Action button" onclick="toggleStatus(${item.ctdt_id})"><span class="icon-[tabler--trash] size-5"></span></button>
                     </td>
                 </tr>
             `);
         });
+        window.AppState.applyPermissionControl();
         renderPagination(totalPages, currentPage);
     }
 }

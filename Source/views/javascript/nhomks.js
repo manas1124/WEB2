@@ -64,13 +64,14 @@ $(function () {
                 <td>${item.ten_nks}</td>
                
                 <td>
-                  <button class="action-item btn btn-circle btn-text btn-sm" data-act="nhomks-sua" data-id="${item.nks_id}" aria-label="sua khao sat"><span class="icon-[tabler--pencil] size-5"></span></button>
-                  <button onclick="deletenks(${item.nks_id})" class="btn btn-circle btn-text btn-sm" aria-label="xoa khao sat"><span class="icon-[tabler--trash] size-5"></span></button>
+                  <button class="action-item btn btn-circle btn-text btn-sm edit-target hidden" data-act="nhomks-sua" data-id="${item.nks_id}" aria-label="sua khao sat"><span class="icon-[tabler--pencil] size-5"></span></button>
+                  <button onclick="deletenks(${item.nks_id})" class="btn btn-circle btn-text btn-sm delete-target hidden" aria-label="xoa khao sat"><span class="icon-[tabler--trash] size-5"></span></button>
                 </td>
             </tr>
     
           `);
         });
+        window.AppState.applyPermissionControl();
         
       }
       

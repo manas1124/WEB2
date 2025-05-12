@@ -3,7 +3,7 @@
   <div class="flex items-center justify-between mb-4">
     <h1>Quản lí quyền</h1>
     <div class="flex items-center gap-4">
-      <button type="button" class="action-item btn btn-primary" data-act="quyen-them">Thêm quyền</button>
+      <button type="button" class="action-item btn btn-primary create-permission hidden" data-act="quyen-them">Thêm quyền</button>
     </div>
   </div>
   <div class="w-full overflow-x-auto">

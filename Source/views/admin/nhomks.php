@@ -3,7 +3,7 @@
         <h1>Quản lý nhóm khảo sát</h1>
         <div class="flex items-center gap-4">
           
-            <button type="button" class="action-item btn btn-primary" data-act="nhomks-them">Thêm nhóm khảo sát</button>
+            <button type="button" class="action-item btn btn-primary create-target hidden" data-act="nhomks-them">Thêm nhóm khảo sát</button>
         </div>
     </div>
    

@@ -92,10 +92,10 @@ async function loadDsKhaoSat(page = 1, txt_search = null,
                     <td>${item.ten_nganh}</td>
                     <td>${item.ten_ck}</td>
                     <td>
-                        <button class="action-item btn btn-circle btn-text btn-sm" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua">
+                        <button class="action-item btn btn-circle btn-text btn-sm view-survey hidden" data-act="xem-kqks" data-id="${item.ks_id}" aria-label="xem ket qua">
                             <span class="icon-[tabler--eye] size-5"></span>
                         </button>
-                        <button class="btnExcel btn btn-circle btn-text btn-sm" data-id="${item.ks_id}" aria-label="xuất excel">
+                        <button class="btnExcel btn btn-circle btn-text btn-sm view-survey hidden" data-id="${item.ks_id}" aria-label="xuất excel">
                             <span class="icon-[tabler--file-spreadsheet] size-5"></span>
                         </button>
                     </td>
@@ -104,7 +104,7 @@ async function loadDsKhaoSat(page = 1, txt_search = null,
             `);
             });
         }
-
+        window.AppState.applyPermissionControl();
         renderPagination(ksList.data.totalPages, ksList.data.currentPage);
     }
 }

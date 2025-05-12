@@ -3,7 +3,7 @@
         <h1>Quản lý User</h1>
 
         <div class="flex items-center gap-4">
-            <button class="action-item btn btn-primary" data-act="user-them">Thêm</button>
+            <button class="action-item btn btn-primary create-target hidden" data-act="user-them">Thêm</button>
             <label id="download-excel-templat" class="btn btn-outline btn-secondary cursor-pointer">Tải file mẫu</label>
             <input type="file" id="input-file-excel" class="input" accept=".xlsx, .xls" />
             <button type="button" class="btn btn-primary" aria-haspopup="dialog" aria-expanded="false" aria-controls="slide-down-animated-modal" data-overlay="#slide-down-animated-modal">Gửi khảo sát</button>
