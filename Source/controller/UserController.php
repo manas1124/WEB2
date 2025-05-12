@@ -103,8 +103,8 @@ if (isset($_POST['func'])) {
                         $data = json_decode($data, true);
                         $success = $ksModel->updateUser(
                             $data["id"],    
-                            $data["email"],    
                             $data["ho_ten"],
+                            $data["email"],    
                             $data["diachi"],
                             $data["dien_thoai"],
                             $data["nhom_ks"],  

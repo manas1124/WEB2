@@ -107,16 +107,7 @@
         class="ml-[16rem] max-sm:ml-4 lg:border-base-content/10 xl:border-e xl:pe-8 relative px-0 py-4 sm:py-8 lg:border-s lg:ps-8 flex flex-wrap gap-px-4 sm:gap-4">
 
     </div>
-    <script>
-        // active nav link
-        // $.noConflict();
-        // jQuery( document ).ready(function() {
-        //     $(".nav-link").click(function () {
-        //         $(".nav-link").removeClass("bg-primary");
-        //         $(this).addClass("bg-primary");   
-        //     });
-        // });
-    </script>
+   
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/flyonui/flyonui.js"></script>
 
@@ -125,6 +116,17 @@
     <script src="./views/javascript/survey.js"></script>
     <script src="./views/javascript/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <script>
+        $("#khao-sat-page").addClass("bg-sky-500/100 text-white"); 
+        // active nav link
+        $.noConflict();
+        jQuery( document ).ready(function() {
+            $(".nav-link").click(function () {
+                $(".nav-link").removeClass("bg-sky-500/100 text-white");
+                $(this).addClass("bg-sky-500/100 text-white");   
+            });
+        });
+    </script>
 </body>
 
 </html>

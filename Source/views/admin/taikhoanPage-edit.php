@@ -17,10 +17,8 @@
                 <input type="text" placeholder="" class="input" id="password" />
             </div>
             <div class="w-96">
-                <label class="label-text" for="select-doituong">Đối tượng</label>
-                <select class="select" id="select-doituong">
-                    <option value="-1">--Chọn đối tượng--</option>
-                </select>
+                <label class="label-text" for="select-doituong">Mã đối tượng</label>
+                <input type="text" placeholder="" class="input" id="select-doituong" />
             </div>
             <div class="w-96">
                 <label class="label-text" for="select-quyen">Quyền</label>

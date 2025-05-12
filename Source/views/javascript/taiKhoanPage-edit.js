@@ -180,12 +180,13 @@ $(function () {
 
     $("#select-status").val(defaultData.status);
     if (doiTuongList != null) {
-      doiTuongList.forEach((item) => {
-        const isSelected = item.dt_id == defaultData.dt_id ? "selected" : "";
-        $("#select-doituong").append(
-          `<option value='${item.dt_id}' ${isSelected}>${item.ten_dt}</option>`
-        );
-      });
+      $("#select-doituong").val(defaultData.dt_id);
+      // doiTuongList.forEach((item) => {
+      //   const isSelected = item.dt_id == defaultData.dt_id ? "selected" : "";
+      //   $("#select-doituong").append(
+      //     `<option value='${item.dt_id}' ${isSelected}>${item.ten_dt}</option>`
+      //   );
+      // });
     }
     if (quyenList != null) {
       quyenList.forEach((item) => {

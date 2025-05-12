@@ -112,50 +112,59 @@ async function loadAllQuyen() {
 function create() {
   const username = $("#username").val();
   const password = $("#password").val();
-  const dt_id = $("#select-doituong").val();
+  const dt_id = $("#ma-doi-tuong").val();
   const quyen_id = $("#select-quyen").val();
   const status = $("#select-status").val();
+  console.log(username, password, dt_id, quyen_id, status)
   $.ajax({
     url: "./controller/accountController.php",
     type: "POST",
     dataType: "json",
     data: {
-      func: "create",
-      username: username,
-      password: password,
-      dt_id: dt_id,
-      quyen_id: quyen_id,
-      status: status,
+        func: "create",
+        username: username,
+        password: password,
+        dt_id: dt_id,
+        quyen_id: quyen_id,
+        status: status,
     },
     success: function (response) {
-      if (response) {
-        Swal.fire({
-          icon: "success",
-          title: "Tạo thành công!",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Tạo không thành công!",
-        });
-      }
+      console.log(response)
+        if (response && response.status === true) {
+            Swal.fire({
+                icon: "success",
+                title: "Tạo thành công!",
+                showConfirmButton: true,
+                timer: 2000,
+            });
+            navigateTaiKhoanPage()
+        } else if (response && response.status === false && response.message) {
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: response.message, // Display the server-sent error message
+            });
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: "Đã có lỗi xảy ra!", // Generic error message if no specific message from server
+            });
+        }
     },
     error: function (xhr, status, error) {
-      console.error("AJAX Error:", {
-        status: status,
-        error: error,
-        responseText: xhr.responseText,
-      });
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi server",
-        html: `<b>${xhr.status} ${xhr.statusText}</b><br><pre>${xhr.responseText}</pre>`,
-      });
+        console.error("AJAX Error:", {
+            status: status,
+            error: error,
+            responseText: xhr.responseText,
+        });
+        Swal.fire({
+            icon: "error",
+            title: "Lỗi server",
+            html: `<b>${xhr.status} ${xhr.statusText}</b><br><pre>${xhr.responseText}</pre>`,
+        });
     },
-  });
+});
 }
 function updatepage(params) {
   $.ajax({
@@ -228,7 +237,7 @@ $(document).ready(function () {
         title: "Lỗi",
         text: "Password không được để trống!",
       });
-    } else if ($("#select-doituong").val() == -1) {
+    } else if ($("#ma-doi-tuong").val() == -1) {
       Swal.fire({
         icon: "error",
         title: "Lỗi",
@@ -273,7 +282,6 @@ $(document).on("click", '[id="tk-xoa"]', function () {
               timer: 1500,
               showConfirmButton: false,
             }).then(() => {
-              // ✅ Tải lại trang sau khi xóa
               location.reload();
             });
           } else {
@@ -293,3 +301,9 @@ $(document).on("click", '[id="tk-xoa"]', function () {
     }
   });
 });
+function navigateTaiKhoanPage() {
+  window.location.href = "./admin.php?page=taiKhoanPage";
+}
+function navigateDoiTuongPage() {
+  window.location.href = "./admin.php?page=doiTuongPage";
+}
