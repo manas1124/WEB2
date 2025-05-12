@@ -18,9 +18,9 @@
         <table class="table ">
             <thead>
                 <tr>
-                    <th class="w-2/5">Tên bài khảo sát</th>
-                    <th>Ngày bắt đầu</th>
-                    <th>Ngày kết thúc</th>
+                    <th class="w-2/5 text-center">Tên bài khảo sát</th>
+                    <th class="text-center">Ngày bắt đầu</th>
+                    <th class="text-center">Ngày kết thúc</th>
                     <th class="text-center">Trạng thái</th>
                     <th>Hành động</th>
                 </tr>

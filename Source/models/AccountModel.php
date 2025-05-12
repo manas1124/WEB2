@@ -22,6 +22,20 @@ class AccountModel
             return false; 
         }
     }
+    public function isExistDoiTuongId($doiTuongId)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM doi_tuong WHERE dt_id = ?");
+        $stmt->bind_param("s", $doiTuongId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            return true; 
+        } else {
+            return false; 
+        }
+    }
     public function usernameIsExistByAccountId($username,$accountId)
     {
         $conn = $this->db->getConnection();

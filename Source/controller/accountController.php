@@ -44,22 +44,46 @@ if (isset($_POST['func'])) {
                         $quyen_id = $_POST["quyen_id"];
                         $status = isset($_POST["status"]) ? $_POST["status"] : null;
 
-                        $response = $accountModel->create($username, $password, $dt_id, $quyen_id, $status);
+                        $isExistUsername = $accountModel->usernameIsExist($username);
+                        $isExistDoiTuongId = $accountModel->isExistDoiTuongId($dt_id);
+
+                        if ($isExistUsername == true) {
+                            echo json_encode( [
+                                "status" => false,
+                                "message" => "Tên đăng nhập đã tồn tại"
+                            ]);
+                            exit;
+                        }
+                        if ($isExistDoiTuongId == false) {
+                            echo json_encode([
+                                "status" => false,
+                                "message" => "Không tồn tại đối tượng có id: '$dt_id'"
+                            ]);
+                            exit;
+                        }
+                        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+                        $response = $accountModel->create($username, $hashedPassword, $dt_id, $quyen_id, $status);
+                        if ($response == true) {
+                            echo json_encode([
+                                "status" => true,
+                                "message" => "Tạo tài khoản thành công"]);
+                                exit;
+                        }
                     } else {
-                        $response = [
+                        echo json_encode([
                             "status" => false,
                             "message" => "Thiếu dữ liệu đầu vào"
-                        ];
+                        ]);
+                        exit;
                     }
                     header('Content-Type: application/json');
                 } else {
-                    $response = [
+                    echo json_encode([
                         'status' => false,
                         'message' => 'Bạn không có quyền để thực hiện việc này'
-                    ];
+                    ]);
                 }
             }
-            echo json_encode($response);
             exit;
         case "updateAccount":
             // if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
