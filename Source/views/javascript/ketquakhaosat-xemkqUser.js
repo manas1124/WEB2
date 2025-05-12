@@ -125,6 +125,14 @@ async function loadDuLieu(ks_id) {
         return;
     }
 
+    document.getElementById('ks-ten').textContent = khaoSat.ten_ks || 'Không rõ';
+    document.getElementById('ks-thangdiem').textContent = khaoSat.thang_diem || 'Chưa có';
+    document.getElementById('ks-ngaybatdau').textContent = khaoSat.ngay_bat_dau || 'Chưa có';
+    document.getElementById('ks-ngayketthuc').textContent = khaoSat.ngay_ket_thuc || 'Chưa có';
+    document.getElementById('ks-nganh').textContent = khaoSat.ten_nganh || 'Chưa có';
+    document.getElementById('ks-chuky').textContent = khaoSat.ten_ck || 'Chưa có';
+    document.getElementById('ks-nhom').textContent = khaoSat.ten_nks || 'Chưa có';
+
     // 1. Lấy danh sách mục khảo sát
     const mucKhaoSat = await getAllMucKhaoSat(ks_id);
     const mks_ids = mucKhaoSat.map(item => item.mks_id);

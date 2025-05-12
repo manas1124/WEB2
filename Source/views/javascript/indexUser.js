@@ -219,33 +219,22 @@ async function getUserById(id) {
     }
 }
 
-let account = null;
-
 $(function () {
     //xu ly lay du lieu nguoi dang dung trong session
     //getuserinfor
     (async () => {
-        account = await getCurrentLoginAccount();
+        const account = await getCurrentLoginAccount();
         if (account) {
             console.log(account)
             const userInfor = await getUserById(account.dtId)
             let username = "Xin chào " + userInfor.ho_ten + " !"
             $("#dropdown-bottom-infor").text(username)
             $("#dropdown-bottom-infor").removeClass("hidden")
-            applyPermissionControl();
         } else {
             $("#btn-login").removeClass("hidden")
         }
     })();
 
-    function applyPermissionControl() {
-        if (!account || !account.permission) return;
-
-        account.permission.forEach(permission => {
-            let className = "." + permission.replaceAll(".", "-");
-            $(className).removeClass("hidden");
-        });
-    }
     // Function to update content and URL
     function updateContent(params) {
         $.ajax({
@@ -257,7 +246,6 @@ $(function () {
             success: function (response) {
                 $("#main-content").html(response.html);
                 
-                applyPermissionControl();
                 let queryString = $.param(params);
                 queryString = cleanQueryString(queryString);
                 // Update the URL
