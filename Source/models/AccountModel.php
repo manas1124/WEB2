@@ -94,17 +94,17 @@ class AccountModel
         $stmt->close();
         return $data;
     }
-    public function update($tk_id, $username, $hashedPassword, $dt_id, $quyen_id, $status)
+    public function update($tk_id, $username, $dt_id, $quyen_id, $status)
     {
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("UPDATE tai_khoan 
-                                SET username = ?, password = ?, dt_id = ?, quyen_id = ?, status = ?
+                                SET username = ?, dt_id = ?, quyen_id = ?, status = ?
                                 WHERE tk_id = ?
     ");
-        $stmt->bind_param("ssiiii", $username, $hashedPassword, $dt_id, $quyen_id, $status, $tk_id);
+        $stmt->bind_param("siiii", $username, $dt_id, $quyen_id, $status, $tk_id);
         return $stmt->execute();
     }
-    public function updateUsernameAndPassword($tk_id, $hashedPassword)
+    public function updatePassword($tk_id, $hashedPassword)
     {
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("UPDATE tai_khoan 

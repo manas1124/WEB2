@@ -6,15 +6,19 @@
         <div class="pt-0 mb-4 ">
             <div class="w-96">
                 <label class="label-text" for="username">ID</label>
-                <input type="text" placeholder="" class="input" id="tk_id" readonly/>
+                <input type="text" placeholder="" class="input" id="tk_id" readonly />
             </div>
             <div class="w-96">
                 <label class="label-text" for="username">Username</label>
-                <input type="text" placeholder="" class="input" id="username" />
+                <input type="text" placeholder="" class="input" id="username" readonly />
             </div>
             <div class="w-96">
-                <label class="label-text" for="password">Password</label>
-                <input type="text" placeholder="" class="input" id="password" />
+                <label class="label-text" for="password">Mật khẩu</label>
+                <input type="password" placeholder="" class="input" id="password" />
+            </div>
+            <div class="w-96">
+                <label class="label-text" for="confirm-password">Xác nhận mật khẩu</label>
+                <input type="password" placeholder="" class="input" id="confirm-password" />
             </div>
             <div class="w-96">
                 <label class="label-text" for="select-doituong">Mã đối tượng</label>

@@ -126,7 +126,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateAccount') {
         exit;
     }
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-    $isSuccess = $accountModel->updateUsernameAndPassword($tk_id, $hashedPassword,);
+    $isSuccess = $accountModel->updatePassword($tk_id, $hashedPassword,);
     if ($isSuccess) {
         echo json_encode([
             'status' => 'success',
