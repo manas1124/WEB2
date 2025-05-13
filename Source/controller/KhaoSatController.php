@@ -116,15 +116,33 @@ if (isset($_POST['func'])) {
             $response = $arr[0]["ctdt_id"]; // tra ve ctdt tim duoc
 
             break;
-        case "deleteKs" : 
-            $id = $_POST['id'];
-            $response = $ksModel->delete($id);
+        case "deleteKs" :
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'delete.survey');
+                $isCreateKsSuccess = false;
+                if ($isVaid) {
+                    $id = $_POST['id'];
+                    $response = $ksModel->delete($id);
+                } else {
+                    echo json_encode([
+                        "status" => "error",
+                        "message" => "chưa có đăng nhập hoặc không lấy được accessToken trong session :".$_SESSION['accessToken']
+                    ]);
+                    exit;
+                }
+            }
             break;
         case "getSurveyFieldAndQuestion":
             $id = $_POST['id'];
             $response = json_decode($surveyModel->getsurveyFieldAndQuestion($id));
             break;
         case "updateKhaoSat":
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'edit.survey');
+                $isCreateKsSuccess = false;
+                if ($isVaid) {
             $data = $_POST['data'];
             $data = json_decode($data, true);
             $isUpdateSuccess = $ksModel->update(
@@ -157,8 +175,21 @@ if (isset($_POST['func'])) {
                 
             }
             $response = $isUpdateSuccess;
+            } else {
+                    echo json_encode([
+                        "status" => "error",
+                        "message" => "chưa có đăng nhập hoặc không lấy được accessToken trong session :".$_SESSION['accessToken']
+                    ]);
+                    exit;
+                }
+            }
             break;
         case "updateTrangThaiSuDungKhaoSat":
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'delete.survey');
+                $isCreateKsSuccess = false;
+                if ($isVaid) {
             $ksId = $_POST['ks-id'];
             $suDungStatus = $_POST['su-dung-status'];
 
@@ -187,6 +218,13 @@ if (isset($_POST['func'])) {
                     'status' => 'error',
                     'message' => 'Lỗi cập nhật trạng thái sử dụng',
                 ]);
+            }} else {
+                    echo json_encode([
+                        "status" => "error",
+                        "message" => "chưa có đăng nhập hoặc không lấy được accessToken trong session :".$_SESSION['accessToken']
+                    ]);
+                    exit;
+                }
             }
             break;
         case "getAllKhaoSatFilter":

@@ -372,6 +372,10 @@ $(function () {
       const chuKi = $("#select-chu-ki").val();
       const loaiKs = $("#select-ks-type").val();
       const isSuDung = $("#select-su-dung").val();
+      const start = new Date(dateStart);
+      const end = new Date(dateEnd);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
       sections.forEach((section) => {
         const sectionName = section.querySelector("input").value;
@@ -422,6 +426,12 @@ $(function () {
           return false;
         } else if (chuKi == "-1") {
           alert("Vui lòng chọn chu kì");
+          return false;
+        } else if (start < today) {
+          alert("Ngày bắt đầu không được ở quá khứ.");
+          return false;
+        } else if (start > end) {
+          alert("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.");
           return false;
         }
         return true;

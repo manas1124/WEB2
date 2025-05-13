@@ -295,6 +295,10 @@ $(function () {
       const idNhomKs = selectedNhomKs.value;
       const dateStart = $("#begin").val();
       const dateEnd = $("#end").val();
+      const start = new Date(dateStart);
+      const end = new Date(dateEnd);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       const loaiTraLoi = $("#select-loai-tra-loi").val();
       const nganh = $("#select-nganh").val();
       const chuKi = $("#select-chu-ki").val();
@@ -342,9 +346,17 @@ $(function () {
         } else if (chuKi == "-1") {
           alert("Vui lòng chọn chu kì");
           return false;
+        } else if (start < today) {
+          alert("Ngày bắt đầu không được ở quá khứ.");
+          return false;
+        } else if (start > end) {
+          alert("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.");
+          return false;
         }
         return true;
       };
+
+
 
       if (isValideData()) {
         checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {

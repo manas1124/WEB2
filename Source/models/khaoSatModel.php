@@ -173,8 +173,8 @@ class KhaoSatModel
     {
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("UPDATE khao_sat SET su_dung = ? WHERE ks_id = ?");
-        $stmt ->bind_param("ii", $su_dung, $ks_id);
-         if ($stmt->execute()) {
+        $stmt->bind_param("ii", $su_dung, $ks_id);
+        if ($stmt->execute()) {
             return true;
         } else {
             return false;
@@ -339,6 +339,23 @@ class KhaoSatModel
             'totalPages' => $totalPages,
             'currentPage' => $page
         ];
+    }
+
+    public function capNhatTrangThaiSuDungTuDong()
+    {
+        $conn = $this->db->getConnection();
+        $sql = "UPDATE khao_sat SET su_dung = CASE
+               WHEN CURRENT_DATE >= ngay_bat_dau AND CURRENT_DATE <= ngay_ket_thuc THEN 1
+               WHEN CURRENT_DATE < ngay_bat_dau THEN 2
+               WHEN CURRENT_DATE > ngay_ket_thuc THEN 0
+            END";
+
+        // Thực thi câu lệnh SQL
+        if ($conn->query($sql)) {
+            return true;  // Thành công
+        } else {
+            return false;  // Thất bại
+        }
     }
 }
 

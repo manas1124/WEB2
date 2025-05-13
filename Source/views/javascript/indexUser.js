@@ -299,6 +299,27 @@ $(function () {
         updateContent(newParams);
     });
 
+    $("#btn-logout").click(function() {
+            $.ajax({
+                type: 'POST',
+                url: './controller/AuthController.php',
+                data: {
+                    action: 'logout'
+                },
+                success: function(response) {
+                    console.log(response);
+
+                    var data = JSON.parse(response);
+                    alert(data['message']); // Show the message from the server
+                    window.location.href = "./login.php";
+
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra khi gửi dữ liệu!');
+                }
+            });
+        })
+
     // Helper function to get URL parameters
     function getUrlParams() {
         let params = {};

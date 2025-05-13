@@ -200,7 +200,7 @@ if (isset($_POST['func'])) {
                 $isVaid = isAuthorization($accessToken, 'view.permission');
                 if ($isVaid) {
                     $id = $_POST['id'];
-                    $response = $accountModel->getQuyenById($id);
+                    $response = $quyenModel->getQuyenById($id);
                 } else {
                     $response = [
                         'status' => false,

@@ -18,17 +18,17 @@ echo '  <aside id="default-sidebar"
                             Khảo sát
                         </a>
                     </li>
-                    <li class="nav-menu view-progra hiddenm">
+                    <li class="nav-menu view-program hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="ctdtPage">
                             Chương trình đào tạo
                         </a>
                     </li>
-                    <li class="nav-menu view-progra hiddenm">
+                    <li class="nav-menu view-program hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="nganh">
                             Ngành
                         </a>
                     </li>
-                    <li class="nav-menu view-progra hiddenm">
+                    <li class="nav-menu view-program hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="chuky">
                             Chu kỳ
                         </a>
@@ -43,12 +43,12 @@ echo '  <aside id="default-sidebar"
                             Nhóm Khảo sát
                         </a>
                     </li>
-                    <li class="nav-menu view-accoun hiddent">
+                    <li class="nav-menu view-account hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="taiKhoanPage">
                             Tài khoản
                         </a>
                     </li>
-                    <li class="nav-menu view-permis hiddension">
+                    <li class="nav-menu view-permission hidden">
                         <a href="" class="nav-item nav-link text-nowrap" id="quyen-page" data-page="quyenPage">
                             Quyền
                         </a>

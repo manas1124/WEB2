@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../models/AccountModel.php';
 require_once __DIR__ . '/../utils/JwtUtil.php';
 require_once __DIR__ . '/../models/ObjectModel.php';
+require_once __DIR__ . '/../models/quyenModel.php';
+
 
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
@@ -159,10 +161,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'login') {
         $_SESSION['accessToken'] = $accessToken;
         $isSuccess = true;
     }
+    $quyenModel = new QuyenModel();
+    $quyen = $quyenModel->getQuyenById($account['quyen_id']);
     echo json_encode([
         'status' => $isSuccess ? 'success' : 'error',
         'message' => $isSuccess ? 'Đăng nhập thành công!' : 'Mật khẩu không đúng!',
-        'accessToken' => $isSuccess ? $accessToken : 'chưa có access token'
+        'accessToken' => $isSuccess ? $accessToken : 'chưa có access token',
+        'role' => $isSuccess ? $quyen['ten_quyen'] : 'error'
     ]);
 }
 
@@ -176,13 +181,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'logout') {
 }
 
 if (isset($_POST['func']) && $_POST['func'] == "getCurrentLoginUser") {
-    if (!isset($_SESSION['accessToken']) &&  $_SESSION['accessToken'] == "") {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Chưa đăng nhập để lấy thông tin tài khoản !',
-        ]);
-        exit;
-    }
+    // if (!isset($_SESSION['accessToken']) &&  $_SESSION['accessToken'] == "") {
+    //     echo json_encode([
+    //         'status' => 'error',
+    //         'message' => 'Chưa đăng nhập để lấy thông tin tài khoản !',
+    //     ]);
+    //     exit;
+    // }
 
 
 
