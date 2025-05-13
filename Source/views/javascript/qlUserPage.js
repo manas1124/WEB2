@@ -347,7 +347,13 @@ $(function () {
     let nganhId = $("#select-nganh").val() != -1 ? $("#select-nganh").val() : null;
     renderUser({ search: search, nhomKsId: nhomKsId, chuKyId: chuKyId, nganhId: nganhId });
   });
-
+  $("#btn-reset").on("click", function() {
+   $("#search").val("");
+  $("#nhom-ks-select").val(-1) // Sets it to the first option
+  $("#select-chu-ki").val(-1)
+  $("#select-nganh").val(-1)
+  resetSearchForm();
+});
   $("#download-excel-templat").on("click", function () {
     window.location.href = "./assets/sample_user.xlsx";
   });

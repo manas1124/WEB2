@@ -70,19 +70,22 @@
             </select>
         </div>
         <div class="w-50 flex flex-col">
-            <label class="font-bold ml-4 mr-2" for="select-nganh">Ngành </label>
+            <label class="font-bold ml-4 mr-2" for="select-nganh">Tất cả</label>
             <select class="p-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="select-nganh">
-                <option value="-1">Chọn ngành</option>
+                <option value="-1">Tất cả</option>
             </select>
         </div>
         <div class="w-50 flex flex-col ">
-            <label class="font-bold ml-4 mr-2" for="select-chu-ki">Chu kì</label>
+            <label class="font-bold ml-4 mr-2" for="select-chu-ki">Tất cả</label>
             <select class="p-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"id="select-chu-ki">
                 <option value="-1">Chọn chu kì</option>
             </select>
         </div>
         <div class="ml-4 relative">
-            <button id="btn-search" class="btn btn-primary absolute bottom-1 left-0">Lọc></button>
+            <button id="btn-search" class="btn btn-primary absolute bottom-1 left-0">Lọc</button>
+        </div>
+        <div class="ml-15 relative">
+            <button id="btn-reset" class="btn btn-soft btn-warning absolute bottom-1 left-0">Hủy</button>
         </div>
     </div>
 
