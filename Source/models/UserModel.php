@@ -11,8 +11,98 @@ class UserModel {
         $this->db = new MyConnection(); // Create a Database instance
     }
 
-   
-     public function getAllUser($search = '',$nhomKsId = '') {
+     public function getUserByPageNumber($page,$searchKeyWord = null,$nhomKsId= null, $chuKyId= null,$nganhId= null)
+    {
+        $limit = 6;
+
+        $conn = $this->db->getConnection();
+        $sql = "SELECT doi_tuong.* ,nks.ten_nks
+                FROM doi_tuong 
+                LEFT JOIN nhom_khao_sat nks ON doi_tuong.nhom_ks = nks.nks_id 
+                LEFT JOIN ctdt_daura  ON doi_tuong.ctdt_id = ctdt_daura.ctdt_id
+                where 1 = 1 ";
+
+        // Đếm tổng số dòng (để tính tổng số trang)
+        $countSql = "SELECT COUNT(*) as total FROM doi_tuong 
+                    LEFT JOIN nhom_khao_sat nks ON doi_tuong.nhom_ks = nks.nks_id 
+                    LEFT JOIN ctdt_daura  ON doi_tuong.ctdt_id = ctdt_daura.ctdt_id 
+                    where 1 = 1 ";
+        $params = [];
+        $types = "";
+        $status = 1;
+       
+        if ($status != null) {
+            $sql .= " AND doi_tuong.status = ?";
+
+            $countSql .= " AND doi_tuong.status = ?";
+            $params[] = $status;
+            $types .= "i";
+        }
+        if ($searchKeyWord != null) {
+            $sql .= " AND (doi_tuong.ho_ten LIKE ? OR doi_tuong.email LIKE ?)";
+
+            $countSql .= " AND (doi_tuong.ho_ten LIKE ? OR doi_tuong.email LIKE ?)";
+            $params[] = "%" . $searchKeyWord . "%";
+            $params[] = "%" . $searchKeyWord . "%";
+            $types .= "ss";
+        }
+        if ($nhomKsId != null) {
+            $sql .= " AND doi_tuong.nhom_ks = ? ";
+
+            $countSql .= " AND doi_tuong.nhom_ks = ? ";
+            $params[] = $nhomKsId;
+            $types .= "i";
+        }
+        if ($nganhId != null) {
+            $sql .= " AND ctdt_daura.nganh_id = ? ";
+
+            $countSql .= " AND ctdt_daura.nganh_id  = ? ";
+            $params[] = $nganhId;
+            $types .= "i";
+        }
+        if ($chuKyId != null) {
+            $sql .= " AND ctdt_daura.ck_id = ? ";
+
+            $countSql .= " AND ctdt_daura.ck_id  = ? ";
+            $params[] = $chuKyId;
+            $types .= "i";
+        }
+        $sql .= " ORDER BY dt_id DESC";
+        $countStmt = $conn->prepare($countSql);
+        if (!empty($params)) {
+            $countStmt->bind_param($types, ...$params);
+        }
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $totalRow = $countResult->fetch_assoc()['total'];
+        $totalPages = ceil($totalRow / $limit);
+        $page = max(1, $page);
+        $offset = ($page - 1) * $limit;
+        // Truy vấn dữ liệu trang hiện tại
+
+        $sql .= " LIMIT ?, ?";
+        $params[] = $offset;
+        $params[] = $limit;
+        $types .= "ii";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+        $finaldata = [
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'data' => $data
+        ];
+        return $finaldata;
+    }
+
+    public function getAllUser($search = '',$nhomKsId = '') {
         $conn = $this->db->getConnection();
        
         if ($nhomKsId != '') {
