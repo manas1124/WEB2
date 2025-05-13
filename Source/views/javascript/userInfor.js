@@ -48,19 +48,22 @@ async function renderPage() {
   $("#phone").val(user.dien_thoai);
 
   $("#submit-edit-account").on("click", () =>
-    submitEditAccount(account.userId)
+    submitEditAccount(account.userId,account.sub)
   );
 }
 $(function () {
+  console.log("resr")
+  backNormal();
   renderPage();
-});
-function submitEditAccount(tk_id) {
-  var username = $("#username").val();
+  $("#submit-edit-infor").on("click", submitEditPersonal);
+})();
+function submitEditAccount(tk_id,username) {
+  var previousPassword = $("#previousPassword").val();
   var password = $("#password").val();
   var confirmPassword = $("#confirm-pass").val();
 
-  if (username === "") {
-    alert("Vui lòng nhập tên đăng nhập.");
+  if (previousPassword === "") {
+    alert("Vui lòng nhập mật khẩu cũ.");
     return false;
   }
   if (password === "") {
@@ -75,13 +78,15 @@ function submitEditAccount(tk_id) {
     alert("Mật khẩu không khớp.");
     return false;
   }
+  console.log(username,previousPassword)
   $.ajax({
     type: "POST",
     url: "./controller/AuthController.php",
     data: {
       action: "updateAccount",
-      tk_id: tk_id,
       username: username,
+      tk_id: tk_id,
+      previousPassword: previousPassword,
       password: password,
     },
     success: function (response) {
@@ -147,10 +152,6 @@ function submitEditPersonal() {
     },
   });
 }
-
-$(function () {
-  $("#submit-edit-infor").on("click", submitEditPersonal);
-});
 
 function toggleEditInfor() {
   $("#submit-edit-infor").removeClass("hidden");

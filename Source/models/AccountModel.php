@@ -104,14 +104,14 @@ class AccountModel
         $stmt->bind_param("ssiiii", $username, $hashedPassword, $dt_id, $quyen_id, $status, $tk_id);
         return $stmt->execute();
     }
-    public function updateUsernameAndPassword($tk_id, $username, $hashedPassword)
+    public function updateUsernameAndPassword($tk_id, $hashedPassword)
     {
         $conn = $this->db->getConnection();
         $stmt = $conn->prepare("UPDATE tai_khoan 
-                                SET username = ?, password = ?
+                                SET password = ?
                                 WHERE tk_id = ?
     ");
-        $stmt->bind_param("ssi", $username, $hashedPassword, $tk_id);
+        $stmt->bind_param("si",  $hashedPassword, $tk_id);
         return $stmt->execute();
     }
     //hàm xoá , chuyển status về 0 thay vì xoá hết
