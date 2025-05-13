@@ -95,10 +95,10 @@ if (isset($_POST['func'])) {
             break;
 
         case "getUserById":
-            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
-                $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'view.target');
-                if ($isVaid) {
+            // if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+            //     $accessToken = $_SESSION['accessToken'];
+            //     $isVaid = isAuthorization($accessToken, 'view.target');
+            //     if ($isVaid) {
                     $id = isset($_POST["id"]) ? $_POST["id"] : null;
                     if ($id) {
                         $user = $ksModel->getUserById($id); // Gọi đến model để lấy dữ liệu
@@ -110,13 +110,13 @@ if (isset($_POST['func'])) {
                     } else {
                         $response = ['error' => 'Thiếu ID người dùng'];
                     }
-                } else {
-                    $response = [
-                        'status' => false,
-                        'message' => 'Bạn không có quyền để thực hiện việc này'
-                    ];
-                }
-            }
+            //     } else {
+            //         $response = [
+            //             'status' => false,
+            //             'message' => 'Bạn không có quyền để thực hiện việc này'
+            //         ];
+            //     }
+            // }
             break;
 
         case "updateUser":

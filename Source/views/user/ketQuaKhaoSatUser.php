@@ -32,7 +32,7 @@
             <button type="button" class="btn btn-primary h-10" id="btn-reset">Reset</button>
         </div>
     </div>
-    <div class="w-full overflow-x-auto h-[500]">
+    <div class="w-full overflow-x-auto min-h-[500px]">
         <table class="table-striped table">
             <thead>
                 <tr>

@@ -51,30 +51,8 @@
     <script src="./views/javascript/indexUser.js"></script>
     <script src="./views/javascript/survey.js"></script>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="Source/views/javascript/jquery-3.7.1.min.js"></script>
+    <script src="./views/javascript/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $("#btn-logout").click(function() {
-            $.ajax({
-                type: 'POST',
-                url: './controller/AuthController.php',
-                data: {
-                    action: 'logout'
-                },
-                success: function(response) {
-                    console.log(response);
-
-                    var data = JSON.parse(response);
-                    alert(data['message']); // Show the message from the server
-                    window.location.href = "./login.php";
-
-                },
-                error: function() {
-                    alert('Có lỗi xảy ra khi gửi dữ liệu!');
-                }
-            });
-        })
-    </script>
 </body>
 
 </html>
