@@ -51,11 +51,14 @@
             },
             success: function(response) {
                 console.log(response);
-
                 var data = JSON.parse(response);
                 alert(data['message']); // Show the message from the server
                 if (data["status"] !== 'error') {
-                    window.location.href = "./admin.php";
+                    if(data["role"] == 'Admin'){
+                        window.location.href = "./admin.php";
+                    } else {
+                        window.location.href = "./home.php";
+                    }
                 }
             },
             error: function() {
