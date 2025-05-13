@@ -51,7 +51,33 @@ if (isset($_POST['func'])) {
                 }
             }
             break;
-
+        case "getUserByPageNumber":
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.target');
+                if ($isVaid) {
+                    $pageNumber = isset($_POST['pageNumber']) ? $_POST['pageNumber'] : 1;
+                    $search = isset($_POST['search']) ? $_POST['search'] : null;
+                    $nhomKsId = isset($_POST['nhomKsId']) ? $_POST['nhomKsId'] : null;
+                    $chuKyId = isset($_POST['chuKyId']) ? $_POST['chuKyId'] : null;
+                    $nganhId = isset($_POST['nganhId']) ? $_POST['nganhId'] : null;                
+                    $result = $ksModel->getUserByPageNumber($pageNumber,$search, $nhomKsId,$chuKyId,$nganhId);
+                    echo json_encode([
+                        "status" => true,
+                        "currentPage" => $result["currentPage"],
+                        "totalPages" => $result["totalPages"],
+                        "userList" => $result["data"]
+                    ]);
+                    exit;
+                    
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
+            break;
         case "deleteUser":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];
