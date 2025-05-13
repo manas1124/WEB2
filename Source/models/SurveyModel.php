@@ -9,7 +9,22 @@ class SurveyModel
         $this->db = new MyConnection();
     }
 
+    public function isExistUserDaLamKhaoSat($user_id, $ks_id)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM kq_khao_sat WHERE nguoi_lamks_id = ? and ks_id = ? ");
+        $stmt->bind_param("ss", $user_id, $ks_id);
 
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0 ) {
+            return true; 
+        } else {
+            return false; 
+        }
+
+    }
     public function getAllSurveys()
     {
         $conn = $this->db->getConnection();
