@@ -64,7 +64,7 @@ async function loadAllTaiKhoan() {
         <tr>
           <td>${item.tk_id}</td>
           <td>${item.username}</td>
-          <td>${item.quyen_id}</td>
+          <td>${item.ten_quyen}</td>
           <td class="text-center">
             ${statusBadge}
           </td>

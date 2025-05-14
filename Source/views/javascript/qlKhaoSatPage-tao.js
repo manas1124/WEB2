@@ -79,15 +79,22 @@ async function createKhaoSat(formData) {
       processData: false,
       dataType: "json",
     });
-    if (response.status === 'error') {
-      console.log(response)
-      alert("Lỗi tạo khảo sát phía server: " + response.message );
-      return response; 
+    if (response.status === "error") {
+      console.log(response);
+      Swal.fire({
+            title: "Thông báo",
+            html: response.message,
+            icon: "warning",
+        });
+      return response;
     }
-    if ( response.status == "success") {
-        alert("Tạo khảo sát thành công");
-        $("#khao-sat-page").trigger("click");
-        
+    if (response.status == "success") {
+      Swal.fire({
+            title: "Thông báo",
+            html: "Tạo khảo sát thành công!",
+            icon: "success",
+        });
+      $("#khao-sat-page").trigger("click");
     }
     return response;
   } catch (error) {
@@ -130,6 +137,7 @@ $(function () {
     link.href = excelFilePath;
     link.download = "example_survey_format.xlsx"; // Specify the downloaded filename
 
+    $("#input-file-survery-content").removeAttr("disabled");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link); // Clean up
@@ -323,45 +331,55 @@ $(function () {
           questions: questions,
         });
       });
-
       let isValideData = () => {
+        let messages = [];
+
         if (tenKhaoSat == "") {
-          alert("Vui lòng nhập tên bài khảo sát");
-          return false;
-        } else if (idNhomKs == "-1") {
-          alert("Vui lòng chọn nhóm bài khảo sát");
-          return false;
-        } else if (dateStart == "") {
-          alert("Vui lòng chọn ngày bắt đầu");
-          return false;
-        } else if (dateEnd == "") {
-          alert("Vui lòng chọn ngày kết thúc");
-          return false;
-        } else if (loaiTraLoi == "-1") {
-          alert("Vui lòng chọn loại trả lời");
-          return false;
-        } else if (nganh == "-1") {
-          alert("Vui lòng chọn ngành");
-          return false;
-        } else if (chuKi == "-1") {
-          alert("Vui lòng chọn chu kì");
-          return false;
-        } else if (start < today) {
-          alert("Ngày bắt đầu không được ở quá khứ.");
-          return false;
-        } else if (start > end) {
-          alert("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.");
+          messages.push("Vui lòng nhập tên bài khảo sát");
+        }
+        if (idNhomKs == "-1") {
+          messages.push("Vui lòng chọn nhóm bài khảo sát");
+        }
+        if (dateStart == "") {
+          messages.push("Vui lòng chọn ngày bắt đầu");
+        }
+        if (dateEnd == "") {
+          messages.push("Vui lòng chọn ngày kết thúc");
+        }
+        if (loaiTraLoi == "-1") {
+          messages.push("Vui lòng chọn loại trả lời");
+        }
+        if (nganh == "-1") {
+          messages.push("Vui lòng chọn ngành");
+        }
+        if (chuKi == "-1") {
+          messages.push("Vui lòng chọn chu kì");
+        }
+        if (start < today) {
+          messages.push("Ngày bắt đầu không được ở quá khứ.");
+        }
+        if (start > end) {
+          messages.push("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.");
+        }
+
+        if (messages.length > 0) {
+          Swal.fire({
+            title: "Thông báo",
+            html: messages[0],
+            icon: "warning",
+          });
           return false;
         }
         return true;
       };
-
-
-
       if (isValideData()) {
         checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {
           if (isExistCtdt == -1) {
-            alert("Không có chương trình đào tạo thuộc ngành, chu kì này");
+            Swal.fire({
+            title: "Thông báo",
+            html: "Không có chương trình đào tạo thuộc ngành, chu kì này",
+            icon: "warning",
+        });
             return;
           }
 

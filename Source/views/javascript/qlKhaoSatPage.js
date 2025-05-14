@@ -3,12 +3,12 @@ function test() {
   console.log("test2");
 }
 
-async function getKhaoSatByPageNumber(page = 1,keyword = null) {
+async function getKhaoSatByPageNumber(page = 1, keyword = null) {
   try {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "getKhaoSatByPageNumber", number: page, keyword:keyword },
+      data: { func: "getKhaoSatByPageNumber", number: page, keyword: keyword },
       dataType: "json",
     });
     console.log("fect", response);
@@ -20,26 +20,42 @@ async function getKhaoSatByPageNumber(page = 1,keyword = null) {
   }
 }
 async function deleteKs(id) {
-  console.log("de", id);
-  try {
-    const response = await $.ajax({
-      url: "./controller/KhaoSatController.php",
-      type: "POST",
-      data: { func: "deleteKs", id: id },
-      dataType: "json",
-    });
-    if (response) {
-      alert("xóa khảo sát thành công");
-      $("#khao-sat-page").trigger("click");
-    } else {
-      alert("xóa khảo sát thất bại");
+  const result = await Swal.fire({
+    title: "Thông báo",
+    html: "Chắc chắn xóa ?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Xác nhận",
+    cancelButtonText: "Hủy",
+    reverseButtons: true,
+  });
+
+  if (result.isConfirmed) {
+    try {
+      const response = await $.ajax({
+        url: "./controller/KhaoSatController.php",
+        type: "POST",
+        data: { func: "deleteKs", id: id },
+        dataType: "json",
+      });
+      if (response) {
+        Swal.fire("Thông báo", "Xóa khảo sát thành công", "success").then(() => {
+          $("#khao-sat-page").trigger("click");
+        });
+      } else {
+        Swal.fire("Thông báo", "Xóa khảo sát thất bại", "error");
+      }
+      return response;
+    } catch (error) {
+      console.log("loi xoa khao sat ", error);
+      Swal.fire("Thông báo", "Có lỗi xảy ra trong quá trình xóa", "error");
+      return null;
     }
-    return response;
-  } catch (error) {
-    console.log("loi xoa khao sat ");
-    return null;
+  } else {
+    return false;
   }
 }
+
 async function getKhaoSatById() {
   try {
     const response = await $.ajax({
@@ -65,7 +81,7 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
       0: '<span class="badge badge-soft badge-error ">Kết thúc</span>',
       1: '<span class="badge badge-soft badge-success ">Đang thực hiện</span>',
       2: '<span class="badge badge-soft badge-warning ">Chưa bắt đầu</span>',
-    }
+    };
     $("#ks-list").empty();
     $("#pagination").empty();
     if (ksList != null) {
@@ -76,12 +92,12 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
                 <td class="text-center">${item.ngay_bat_dau}</td>
                 <td class="text-center">${item.ngay_ket_thuc}</td>
                 <td class="text-center">
-                  ${surveyUsedStatus[item.su_dung] }
+                  ${surveyUsedStatus[item.su_dung]}
                 </td>
                 <td>
                 <button class="action-item btn btn-circle btn-text btn-sm view-survey hidden" data-act="ks-chi-tiet" data-id="${
-                    item.ks_id
-                  }" aria-label="xem chi tiết"> <span class="icon-[solar--eye-linear] size-5"></span></button>
+                  item.ks_id
+                }" aria-label="xem chi tiết"> <span class="icon-[solar--eye-linear] size-5"></span></button>
                
                   <button class="action-item btn btn-circle btn-text btn-sm edit-survey hidden" data-act="ks-sua" data-id="${
                     item.ks_id
@@ -111,28 +127,32 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
   }
 }
 $("#btn-search-ks").on("click", function () {
-  let keyword = $("#input-search-ks").val()
-  renderAllKhaoSat(1,keyword);
-  $("#input-search-ks").val("")
-})
+  let keyword = $("#input-search-ks").val();
+  renderAllKhaoSat(1, keyword);
+  $("#input-search-ks").val("");
+});
 $(function () {
   renderAllKhaoSat();
 
   $("#pagination").on("click", ".btn-page", function () {
-    const currentPage = Number($("#pagination button[aria-current='page']").data("page"));
-        const selectedPage = Number($(this).data("page"));
-        const selectedValue = $("#select-status").val();
-        const status = selectedValue == -1 ? null : selectedValue;
-        console.log(currentPage)
-        console.log(selectedPage)
-        if (currentPage == selectedPage) {
-            return;
-        }
+    const currentPage = Number(
+      $("#pagination button[aria-current='page']").data("page")
+    );
+    const selectedPage = Number($(this).data("page"));
+    const selectedValue = $("#select-status").val();
+    const status = selectedValue == -1 ? null : selectedValue;
+    console.log(currentPage);
+    console.log(selectedPage);
+    if (currentPage == selectedPage) {
+      return;
+    }
     renderAllKhaoSat(selectedPage, status);
   });
 
   $("#pagination").on("click", ".btn-prev", function () {
-    let currentPage = Number($("#pagination button[aria-current='page']").data("page"));
+    let currentPage = Number(
+      $("#pagination button[aria-current='page']").data("page")
+    );
     if (currentPage == 1) {
       return;
     }
@@ -141,8 +161,10 @@ $(function () {
   });
 
   $("#pagination").on("click", ".btn-next", function () {
-    let currentPage = Number($("#pagination button[aria-current='page']").data("page"));
-    console.log("pre",currentPage)
+    let currentPage = Number(
+      $("#pagination button[aria-current='page']").data("page")
+    );
+    console.log("pre", currentPage);
     if (currentPage == $("#pagination .btn-page").length) {
       return;
     }
@@ -150,4 +172,3 @@ $(function () {
     renderAllKhaoSat(currentPage);
   });
 });
-

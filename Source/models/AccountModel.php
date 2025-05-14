@@ -70,10 +70,11 @@ class AccountModel
     public function getAllTaiKhoan()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT *
-                                FROM tai_khoan
-                                ");
-
+        $stmt = $conn->prepare("select *,quyen.ten_quyen 
+                            from tai_khoan 
+                            inner join quyen on tai_khoan.quyen_id = quyen.quyen_id 
+                            where tai_khoan.status = 1");
+                               
         if (!$stmt) {
             error_log("Prepare failed: " . $conn->error);
             return false;
