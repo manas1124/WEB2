@@ -182,12 +182,16 @@ function logout() {
             console.log(response);
 
             var data = JSON.parse(response);
-            alert(data['message']); // Show the message from the server
+            // alert(data['message']); // Show the message from the server
             window.location.href = "./logad.php";
             localStorage.clear();
         },
         error: function () {
-            alert('Có lỗi xảy ra khi gửi dữ liệu!');
+            Swal.fire({
+                title: 'Có lỗi xảy ra khi gửi dữ liệu!',
+                icon: 'error',
+                confirmButtonText: 'Đã hiểu'
+            });
         }
     });
 }
