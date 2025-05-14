@@ -414,10 +414,9 @@ $(function () {
                         text: "Bạn đã gửi khảo sát không thành công.",
                         icon: 'error',
                         showCancelButton: true,
-                        confirmButtonColor: '#d33',
+                        confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Thử lại',
-                        
+                        confirmButtonText: 'Thử lại'
                     });
             }
         });

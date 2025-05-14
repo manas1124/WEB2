@@ -258,6 +258,8 @@ $(document).on("click", '[id="tk-xoa"]', function () {
     showCancelButton: true,
     confirmButtonText: "Xóa",
     cancelButtonText: "Hủy",
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33'
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({

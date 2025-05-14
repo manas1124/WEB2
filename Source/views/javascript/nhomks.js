@@ -50,8 +50,9 @@ async function deletenks(id) {
             text: "Đã xóa nhóm khảo sát không thành công",
             icon: 'error',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
             confirmButtonText: 'Thử lại',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
           });
           
         } else {
@@ -62,6 +63,7 @@ async function deletenks(id) {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Đồng ý',
+            cancelButtonColor: '#d33'
           }).then(() => {
             location.reload(); 
           });
@@ -73,8 +75,9 @@ async function deletenks(id) {
             text: "Lỗi khi xoá người dùng",
             icon: 'error',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
             confirmButtonText: 'Thử lại',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
           });
         
       }
@@ -176,6 +179,7 @@ async function action(mode) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Đồng ý',
+        cancelButtonColor: '#d33'
       }).then(() => {
         closeModal();
         location.reload(); 
@@ -187,8 +191,9 @@ async function action(mode) {
         text: "Thêm nhóm khảo sát không thành công",
         icon: 'error',
         showCancelButton: true,
-        confirmButtonColor: '#d33',
         confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
       });
       closeModal();
       location.reload();
@@ -215,6 +220,7 @@ async function action(mode) {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Đồng ý',
+        cancelButtonColor: '#d33'
       }).then(() => {
         closeModal();
         location.reload(); 
@@ -226,8 +232,9 @@ async function action(mode) {
         text: "Cập nhật nhóm khảo sát không thành công",
         icon: 'error',
         showCancelButton: true,
-        confirmButtonColor: '#d33',
         confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
       });
 
       console.error(" Lỗi khi cập nhật:", result);

@@ -7,10 +7,11 @@ $('#loginForm').on('submit', function (e) {
             title: 'Thông báo',
             text: "Tên đăng nhập hoặc mật khẩu không được để trống!",
             icon: 'warning',
-            confirmButtonText: 'Thử lại'
+            confirmButtonText: 'Thử lại',
+            confirmButtonColor: '#3085d6'
         });
         return;
-     }
+    }
     $.ajax({
         type: 'POST',
         url: './controller/AuthController.php',
@@ -30,12 +31,11 @@ $('#loginForm').on('submit', function (e) {
                     title: 'Đăng nhập thành công',
                     text: " Đang chuyển hướng...",
                     icon: 'success',
-                    showCancelButton: true,
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Đăng xuất',
+                    confirmButtonText: 'Tiếp tục',
                 }).then((result) => {
                     window.location.href = "./home.php";
-                    
+
                 });
             }
             else {
@@ -76,7 +76,7 @@ $('#signUpForm').on('submit', function (e) {
         ctdt: $('#signUpForm #cbxChuongTrinhDaoTao').val(),
         doiTuong: $('#signUpForm #cbxDoiTuong').val()
     };
-    if (!vadlidate(data)) {
+    if (!validate(data)) {
         return;
     }
 
@@ -107,7 +107,7 @@ $('#signUpForm').on('submit', function (e) {
                     title: 'Đăng kí thành công',
                     text: " Bây giờ bạn có thể đăng nhập",
                     icon: 'success',
-                    showCancelButton: true,
+                    showCancelButton: false,
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Đăng nhập ngay',
                 }).then((result) => {
@@ -121,9 +121,9 @@ $('#signUpForm').on('submit', function (e) {
                     title: 'Đăng kí thất bại',
                     text: data.message,
                     icon: 'error',
-                    showCancelButton: true,
+                    showCancelButton: false,
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Thử lại',
+                    confirmButtonText: 'Thử lại'
                 });
             }
 
@@ -139,55 +139,72 @@ $('#signUpForm').on('submit', function (e) {
     });
 });
 
-function vadlidate(data) {
+function validate(data) {
     let message = '';
-    if (data.username == "") {
+
+    // Kiểm tra tên đăng nhập
+    if (!data.username || data.username.trim() === '') {
         message = "Tên đăng nhập không được để trống!";
-    }
-    else if (/\s/.test(data.username) == true ) {
+    } else if (/\s/.test(data.username)) {
         message = "Tên đăng nhập không được có khoảng trắng!";
-    }
-    else if (data.password == "") {
-        message = "Mật khẩu không được để trống!";
-    }
-    else if (data.passwordConfirm == "") {
-        message = "Mật khẩu xác nhận không được để trống!";
-    }
-    else if (data.password != data.passwordConfirm) {
-        message = "Mật khẩu không trùng khớp!";
-    }
-    else if (data.fullName == "") {
-        message = "Họ tên không được để trống!";
-    }
-    else if (data.phone == "") {
-        message = "Số điện thoại không được để trống!";
-    }
-    else if (data.email == "") {
-        message = "Email không được để trống!";
-    }
-    else if (data.address == "") {
-        message = "Địa chỉ không được để trống!";
-    }
-    else if (data.address.match(/[^\p{L}\p{N}\s]/u)) {
-        message = "Địa chỉ không được có kí tự đặc biệt!";
-    }
-    else if (data.ctdt == "") {
-        message = "Vui lòng chọn chương trình đào tạo !";
-    }
-    else if (data.doiTuong == "") {
-        message = "Vui lòng chọn đối tượng !";
-    }
-    // username không được có kí tự đặc biệt 
-    else if (data.username.match(/[^a-zA-Z0-9]/)) {
+    } else if (/[^a-zA-Z0-9]/.test(data.username)) {
         message = "Tên đăng nhập không được có kí tự đặc biệt!";
     }
-    else if (data.phone.match(/[^0-9]/)) {
-        message = "Số điện thoại không được có kí tự đặc biệt!";
+
+    // Kiểm tra mật khẩu
+    else if (!data.password || data.password.trim() === '') {
+        message = "Mật khẩu không được để trống!";
     }
-    else if (data.phone.length < 10 || data.phone[0] != 0) {
+
+    // Kiểm tra xác nhận mật khẩu
+    else if (!data.passwordConfirm || data.passwordConfirm.trim() === '') {
+        message = "Mật khẩu xác nhận không được để trống!";
+    } else if (data.password !== data.passwordConfirm) {
+        message = "Mật khẩu không trùng khớp!";
+    }
+
+    // Kiểm tra họ tên
+    else if (!data.fullName || data.fullName.trim() === '') {
+        message = "Họ tên không được để trống!";
+    } else if (/[^a-zA-ZÀ-Ỹà-ỹ\s]/.test(data.fullName.trim())) {
+        message = "Họ tên không được chứa số!";
+    }
+
+
+    // Kiểm tra số điện thoại
+    else if (!data.phone || data.phone.trim() === '') {
+        message = "Số điện thoại không được để trống!";
+    } else if (/[^0-9]/.test(data.phone)) {
+        message = "Số điện thoại không được có kí tự đặc biệt!";
+    } else if (data.phone.length !== 10 || !data.phone.startsWith('0')) {
         message = "Số điện thoại phải gồm 10 số và bắt đầu bằng 0!";
     }
-    if (message != '') {
+
+    // Kiểm tra email
+    else if (!data.email || data.email.trim() === '') {
+        message = "Email không được để trống!";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
+        message = "Email không đúng định dạng!";
+    }
+
+    // Kiểm tra địa chỉ
+    else if (!data.address || data.address.trim() === '') {
+        message = "Địa chỉ không được để trống!";
+    } else if (data.address.match(/[^\p{L}\p{N}\s,.-]/u)) {
+        message = "Địa chỉ không được có kí tự đặc biệt!";
+    }
+
+    // Kiểm tra chương trình đào tạo
+    else if (!data.ctdt || data.ctdt.trim() === '') {
+        message = "Vui lòng chọn chương trình đào tạo!";
+    }
+
+    // Kiểm tra đối tượng
+    else if (!data.doiTuong || data.doiTuong.trim() === '') {
+        message = "Vui lòng chọn đối tượng!";
+    }
+
+    if (message !== '') {
         Swal.fire({
             title: 'Thông báo',
             text: message,
@@ -196,6 +213,7 @@ function vadlidate(data) {
         });
         return false;
     }
+
     return true;
 }
 
@@ -322,7 +340,7 @@ $(function () {
                 }).then((result) => {
                     location.href = "./home.php";
                 });
-                
+
 
             }
         });
@@ -398,7 +416,8 @@ $(function () {
                         Swal.fire({
                             title: 'Có lỗi xảy ra khi gửi dữ liệu!',
                             icon: 'error',
-                            confirmButtonText: 'Đã hiểu'
+                            confirmButtonText: 'Đã hiểu',
+                            confirmButtonColor: '#3085d6'
                         });
                     }
                 });

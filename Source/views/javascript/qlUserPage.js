@@ -346,8 +346,9 @@ $(function () {
             text: "Bạn đã gửi khảo sát không thành công.",
             icon: 'error',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
             confirmButtonText: 'Thử lại',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
           });
         }
       },
@@ -357,8 +358,9 @@ $(function () {
                         text: "Bạn đã gửi khảo sát không thành công.",
                         icon: 'error',
                         showCancelButton: true,
-                        confirmButtonColor: '#d33',
                         confirmButtonText: 'Thử lại',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33'
                         
                     });
       },
