@@ -26,8 +26,7 @@ Class NhomKsModel {
     }
     public function addNhomks($ten_Nks) {
         $conn = $this->db->getConnection();
-    
-        $stmt = $conn->prepare("INSERT INTO nhom_khao_sat (ten_nks) VALUES (?)");
+        $stmt = $conn->prepare("INSERT INTO nhom_khao_sat (ten_nks,status) VALUES (?,1)");
         $stmt->bind_param(
             "s",  $ten_Nks);
         
