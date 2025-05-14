@@ -35,7 +35,7 @@ async function getUserById(id) {
 async function renderPage() {
   const account = await getCurrentLoginAcount();
   if (account == null) {
-    window.location.href = "/Source/login.php";
+    window.location.href = "./login.php";
     return;
   }
   const user = await getUserById(account.dtId);
