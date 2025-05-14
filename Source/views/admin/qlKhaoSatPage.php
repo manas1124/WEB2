@@ -1,3 +1,4 @@
+<div class="flex w-full justify-center">
 <div id="ctdt-content" class="container h-full">
     <h1>Tìm kiếm bài khảo sát</h1>
     <div class="flex items-center justify-between mb-4">
@@ -15,7 +16,7 @@
     </div>
 
     <div class="w-full overflow-x-auto h-[400px] ">
-        <table class="table ">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th class="w-2/5 text-center">Tên bài khảo sát</th>
@@ -48,4 +49,6 @@
     <div id="pagination" class="flex justify-center space-x-3 mt-3"></div>
 
 </div>
+</div>
 <script src="views/javascript/qlKhaoSatPage.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

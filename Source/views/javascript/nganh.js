@@ -67,7 +67,7 @@ function renderPagination(totalPages, currentPage) {
 
     $("#pagination").empty();
 
-    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><<</button><div class="flex items-center gap-x-1">`);
+    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><</button><div class="flex items-center gap-x-1">`);
 
     for (let i = 1; i <= totalPages; i++) {
         let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
@@ -76,7 +76,7 @@ function renderPagination(totalPages, currentPage) {
         `);
     }
 
-    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">>></button>`);
+    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">></button>`);
 }
 
 function create() {
@@ -171,31 +171,43 @@ function update() {
 }
 
 function toggleStatus(nganh_id) {
-    $.ajax({
-        url: "./controller/nganhController.php",
-        type: "GET",
-        dataType: "json",
-        data: {
-            func: "toggleStatus",
-            nganh_id: nganh_id,
-        },
-        success: function (response) {
-            if (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Đổi trạng thái thành công!',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-                const txtSearch = $("#search-keyword").val().trim();
-                    const selectedValue = $("#select-status").val();
-                    const status = selectedValue == -1 ? null : selectedValue;
-                loadAllNganh(1, status, txtSearch);
-            }
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn thay đổi trạng thái không?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Có, thay đổi ngay',
+        cancelButtonText: 'Không',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "./controller/nganhController.php",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    func: "toggleStatus",
+                    nganh_id: nganh_id,
+                },
+                success: function (response) {
+                    if (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Đổi trạng thái thành công!',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        const txtSearch = $("#search-keyword").val().trim();
+                        const selectedValue = $("#select-status").val();
+                        const status = selectedValue == -1 ? null : selectedValue;
+                        loadAllNganh(1, status, txtSearch);
+                    }
 
-        },
-        error: function (error) {
-            console.error("Error loading form sua:", error);
+                },
+                error: function (error) {
+                    console.error("Error loading form sua:", error);
+                }
+            });
         }
     });
 }
@@ -230,7 +242,9 @@ $(document).ready(function () {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Có, sửa ngay',
-            cancelButtonText: 'Không'
+            cancelButtonText: 'Không',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
         }).then((result) => {
             if (result.isConfirmed) {
                 update(); // Gọi hàm cập nhật khi xác nhận
@@ -249,7 +263,7 @@ $(document).ready(function () {
         const txtSearch = $("#search-keyword").val().trim();
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        loadAllNganh(1, status, txtSearch); 
+        loadAllNganh(1, status, txtSearch);
     });
 
     $("#btn-reset").on("click", function () {
@@ -257,7 +271,7 @@ $(document).ready(function () {
         const txtSearch = $("#search-keyword").val().trim();
         loadAllNganh(1, null, txtSearch);
     });
-    
+
 
     $("#pagination").on("click", ".btn-page", function () {
         const currentPage = Number($("#pagination button[aria-current='page']").data("page"));

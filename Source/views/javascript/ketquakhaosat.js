@@ -118,16 +118,16 @@ function renderPagination(totalPages, currentPage) {
 
     $("#pagination").empty();
 
-    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><<</button><div class="flex items-center gap-x-1">`);
+    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><</button><div class="flex items-center gap-x-1">`);
 
-    for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+    for (let i = 1; i <= totalPages; i++) {
         let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
         $("#pagination").append(`
             <button type="button" class="btn btn-text btn-square aria-[current='page']:text-bg-primary btn-page" data-page="${i}" ${activeClass}>${i}</button>
         `);
     }
 
-    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">>></button>`);
+    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">></button>`);
 }
 
 async function getAllChuky() {
@@ -184,7 +184,7 @@ async function getAllNhomKhaoSat() {
 async function loadAllNhomKhaoSat() {
     const response = await getAllNhomKhaoSat();
     $("#select-nhom").empty();
-    $("#select-nhom").append(`<option value="-1">Chọn nhóm khảo sát</option>`);
+    $("#select-nhom").append(`<option value="-1">Tất cả</option>`);
     if (response) {
         response.forEach(item => {
             $("#select-nhom").append(`<option value="${item.nks_id}">${item.ten_nks}</option>`);
@@ -195,7 +195,7 @@ async function loadAllNhomKhaoSat() {
 async function loadAllNganh() {
     const response = await getAllNganh();
     $("#select-nganh").empty();
-    $("#select-nganh").append(`<option value="-1">Chọn ngành</option>`);
+    $("#select-nganh").append(`<option value="-1">Tất cả</option>`);
     if (response) {
         response.forEach(item => {
             $("#select-nganh").append(`<option value="${item.nganh_id}">${item.ten_nganh}</option>`);
@@ -207,7 +207,7 @@ async function loadAllChuky() {
     const response = await getAllChuky();
     console.log(response);
     $("#select-chuky").empty();
-    $("#select-chuky").append(`<option value="-1">Chọn chu kỳ</option>`);
+    $("#select-chuky").append(`<option value="-1">Tất cả</option>`);
     if (response) {
         response.forEach(item => {
             $("#select-chuky").append(`<option value="${item.ck_id}">${item.ten_ck}</option>`);
@@ -348,33 +348,33 @@ $(function () {
     });
 
     $("#pagination").on("click", ".btn-prev", function () {
-        const currentPage = Number($("#pagination .btn-page[aria-current='page']").data("page"));
+        let currentPage = Number($("#pagination .btn-page[aria-current='page']").data("page"));
         if (currentPage == 1) {
             return;
         }
         const filters = getFilterData();
-        const selectedPage = currentPage - 1;
-        loadDsKhaoSat(selectedPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
+        currentPage -= 1;
+        loadDsKhaoSat(currentPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
     });
 
     $("#pagination").on("click", ".btn-next", function () {
-        const currentPage = Number($("#pagination .btn-page[aria-current='page']").data("page"));
-        if (currentPage == $("#pagination .btn-page]").length) {
+        let currentPage = Number($("#pagination .btn-page[aria-current='page']").data("page"));
+        if (currentPage == $("#pagination .btn-page").length) {
             return;
         }
         const filters = getFilterData();
-        const selectedPage = currentPage + 1;
-        loadDsKhaoSat(selectedPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
+        currentPage += 1;
+        loadDsKhaoSat(currentPage, filters.txt_search, filters.ngay_bat_dau, filters.ngay_ket_thuc, filters.nks_id, filters.nganh, filters.chuky);
     });
 
     $("#form-send-mail").on("submit", function (e) {
-        e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+        e.preventDefault(); 
         const objectSelect = $("#nhom-ks-select-modal").val();
         const subject = $("input[name='subject-text']").val();
         const body = $("textarea[name='body-text']").val();
-        const file = $("#file-attachment")[0].files[0]; // file đính kèm
+        const file = $("#file-attachment")[0].files[0]; 
         console.log(objectSelect, subject, body, file);
-        // Tạo FormData để gửi cả dữ liệu văn bản và file
+        
         const formData = new FormData();
         formData.append("objectSelect", objectSelect);
         formData.append("subject", subject);
@@ -389,19 +389,35 @@ $(function () {
             method: "POST",
             dataType: "json",
             data: formData,
-            processData: false, // 🔥 bắt buộc khi gửi FormData
-            contentType: false, // 🔥 bắt buộc khi gửi file
+            processData: false, 
+            contentType: false, 
 
             success: function (response) {
                 const data = JSON.parse(response);
                 if (data.status === "success") {
+                    Swal.fire({
+                        title: 'Thành công',
+                        text: "Bạn đã gửi khảo sát thành công.",
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Đồng ý',
+                       
+                    });
                     $("#slide-down-animated-modal").addClass("hidden");
                 }
-                alert(data.message);
-
             },
             error: function (err) {
-                console.error("Gửi thất bại", err);
+                Swal.fire({
+                        title: 'Thất bại',
+                        text: "Bạn đã gửi khảo sát không thành công.",
+                        icon: 'error',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Thử lại'
+                    });
             }
         });
     });

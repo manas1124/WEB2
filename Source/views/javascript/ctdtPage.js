@@ -106,7 +106,7 @@ function renderPagination(totalPages, currentPage) {
 
     $("#pagination").empty();
 
-    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><<</button><div class="flex items-center gap-x-1">`);
+    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev" data-page="${currentPage}"><</button><div class="flex items-center gap-x-1">`);
 
     for (let i = 1; i <= totalPages; i++) {
         let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
@@ -115,13 +115,13 @@ function renderPagination(totalPages, currentPage) {
         `);
     }
 
-    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">>></button>`);
+    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next" data-page="${currentPage}">></button>`);
 }
 
 async function loadAllNganh() {
     const response = await getAllNganh();
     $("#select-nganh").empty();
-    $("#select-nganh").append(`<option value="-1">Chọn ngành</option>`);
+    $("#select-nganh").append(`<option value="-1">Tất cả</option>`);
     if (response) {
         response.forEach(item => {
             $("#select-nganh").append(`<option value="${item.nganh_id}">${item.ten_nganh}</option>`);
@@ -133,7 +133,7 @@ async function loadAllChuky() {
     const response = await getAllChuky();
     console.log(response);
     $("#select-chuky").empty();
-    $("#select-chuky").append(`<option value="-1">Chọn chu kỳ</option>`);
+    $("#select-chuky").append(`<option value="-1">Tất cả</option>`);
     if (response) {
         response.forEach(item => {
             $("#select-chuky").append(`<option value="${item.ck_id}">${item.ten_ck}</option>`);
@@ -249,54 +249,66 @@ function update() {
 }
 
 function toggleStatus(ctdt_id) {
-    $.ajax({
-        url: "./controller/CTDTController.php",
-        type: "GET",
-        dataType: "json",
-        data: {
-            func: "toggleStatus",
-            ctdt_id: ctdt_id,
-        },
-        success: function (response) {
-            if (!response.status) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi',
-                    text: response.message,
-                    timer: 2000
-                });
-            }
-            else {
-                if (response.data) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Đã lưu thay đổi!',
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                    const txt_search = $("#search-keyword").val().trim();
-                    const selectedNganh = $("#select-nganh").val();
-                    const nganh = selectedNganh == -1 ? null : selectedNganh;
-                    const selectedChuky = $("#select-chuky").val();
-                    const chuky = selectedChuky == -1 ? null : selectedChuky;
-                    const selectedLoai = $("#select-loai").val();
-                    const loai = selectedLoai == -1 ? null : selectedLoai;
-                    const selectedStatus = $("#select-status").val();
-                    const status = selectedStatus == -1 ? null : selectedStatus;
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn thay đổi trạng thái không?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Có, thay đổi ngay',
+        cancelButtonText: 'Không',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "./controller/CTDTController.php",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    func: "toggleStatus",
+                    ctdt_id: ctdt_id,
+                },
+                success: function (response) {
+                    if (!response.status) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: response.message,
+                            timer: 2000
+                        });
+                    }
+                    else {
+                        if (response.data) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Đã lưu thay đổi!',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            const txt_search = $("#search-keyword").val().trim();
+                            const selectedNganh = $("#select-nganh").val();
+                            const nganh = selectedNganh == -1 ? null : selectedNganh;
+                            const selectedChuky = $("#select-chuky").val();
+                            const chuky = selectedChuky == -1 ? null : selectedChuky;
+                            const selectedLoai = $("#select-loai").val();
+                            const loai = selectedLoai == -1 ? null : selectedLoai;
+                            const selectedStatus = $("#select-status").val();
+                            const status = selectedStatus == -1 ? null : selectedStatus;
 
-                    loadAllCTDT(1, nganh, chuky, loai, status, txt_search);
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Lưu thay đổi thất bại!'
-                    });
+                            loadAllCTDT(1, nganh, chuky, loai, status, txt_search);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: 'Lưu thay đổi thất bại!'
+                            });
+                        }
+                    }
+
+                },
+                error: function (error) {
+                    console.error("Error loading form sua:", error);
                 }
-            }
-
-        },
-        error: function (error) {
-            console.error("Error loading form sua:", error);
+            });
         }
     });
 }
@@ -363,7 +375,9 @@ $(document).ready(async function () {
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Có, sửa ngay',
-                cancelButtonText: 'Không'
+                cancelButtonText: 'Không',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
                     update();
@@ -429,7 +443,7 @@ $(document).ready(async function () {
     });
 
     $("#pagination").on("click", ".btn-prev", function () {
-        const currentPage = Number($("#pagination .btn-prev[aria-current='page']").data("page"));
+        let currentPage = Number($(this).data("page"));
         if (currentPage == 1) {
             return;
         }
@@ -441,14 +455,14 @@ $(document).ready(async function () {
         const loai = selectedLoai == -1 ? null : selectedLoai;
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
-        const selectedPage = currentPage + 1;
-        console.log(selectedPage, nganh, chuky, loai, status);
-        loadAllCTDT(selectedPage, nganh, chuky, loai, status);
+        currentPage -= 1;
+        console.log(currentPage, nganh, chuky, loai, status);
+        loadAllCTDT(currentPage, nganh, chuky, loai, status);
     });
 
     $("#pagination").on("click", ".btn-next", function () {
-        const currentPage = Number($("#pagination .btn-next[aria-current='page']").data("page"));
-        if (currentPage == $("#pagination .btn-page]").length) {
+        let currentPage = Number($(this).data("page"));
+        if (currentPage == $("#pagination .btn-page").length) {
             return;
         }
         const selectedNganh = $("#select-nganh").val();
@@ -459,8 +473,8 @@ $(document).ready(async function () {
         const loai = selectedLoai == -1 ? null : selectedLoai;
         const selectedStatus = $("#select-status").val();
         const status = selectedStatus == -1 ? null : selectedStatus;
-        const selectedPage = currentPage + 1;
-        console.log(selectedPage, nganh, chuky, loai, status);
-        loadAllCTDT(selectedPage, nganh, chuky, loai, status);
+        currentPage += 1;
+        console.log(currentPage, nganh, chuky, loai, status);
+        loadAllCTDT(currentPage, nganh, chuky, loai, status);
     });
 });

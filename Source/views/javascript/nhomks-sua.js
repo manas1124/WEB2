@@ -14,14 +14,14 @@ async function getNhomKsById(id) {
 
         return response;
     } catch (error) {
-        
+
         return null;
     }
 }
 
 async function updateNhomKs(data) {
     try {
-        console.log('Dữ liệu gửi đi:', data); 
+        console.log('Dữ liệu gửi đi:', data);
 
         const response = await $.ajax({
             url: './controller/nhomKsController.php',
@@ -41,7 +41,7 @@ async function updateNhomKs(data) {
         console.log('Kết quả response:', response);
         return response;
     } catch (error) {
-     
+
         return false;
     }
 }
@@ -50,45 +50,76 @@ $(".main-content").on("click", ".action-item", function (e) {
     let action = $(this).data("act");
     let id = $(this).data("id");
     console.log("Action:", action, "ID:", id);
-   
-   
-  });
+
+
+});
 $(function () {
     window.HSStaticMethods.autoInit();
-    (async () =>{
+    (async () => {
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const nhomKsId = urlParams.get('id');
-    console.log('ID nhóm khảo sát lấy từ URL:', nhomKsId);
-    const res = await getNhomKsById(nhomKsId);
-    console.log("🧾 Phản hồi từ getNhomKsById:", res);
-    const defaultData = res;
-    console.log("📦 Dữ liệu nhomks:", defaultData);
+        const urlParams = new URLSearchParams(window.location.search);
+        const nhomKsId = urlParams.get('id');
+        console.log('ID nhóm khảo sát lấy từ URL:', nhomKsId);
+        const res = await getNhomKsById(nhomKsId);
+        console.log("🧾 Phản hồi từ getNhomKsById:", res);
+        const defaultData = res;
+        console.log("📦 Dữ liệu nhomks:", defaultData);
 
-    $("#ten-nhomks").val(defaultData.ten_nks);
-    // Sự kiện khi nhấn nút "Lưu"
-    $('#btn-update').on('click', async function (e) {
-        e.preventDefault();
-    
-        const ten_nks = $("#ten-nhomks").val().trim();
-    
-        if (!ten_nks) {
-            alert("Vui lòng nhập tên nhóm khảo sát.");
-            return;
-        }
-    
-        const result = await updateNhomKs({
-            id: nhomKsId,
-            ten_nks: ten_nks
+        $("#ten-nhomks").val(defaultData.ten_nks);
+        // Sự kiện khi nhấn nút "Lưu"
+        $('#btn-update').on('click', async function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn thay đổi không?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Có, thay đổi ngay',
+                cancelButtonText: 'Không',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    if (result.isConfirmed) {
+
+                        const ten_nks = $("#ten-nhomks").val().trim();
+
+                        if (!ten_nks) {
+                            swal({
+                                title: "Cảnh báo!",
+                                text: "Vui lòng nhập tên nhóm khảo sát.",
+                                icon: "warning",
+                                button: "Đã hiểu",
+                            });
+                            return;
+                        }
+
+
+                        const result = await updateNhomKs({
+                            id: nhomKsId,
+                            ten_nks: ten_nks
+                        });
+
+                        if (result && result.success) {
+                            Swal.fire({
+                                title: 'Cập nhật nhóm khảo sát thành công!',
+                                icon: 'success',
+                                confirmButtonText: 'Đã hiểu',
+                                confirmButtonColor: '#3085d6'
+                            });
+
+                        } else {
+                            Swal.fire({
+                                title: 'Cập nhật nhóm khảo sát thất bại!',
+                                icon: 'error',
+                                confirmButtonText: 'Đã hiểu',
+                                confirmButtonColor: '#3085d6'
+                            });
+                            console.error(" Lỗi khi cập nhật:", result);
+                        }
+                    }
+                }
+            });
         });
-    
-        if (result && result.success) {
-            alert("Cập nhật nhóm khảo sát thành công!");
-           
-        } else {
-            alert("Cập nhật thất bại. Vui lòng thử lại.");
-            console.error(" Lỗi khi cập nhật:", result);
-        }
-    });
     })();
 });

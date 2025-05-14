@@ -150,8 +150,12 @@ $(function () {
     const currentKsId = urlParams.get("id");
     const defaultData = await getChiTietKsById(currentKsId);
 
-    if ( defaultData.su_dung == 1) {
-      alert("Bài khảo sát đã bị đã đang được thực hiện, không được chỉnh sửa !")
+    if (defaultData.su_dung == 1) {
+      Swal.fire({
+        title: "Thông báo",
+        html: "Bài khảo sát đã bị đã đang được thực hiện, không được chỉnh sửa !",
+        icon: "warning",
+      });
       window.location.href = "./admin.php?page=qlKhaoSatPage";
       return;
     }
@@ -195,11 +199,14 @@ $(function () {
       });
     }
     if (answerTypeList != null) {
-      answerTypeList.map((item) => {   
-          $("#select-loai-tra-loi").append(
-            `<option ${defaultData.ltl_id == item.ltl_id ? 'selected="selected" ' : "" }  
+      answerTypeList.map((item) => {
+        $("#select-loai-tra-loi").append(
+          `<option ${
+            defaultData.ltl_id == item.ltl_id ? 'selected="selected" ' : ""
+          }  
               value='${item.ltl_id}'>${item.thang_diem}</option>`
-          );});
+        );
+      });
     }
     //xu li gia tri mac dinh
     $("#select-su-dung").val(defaultData.su_dung);
@@ -406,32 +413,42 @@ $(function () {
       };
 
       let isValideData = () => {
+        let messages = [];
+
         if (tenKhaoSat == "") {
-          alert("Vui lòng nhập tên bài khảo sát");
-          return false;
-        } else if (idNhomKs == "-1") {
-          alert("Vui lòng chọn nhóm bài khảo sát");
-          return false;
-        } else if (dateStart == "") {
-          alert("Vui lòng chọn ngày bắt đầu");
-          return false;
-        } else if (dateEnd == "") {
-          alert("Vui lòng chọn ngày kết thúc");
-          return false;
-        } else if (loaiTraLoi == "-1") {
-          alert("Vui lòng chọn loại trả lời");
-          return false;
-        } else if (nganh == "-1") {
-          alert("Vui lòng chọn ngành");
-          return false;
-        } else if (chuKi == "-1") {
-          alert("Vui lòng chọn chu kì");
-          return false;
-        } else if (start < today) {
-          alert("Ngày bắt đầu không được ở quá khứ.");
-          return false;
-        } else if (start > end) {
-          alert("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.");
+          messages.push("Vui lòng nhập tên bài khảo sát");
+        }
+        if (idNhomKs == "-1") {
+          messages.push("Vui lòng chọn nhóm bài khảo sát");
+        }
+        if (dateStart == "") {
+          messages.push("Vui lòng chọn ngày bắt đầu");
+        }
+        if (dateEnd == "") {
+          messages.push("Vui lòng chọn ngày kết thúc");
+        }
+        if (loaiTraLoi == "-1") {
+          messages.push("Vui lòng chọn loại trả lời");
+        }
+        if (nganh == "-1") {
+          messages.push("Vui lòng chọn ngành");
+        }
+        if (chuKi == "-1") {
+          messages.push("Vui lòng chọn chu kì");
+        }
+        if (start < today) {
+          messages.push("Ngày bắt đầu không được ở quá khứ.");
+        }
+        if (start > end) {
+          messages.push("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.");
+        }
+
+        if (messages.length > 0) {
+          Swal.fire({
+            title: "Thông báo",
+            html: messages[0],
+            icon: "warning",
+          });
           return false;
         }
         return true;
@@ -441,19 +458,34 @@ $(function () {
       if (isValideData()) {
         checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {
           if (isExistCtdt == -1) {
-            alert("không có chương trình đào đạo thuộc ngành, chu kì này");
+            Swal.fire({
+              title: "Thông báo",
+              html: "không có chương trình đào đạo thuộc ngành, chu kì này",
+              icon: "warning",
+            });
             return;
           }
           editSurveyData["ctdt-id"] = isExistCtdt;
           if (
-            confirm("Nếu cập nhật sẽ mất kết quả của bài khảo sát cũ (nếu có) ??")
+            confirm(
+              "Nếu cập nhật sẽ mất kết quả của bài khảo sát cũ (nếu có) ??"
+            )
           ) {
             updateKhaoSat(editSurveyData).then((response) => {
               if (response) {
                 $("#khao-sat-page").trigger("click");
-                alert("Cập nhật thành công");
+                Swal.fire({
+                  title: "Thông báo",
+                  html: "Cập nhật thành công",
+                  icon: "success",
+                });
               } else {
-                alert("Cập nhật thất bại");
+                Swal.fire({
+                  title: "Thông báo",
+                  html: "Cập nhật thất bại",
+                  icon: "warning",
+                });
+                alert("");
               }
             });
           }

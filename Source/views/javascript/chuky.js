@@ -65,7 +65,7 @@ function renderPagination(totalPages, currentPage) {
 
     $("#pagination").empty();
 
-    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><<</button><div class="flex items-center gap-x-1">`);
+    $("#pagination").append(`<button type="button" class="btn btn-text btn-prev"><</button><div class="flex items-center gap-x-1">`);
 
     for (let i = 1; i <= totalPages; i++) {
         let activeClass = (i == currentPage) ? 'aria-current="page"' : '';
@@ -74,7 +74,7 @@ function renderPagination(totalPages, currentPage) {
         `);
     }
 
-    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">>></button>`);
+    $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">></button>`);
 }
 
 function create() {
@@ -170,40 +170,52 @@ function update() {
 }
 
 function toggleStatus(ck_id) {
-    $.ajax({
-        url: "./controller/chuKyController.php",
-        type: "GET",
-        dataType: "json",
-        data: {
-            func: "toggleStatus",
-            ck_id: ck_id,
-        },
-        success: function (response) {
-            if (response?.status == false && response?.message) {
-                Swal.fire({
-                    title: "Thông báo",
-                    text: response.message,
-                    icon: "warning"
-                });
-            } else {
-                if (response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Đổi trạng thái thành công!',
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                    const txtSearch = $("#search-keyword").val().trim();
-                    const selectedValue = $("#select-status").val();
-                    const status = selectedValue == -1 ? null : selectedValue;
-                    loadAllChuky(1, status, txtSearch);
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn thay đổi trạng thái không?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Có, thay đổi ngay',
+        cancelButtonText: 'Không',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "./controller/chuKyController.php",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    func: "toggleStatus",
+                    ck_id: ck_id,
+                },
+                success: function (response) {
+                    if (response?.status == false && response?.message) {
+                        Swal.fire({
+                            title: "Thông báo",
+                            text: response.message,
+                            icon: "warning"
+                        });
+                    } else {
+                        if (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Đổi trạng thái thành công!',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            const txtSearch = $("#search-keyword").val().trim();
+                            const selectedValue = $("#select-status").val();
+                            const status = selectedValue == -1 ? null : selectedValue;
+                            loadAllChuky(1, status, txtSearch);
+                        }
+                    }
+
+
+                },
+                error: function (error) {
+                    console.error("Error loading form sua:", error);
                 }
-            }
-
-
-        },
-        error: function (error) {
-            console.error("Error loading form sua:", error);
+            });
         }
     });
 }
@@ -262,7 +274,10 @@ $(document).ready(function () {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Có, sửa ngay',
-            cancelButtonText: 'Không'
+            cancelButtonText: 'Không',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
+
         }).then((result) => {
             if (result.isConfirmed) {
                 update();

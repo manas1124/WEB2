@@ -2,6 +2,16 @@
 $('#loginForm').on('submit', function (e) {
     console.log("date gui:", $('#txtUsername').val(), $('#txtPassword').val())
     e.preventDefault();
+    if ($('#txtUsername').val() == "" || $('#txtPassword').val() == "") {
+        Swal.fire({
+            title: 'Thông báo',
+            text: "Tên đăng nhập hoặc mật khẩu không được để trống!",
+            icon: 'warning',
+            confirmButtonText: 'Thử lại',
+            confirmButtonColor: '#3085d6'
+        });
+        return;
+    }
     $.ajax({
         type: 'POST',
         url: './controller/AuthController.php',
@@ -15,16 +25,40 @@ $('#loginForm').on('submit', function (e) {
 
             var data = JSON.parse(response);
             console.log(data);
-            alert(data['message']); // Show the message from the server
+            // alert(data['message']); // Show the message from the server
             if (data['status'] == "success") {
-                window.location.href = "./home.php";
+                Swal.fire({
+                    title: 'Đăng nhập thành công',
+                    text: " Đang chuyển hướng...",
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Tiếp tục',
+                }).then((result) => {
+                    window.location.href = "./home.php";
+
+                });
             }
+            else {
+                Swal.fire({
+                    title: 'Đăng nhập thất bại',
+                    text: data['message'],
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Thử lại',
+                });
+            }
+
 
 
         },
         error: function () {
             console.log(response);
-            alert('Có lỗi xảy ra khi gửi dữ liệu!');
+            Swal.fire({
+                title: 'Có lỗi xảy ra khi gửi dữ liệu!',
+                icon: 'error',
+                confirmButtonText: 'Đã hiểu'
+            });
         }
     });
 });
@@ -42,7 +76,7 @@ $('#signUpForm').on('submit', function (e) {
         ctdt: $('#signUpForm #cbxChuongTrinhDaoTao').val(),
         doiTuong: $('#signUpForm #cbxDoiTuong').val()
     };
-    if (!vadlidate(data)) {
+    if (!validate(data)) {
         return;
     }
 
@@ -66,79 +100,120 @@ $('#signUpForm').on('submit', function (e) {
             // console.log(response);
 
             var data = JSON.parse(response);
-            alert(data.message); // Show the message from the server
+            // alert(data.message); // Show the message from the server
             console.log(data);
             if (data.status == "success") {
-                $("#signUpForm").addClass("hidden")
-                $("#signInForm").removeClass("hidden")
+                Swal.fire({
+                    title: 'Đăng kí thành công',
+                    text: " Bây giờ bạn có thể đăng nhập",
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Đăng nhập ngay',
+                }).then((result) => {
+                    document.getElementById('signUpForm').reset();
+                    $("#signUpForm").addClass("hidden")
+                    $("#signInForm").removeClass("hidden")
+                });
+            }
+            else {
+                Swal.fire({
+                    title: 'Đăng kí thất bại',
+                    text: data.message,
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Thử lại'
+                });
             }
 
 
         },
         error: function () {
-            alert('Có lỗi xảy ra khi gửi dữ liệu!');
+            Swal.fire({
+                title: 'Có lỗi xảy ra khi gửi dữ liệu!',
+                icon: 'error',
+                confirmButtonText: 'Đã hiểu'
+            });
         }
     });
 });
 
-function vadlidate(data) {
-    if (data.username == "") {
-        alert("Tên đăng nhập không được để trống!");
+function validate(data) {
+    let message = '';
+
+    // Kiểm tra tên đăng nhập
+    if (!data.username || data.username.trim() === '') {
+        message = "Tên đăng nhập không được để trống!";
+    } else if (/\s/.test(data.username)) {
+        message = "Tên đăng nhập không được có khoảng trắng!";
+    } else if (/[^a-zA-Z0-9]/.test(data.username)) {
+        message = "Tên đăng nhập không được có kí tự đặc biệt!";
+    }
+
+    // Kiểm tra mật khẩu
+    else if (!data.password || data.password.trim() === '') {
+        message = "Mật khẩu không được để trống!";
+    }
+
+    // Kiểm tra xác nhận mật khẩu
+    else if (!data.passwordConfirm || data.passwordConfirm.trim() === '') {
+        message = "Mật khẩu xác nhận không được để trống!";
+    } else if (data.password !== data.passwordConfirm) {
+        message = "Mật khẩu không trùng khớp!";
+    }
+
+    // Kiểm tra họ tên
+    else if (!data.fullName || data.fullName.trim() === '') {
+        message = "Họ tên không được để trống!";
+    } else if (/[^a-zA-ZÀ-Ỹà-ỹ\s]/.test(data.fullName.trim())) {
+        message = "Họ tên không được chứa số!";
+    }
+
+
+    // Kiểm tra số điện thoại
+    else if (!data.phone || data.phone.trim() === '') {
+        message = "Số điện thoại không được để trống!";
+    } else if (/[^0-9]/.test(data.phone)) {
+        message = "Số điện thoại không được có kí tự đặc biệt!";
+    } else if (data.phone.length !== 10 || !data.phone.startsWith('0')) {
+        message = "Số điện thoại phải gồm 10 số và bắt đầu bằng 0!";
+    }
+
+    // Kiểm tra email
+    else if (!data.email || data.email.trim() === '') {
+        message = "Email không được để trống!";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
+        message = "Email không đúng định dạng!";
+    }
+
+    // Kiểm tra địa chỉ
+    else if (!data.address || data.address.trim() === '') {
+        message = "Địa chỉ không được để trống!";
+    } else if (data.address.match(/[^\p{L}\p{N}\s,.-]/u)) {
+        message = "Địa chỉ không được có kí tự đặc biệt!";
+    }
+
+    // Kiểm tra chương trình đào tạo
+    else if (!data.ctdt || data.ctdt.trim() === '') {
+        message = "Vui lòng chọn chương trình đào tạo!";
+    }
+
+    // Kiểm tra đối tượng
+    else if (!data.doiTuong || data.doiTuong.trim() === '') {
+        message = "Vui lòng chọn đối tượng!";
+    }
+
+    if (message !== '') {
+        Swal.fire({
+            title: 'Thông báo',
+            text: message,
+            icon: 'warning',
+            confirmButtonText: 'Thử lại'
+        });
         return false;
     }
-    if (data.password == "") {
-        alert("Mật khẩu không được để trống!");
-        return false;
-    }
-    if (data.passwordConfirm == "") {
-        alert("Mật khẩu không được để trống!");
-        return false;
-    }
-    if (data.password != data.passwordConfirm) {
-        alert("Mật khẩu không khớp!");
-        return false;
-    }
-    if (data.fullName == "") {
-        alert("Họ tên không được để trống!");
-        return false;
-    }
-    if (data.phone == "") {
-        alert("Số điện thoại không được để trống!");
-        return false;
-    }
-    if (data.email == "") {
-        alert("Email không được để trống!");
-        return false;
-    }
-    if (data.address == "") {
-        alert("Địa chỉ không được để trống!");
-        return false;
-    }
-    if (data.address.match(/[^\p{L}\p{N}\s]/u)) {
-        alert("Địa chỉ không được có kí tự đặc biệt!");
-        return false;
-    }
-    if (data.ctdt == "") {
-        alert("Vui lòng chọn chương trình đào tạo !");
-        return false;
-    }
-    if (data.doiTuong == "") {
-        alert("Vui lòng chọn đối tượng!");
-        return false;
-    }
-    // username không được có kí tự đặc biệt 
-    if (data.username.match(/[^a-zA-Z0-9]/)) {
-        alert("Tên đăng nhập không được có kí tự đặc biệt!");
-        return false;
-    }
-    if (data.phone.match(/[^0-9]/)) {
-        alert("Số điện thoại không được có kí tự đặc biệt!");
-        return false;
-    }
-    if (data.phone.length < 10 || data.phone[0] != 0) {
-        alert("Số điện thoại phải gồm 10 số và bắt đầu bằng 0!");
-        return false;
-    }
+
     return true;
 }
 
@@ -245,7 +320,7 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 $("#main-content").html(response.html);
-                
+
                 let queryString = $.param(params);
                 queryString = cleanQueryString(queryString);
                 // Update the URL
@@ -253,7 +328,19 @@ $(function () {
 
             },
             error: function (error) {
-                console.error("Error navigate page:", error);
+                Swal.fire({
+                    title: error.responseText,
+                    text: 'Bạn không được phép thực hiện thao tác này',
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Đồng ý',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    location.href = "./home.php";
+                });
+
 
             }
         });
@@ -299,26 +386,44 @@ $(function () {
         updateContent(newParams);
     });
 
-    $("#btn-logout").click(function() {
-            $.ajax({
-                type: 'POST',
-                url: './controller/AuthController.php',
-                data: {
-                    action: 'logout'
-                },
-                success: function(response) {
-                    console.log(response);
+    $("#btn-logout").click(function () {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            text: "Bạn sẽ phải đăng nhập lại nếu muốn tiếp tục sử dụng.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đăng xuất',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: './controller/AuthController.php',
+                    data: {
+                        action: 'logout'
+                    },
+                    success: function (response) {
+                        console.log(response);
 
-                    var data = JSON.parse(response);
-                    alert(data['message']); // Show the message from the server
-                    window.location.href = "./login.php";
+                        var data = JSON.parse(response);
+                        // alert(data['message']); // Show the message from the server
+                        window.location.href = "./login.php";
 
-                },
-                error: function() {
-                    alert('Có lỗi xảy ra khi gửi dữ liệu!');
-                }
-            });
-        })
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: 'Có lỗi xảy ra khi gửi dữ liệu!',
+                            icon: 'error',
+                            confirmButtonText: 'Đã hiểu',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    }
+                });
+            }
+        });
+    })
 
     // Helper function to get URL parameters
     function getUrlParams() {

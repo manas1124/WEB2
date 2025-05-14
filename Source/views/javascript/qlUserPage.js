@@ -115,7 +115,7 @@ async function renderUser({
       $("#user-list").append("<tr>Không có dữ liệu</tr>");
     }
     $("#pagination").append(
-      `<button type="button" class="btn btn-text btn-prev">Previous</button><div class="flex items-center gap-x-1">`
+      `<button type="button" class="btn btn-text btn-prev"><</button><div class="flex items-center gap-x-1">`
     );
     for (let i = 1; i <= totalPages; i++) {
       let activeClass = i == currentPage ? 'aria-current="page"' : "";
@@ -124,7 +124,7 @@ async function renderUser({
           `);
     }
     $("#pagination").append(
-      `</div><button type="button" class="btn btn-text btn-next">Next</button>`
+      `</div><button type="button" class="btn btn-text btn-next">></button>`
     );
   }
 }
@@ -178,24 +178,48 @@ async function getUserById(id) {
 }
 
 async function deleteUser(id) {
-  console.log("Deleting user with ID:", id);
-  try {
-    const response = await $.ajax({
-      url: "./controller/UserController.php",
-      type: "POST",
-      data: { func: "deleteUser", id: id },
-      dataType: "json",
-    });
+  Swal.fire({
+    title: 'Bạn có chắc chắn muốn xóa đối tượng?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Có, xóa ngay',
+    cancelButtonText: 'Không',
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33'
+  }).then( async (result) => {
+    if (result.isConfirmed) {
+      console.log("Deleting user with ID:", id);
+      try {
+        const response = await $.ajax({
+          url: "./controller/UserController.php",
+          type: "POST",
+          data: { func: "deleteUser", id: id },
+          dataType: "json",
+        });
 
-    if (response.success) {
-      alert("xóa thất bại");
-    } else {
-      alert("xóa thành công");
-      loadUserList();
+        if (response.success) {
+          Swal.fire({
+                    title: 'Thông báo',
+                    text: 'Xóa thất bại',
+                    icon: 'error',
+                    confirmButtonText: 'Thử lại'
+                  });
+        } else {
+          Swal.fire({
+                    title: 'Thông báo',
+                    text: 'Xóa thành công!',
+                    icon: 'success',
+                    confirmButtonText: 'Tiếp tục'
+                  });
+          loadUserList();
+        }
+      } catch (error) {
+        console.log("Lỗi khi xóa người dùng");
+      }
     }
-  } catch (error) {
-    console.log("Lỗi khi xóa người dùng");
-  }
+  });
+
+
 }
 
 async function loadNhomKsToSelect() {
@@ -294,14 +318,21 @@ async function loadUserList() {
   console.log("Search:", searchKeyword);
   console.log("Nhóm khảo sát ID:", nhomKsId);
 
+}
+
+$(function () {
+  renderUser({});
+  // loadUserList();
+  loadNhomKsToSelect();
+  loadNhomKsToSelectModal();
+
   $("#form-send-mail").on("submit", function (e) {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+    e.preventDefault(); 
     const objectSelect = $("#nhom-ks-select-modal").val();
     const subject = $("input[name='subject-text']").val();
     const body = $("textarea[name='body-text']").val();
-    const file = $("#file-attachment")[0].files[0]; // file đính kèm
+    const file = $("#file-attachment")[0].files[0]; 
     console.log(objectSelect, subject, body, file);
-    // Tạo FormData để gửi cả dữ liệu văn bản và file
     const formData = new FormData();
     formData.append("objectSelect", objectSelect);
     formData.append("subject", subject);
@@ -316,44 +347,74 @@ async function loadUserList() {
       method: "POST",
       dataType: "json",
       data: formData,
-      processData: false, // 🔥 bắt buộc khi gửi FormData
-      contentType: false, // 🔥 bắt buộc khi gửi file
+      processData: false,
+      contentType: false, 
 
       success: function (response) {
         const data = JSON.parse(response);
         if (data.status === "success") {
+          Swal.fire({
+            title: 'Thành công',
+            text: "Bạn đã gửi khảo sát thành công.",
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý',
+          });
           $("#slide-down-animated-modal").addClass("hidden");
         }
-        alert(data.message);
+        else {
+          Swal.fire({
+            title: 'Thất bại',
+            text: "Bạn đã gửi khảo sát không thành công.",
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonText: 'Thử lại',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
+          });
+        }
       },
       error: function (err) {
-        console.error("Gửi thất bại", err);
+        Swal.fire({
+                        title: 'Thất bại',
+                        text: "Bạn đã gửi khảo sát không thành công.",
+                        icon: 'error',
+                        showCancelButton: true,
+                        confirmButtonText: 'Thử lại',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33'
+                        
+                    });
       },
     });
   });
-}
 
-$(function () {
-  renderUser({});
-  // loadUserList();
-  loadNhomKsToSelect();
-  loadNhomKsToSelectModal();
+
 
   $("#btn-search").on("click", function () {
     console.log("execute search user: ");
     let search = $("#search").val();
     let nhomKsId = $("#nhom-ks-select").val();
-    let chuKyId = $("#select-chu-ki").val() != -1 ? $("#select-chu-ki").val() : null;
-    let nganhId = $("#select-nganh").val() != -1 ? $("#select-nganh").val() : null;
-    renderUser({ search: search, nhomKsId: nhomKsId, chuKyId: chuKyId, nganhId: nganhId });
+    let chuKyId =
+      $("#select-chu-ki").val() != -1 ? $("#select-chu-ki").val() : null;
+    let nganhId =
+      $("#select-nganh").val() != -1 ? $("#select-nganh").val() : null;
+    renderUser({
+      search: search,
+      nhomKsId: nhomKsId,
+      chuKyId: chuKyId,
+      nganhId: nganhId,
+    });
   });
-  $("#btn-reset").on("click", function() {
-   $("#search").val("");
-  $("#nhom-ks-select").val(-1) // Sets it to the first option
-  $("#select-chu-ki").val(-1)
-  $("#select-nganh").val(-1)
-  resetSearchForm();
-});
+  $("#btn-reset").on("click", function () {
+    $("#search").val("");
+    $("#nhom-ks-select").val(-1); // Sets it to the first option
+    $("#select-chu-ki").val(-1);
+    $("#select-nganh").val(-1);
+    resetSearchForm();
+  });
   $("#download-excel-templat").on("click", function () {
     window.location.href = "./assets/sample_user.xlsx";
   });
@@ -387,12 +448,12 @@ $(function () {
     let currentPage = Number(
       $("#pagination button[aria-current='page']").data("page")
     );
-    console.log("pre", currentPage);
+    console.log("pre", currentPage, "max",$("#pagination .btn-page").length);
     if (currentPage == $("#pagination .btn-page").length) {
       return;
     }
     currentPage += 1;
-    renderUser((page = currentPage));
+    renderUser({ page: currentPage });
   });
 
   $("#input-file-excel").on("change", function () {

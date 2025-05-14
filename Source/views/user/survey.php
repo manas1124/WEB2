@@ -8,6 +8,15 @@
                 $accessToken = $_SESSION['accessToken'];
                 $object = validateToken($accessToken);
                 $doiTuongId = $object->dtId;
+                $isVaid = isAuthorization($accessToken, 'view.survey');
+                if(!$isVaid) {
+                    echo 'Ko có quyền truy cập!';
+                    exit;
+                }
+    }
+    else {
+        echo 'Không có quyền truy cập!';
+        exit;
     }
 
 

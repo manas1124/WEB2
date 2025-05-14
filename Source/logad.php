@@ -5,7 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="./assets/css/output.css" rel="stylesheet">
-    <title>Login</title>
+    <title>Login Admin</title>
+    <link rel="shortcut icon" href="./assets/image/sgu.png">
+
 </head>
 
 <body class="flex w-full h-screen justify-between">
@@ -39,33 +41,56 @@
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/flyonui/flyonui.js"></script>
     <script>
-    $('#loginForm').on('submit', function(e) {
-        e.preventDefault();
-        $.ajax({
-            type: 'POST',
-            url: './controller/AuthController.php',
-            data: {
-                action: 'login',
-                username: $('#txtUsername').val(),
-                password: $('#txtPassword').val()
-            },
-            success: function(response) {
-                console.log(response);
-                var data = JSON.parse(response);
-                alert(data['message']); // Show the message from the server
-                if (data["status"] !== 'error') {
-                    if(data["role"] == 'Admin'){
-                        window.location.href = "./admin.php";
+        $('#loginForm').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: './controller/AuthController.php',
+                data: {
+                    action: 'login',
+                    username: $('#txtUsername').val(),
+                    password: $('#txtPassword').val()
+                },
+                success: function(response) {
+                    console.log(response);
+                    var data = JSON.parse(response);
+                    if (data['status'] == "success") {
+                        Swal.fire({
+                            title: 'Đăng nhập thành công',
+                            text: " Đang chuyển hướng...",
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Tiếp tục',
+                        }).then((result) => {
+                            if (data["role"] == 'Admin') {
+                                window.location.href = "./admin.php";
+                            } else {
+                                window.location.href = "./home.php";
+                            }
+                        });
                     } else {
-                        window.location.href = "./home.php";
+                        Swal.fire({
+                            title: 'Đăng nhập thất bại',
+                            text: data['message'],
+                            icon: 'error',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Thử lại',
+                        });
                     }
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Đăng nhập thất bại',
+                        text: 'Có lỗi khi gửi dữ liệu!',
+                        icon: 'error',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Thử lại',
+                    });
                 }
-            },
-            error: function() {
-                alert('Có lỗi xảy ra khi gửi dữ liệu!');
-            }
+            });
         });
-    });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

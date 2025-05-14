@@ -45,6 +45,10 @@ $(function () {
                 let queryString = $.param(params);
                 queryString = cleanQueryString(queryString);
                 history.pushState(params, "", "admin.php?" + queryString);
+
+                $(".nav-link").removeClass("bg-primary text-white");
+                $(".nav-item[data-page='" + params.page + "']").addClass("bg-primary text-white");
+
             },
             error: function (error) {
                 console.error("Error navigate page:", error);
@@ -178,12 +182,16 @@ function logout() {
             console.log(response);
 
             var data = JSON.parse(response);
-            alert(data['message']); // Show the message from the server
+            // alert(data['message']); // Show the message from the server
             window.location.href = "./logad.php";
             localStorage.clear();
         },
         error: function () {
-            alert('Có lỗi xảy ra khi gửi dữ liệu!');
+            Swal.fire({
+                title: 'Có lỗi xảy ra khi gửi dữ liệu!',
+                icon: 'error',
+                confirmButtonText: 'Đã hiểu'
+            });
         }
     });
 }
