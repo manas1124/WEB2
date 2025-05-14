@@ -294,14 +294,21 @@ async function loadUserList() {
   console.log("Search:", searchKeyword);
   console.log("Nhóm khảo sát ID:", nhomKsId);
 
+}
+
+$(function () {
+  renderUser({});
+  // loadUserList();
+  loadNhomKsToSelect();
+  loadNhomKsToSelectModal();
+
   $("#form-send-mail").on("submit", function (e) {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+    e.preventDefault(); 
     const objectSelect = $("#nhom-ks-select-modal").val();
     const subject = $("input[name='subject-text']").val();
     const body = $("textarea[name='body-text']").val();
-    const file = $("#file-attachment")[0].files[0]; // file đính kèm
+    const file = $("#file-attachment")[0].files[0]; 
     console.log(objectSelect, subject, body, file);
-    // Tạo FormData để gửi cả dữ liệu văn bản và file
     const formData = new FormData();
     formData.append("objectSelect", objectSelect);
     formData.append("subject", subject);
@@ -316,28 +323,49 @@ async function loadUserList() {
       method: "POST",
       dataType: "json",
       data: formData,
-      processData: false, // 🔥 bắt buộc khi gửi FormData
-      contentType: false, // 🔥 bắt buộc khi gửi file
+      processData: false,
+      contentType: false, 
 
       success: function (response) {
         const data = JSON.parse(response);
         if (data.status === "success") {
+          Swal.fire({
+            title: 'Thành công',
+            text: "Bạn đã gửi khảo sát thành công.",
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý',
+          });
           $("#slide-down-animated-modal").addClass("hidden");
         }
-        alert(data.message);
+        else {
+          Swal.fire({
+            title: 'Thất bại',
+            text: "Bạn đã gửi khảo sát không thành công.",
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Thử lại',
+          });
+        }
       },
       error: function (err) {
-        console.error("Gửi thất bại", err);
+        Swal.fire({
+                        title: 'Thất bại',
+                        text: "Bạn đã gửi khảo sát không thành công.",
+                        icon: 'error',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Thử lại',
+                        
+                    });
       },
     });
   });
-}
 
-$(function () {
-  renderUser({});
-  // loadUserList();
-  loadNhomKsToSelect();
-  loadNhomKsToSelectModal();
+
 
   $("#btn-search").on("click", function () {
     console.log("execute search user: ");

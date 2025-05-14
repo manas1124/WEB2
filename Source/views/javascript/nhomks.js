@@ -24,26 +24,63 @@ async function getAllNhomKs() {
 }
 async function deletenks(id) {
 
-     console.log("Deleting user with ID:", id);
-  try {
-    const response = await $.ajax({
-      url: "./controller/nhomKsController.php",
-      type: "POST",
-      data: { func: "deletenks", id: id }, // Gửi ID người dùng cần xóa
-      dataType: "json",
-    });
-  
-    if (response.success) {
-      alert("xóa thất bại"); 
+  console.log("Deleting user with ID:", id);
+  Swal.fire({
+    title: 'Cảnh báo',
+    text: "Bạn có chắc chắn muốn xóa nhóm khảo sát này không?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'Chắc chắn',
+    cancelButtonText: 'Hủy',
+    cancelButtonColor: '#d33',
+  }).then((result) => {   
+    if (result.isConfirmed) {
+      try {
+        const response = $.ajax({
+          url: "./controller/nhomKsController.php",
+          type: "POST",
+          data: { func: "deletenks", id: id }, // Gửi ID người dùng cần xóa
+          dataType: "json",
+        });
       
-    } else {
-      alert("xóa thành công"); 
-      location.reload();
+        if (response.success) {
+          Swal.fire({
+            title: 'Thất bại',
+            text: "Đã xóa nhóm khảo sát không thành công",
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Thử lại',
+          });
+          
+        } else {
+          Swal.fire({
+            title: 'Thành công',
+            text: "Đã xóa nhóm khảo sát thành công 1",
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Đồng ý',
+          }).then(() => {
+            location.reload(); 
+          });
+          
+        }
+      } catch (error) {
+        Swal.fire({
+            title: 'Thất bại',
+            text: "Lỗi khi xoá người dùng",
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Thử lại',
+          });
+        
+      }
     }
-  } catch (error) {
-    console.log("Lỗi khi xóa người dùng");
-    
-  }
+  });
+  
 }
 
 
@@ -102,6 +139,15 @@ function showModal(mode) {
   $("#basic-modal").removeClass("hidden").addClass("open");
   $("body").css("overflow", "hidden");
   $("#basic-modal").attr("modal-data", mode);
+  if (mode === "update") {
+    $("#modal-title").text("Cập nhật nhóm khảo sát");
+    $("#btn-save").text("Cập nhật");
+  } 
+  else {
+    $("#modal-title").text("Thêm nhóm khảo sát");
+    $("#btn-save").text("Thêm");
+  }
+
 }
 function closeModal() {
   $("#basic-modal").removeClass("open").addClass("hidden");
@@ -121,16 +167,34 @@ async function action(mode) {
 
     const result = await addNhomks(ten_nks);
     if (result.success) {
-      alert("Thêm thành công!");
+      Swal.fire({
+        title: 'Thành công',
+        text: "Thêm nhóm khảo sát thành công",
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Đồng ý',
+      }).then(() => {
+        closeModal();
+        location.reload(); 
+      });
+    }
+    else {
+      Swal.fire({
+        title: 'Thất bại',
+        text: "Thêm nhóm khảo sát không thành công",
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Thử lại',
+      });
       closeModal();
       location.reload();
-    } else {
-      alert(result.message);
     }
   }
   else {
     const ten_nks = $("#ten-nhomks").val().trim();
-
+   
     if (!ten_nks) {
       alert("Vui lòng nhập tên nhóm khảo sát.");
       return;
@@ -142,46 +206,61 @@ async function action(mode) {
     });
 
     if (result && result.success) {
-      alert("Cập nhật nhóm khảo sát thành công!");
-      closeModal();
-      location.reload();
-      nhomKsId = -1;
+      Swal.fire({
+        title: 'Thành công',
+        text: "Cập nhật nhóm khảo sát thành công",
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Đồng ý',
+      }).then(() => {
+        closeModal();
+        location.reload(); 
+        nhomKsId = -1;
+      });
     } else {
-      alert("Cập nhật thất bại. Vui lòng thử lại.");
+      Swal.fire({
+        title: 'Thất bại',
+        text: "Cập nhật nhóm khảo sát không thành công",
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Thử lại',
+      });
+
       console.error(" Lỗi khi cập nhật:", result);
     }
   }
 }
 
+  $(function () {
 
-$(function () {
-
-  const nhomKsId = -1;
-
+    const nhomKsId = -1;
 
 
-  $('#btn-save').on('click', async function (e) {
-    e.preventDefault();
-    const mode = $("#basic-modal").attr("modal-data");
-    action(mode);
-  });
 
-  $(".main-content").on("click", ".action-item", function (e) {
-    e.preventDefault();
-    let action = $(this).data("act");
-    console.log(action)
-    $(".main-content").load(`day la trang ${action}`)
-  });
+    $('#btn-save').on('click', async function (e) {
+      e.preventDefault();
+      const mode = $("#basic-modal").attr("modal-data");
+      action(mode);
+    });
+
+    $(".main-content").on("click", ".action-item", function (e) {
+      e.preventDefault();
+      let action = $(this).data("act");
+      console.log(action)
+      $(".main-content").load(`day la trang ${action}`)
+    });
 
 
-  (async () => {
-    let ksList = await getAllNhomKs();
-    // ksList = JSON.parse(ksList)
-    if (ksList != null) {
-      // console.log(ksList)
+    (async () => {
+      let ksList = await getAllNhomKs();
+      // ksList = JSON.parse(ksList)
+      if (ksList != null) {
+        // console.log(ksList)
       
-      ksList.map((item) => {
-        $("#nhomks-list").append(`
+        ksList.map((item) => {
+          $("#nhomks-list").append(`
           <tr>
               <td>${item.ten_nks}</td>
               
@@ -192,13 +271,12 @@ $(function () {
           </tr>
   
         `);
-      });
-      window.AppState.applyPermissionControl();
+        });
+        window.AppState.applyPermissionControl();
       
-    }
+      }
     
     
 
-  })();
-});
-  
+    })();
+  });
