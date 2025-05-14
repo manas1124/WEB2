@@ -161,6 +161,8 @@ $(document).on("click", '[id="quyen-xoa"]', function () {
     showCancelButton: true,
     confirmButtonText: "Xóa",
     cancelButtonText: "Hủy",
+    cancelButtonColor: '#d33',
+    confirmButtonColor: '#3085d6'
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({

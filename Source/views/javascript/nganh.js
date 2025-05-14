@@ -240,7 +240,9 @@ $(document).ready(function () {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Có, sửa ngay',
-            cancelButtonText: 'Không'
+            cancelButtonText: 'Không',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
         }).then((result) => {
             if (result.isConfirmed) {
                 update(); // Gọi hàm cập nhật khi xác nhận

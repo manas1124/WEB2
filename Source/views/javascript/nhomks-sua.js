@@ -75,7 +75,9 @@ $(function () {
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Có, thay đổi ngay',
-                cancelButtonText: 'Không'
+                cancelButtonText: 'Không',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     if (result.isConfirmed) {
@@ -102,14 +104,16 @@ $(function () {
                             Swal.fire({
                                 title: 'Cập nhật nhóm khảo sát thành công!',
                                 icon: 'success',
-                                confirmButtonText: 'Đã hiểu'
+                                confirmButtonText: 'Đã hiểu',
+                                confirmButtonColor: '#3085d6'
                             });
 
                         } else {
                             Swal.fire({
                                 title: 'Cập nhật nhóm khảo sát thất bại!',
                                 icon: 'error',
-                                confirmButtonText: 'Đã hiểu'
+                                confirmButtonText: 'Đã hiểu',
+                                confirmButtonColor: '#3085d6'
                             });
                             console.error(" Lỗi khi cập nhật:", result);
                         }
