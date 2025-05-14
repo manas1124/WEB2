@@ -115,7 +115,7 @@ async function renderUser({
       $("#user-list").append("<tr>Không có dữ liệu</tr>");
     }
     $("#pagination").append(
-      `<button type="button" class="btn btn-text btn-prev">Previous</button><div class="flex items-center gap-x-1">`
+      `<button type="button" class="btn btn-text btn-prev"><</button><div class="flex items-center gap-x-1">`
     );
     for (let i = 1; i <= totalPages; i++) {
       let activeClass = i == currentPage ? 'aria-current="page"' : "";
@@ -124,7 +124,7 @@ async function renderUser({
           `);
     }
     $("#pagination").append(
-      `</div><button type="button" class="btn btn-text btn-next">Next</button>`
+      `</div><button type="button" class="btn btn-text btn-next">></button>`
     );
   }
 }
@@ -343,17 +343,24 @@ $(function () {
     console.log("execute search user: ");
     let search = $("#search").val();
     let nhomKsId = $("#nhom-ks-select").val();
-    let chuKyId = $("#select-chu-ki").val() != -1 ? $("#select-chu-ki").val() : null;
-    let nganhId = $("#select-nganh").val() != -1 ? $("#select-nganh").val() : null;
-    renderUser({ search: search, nhomKsId: nhomKsId, chuKyId: chuKyId, nganhId: nganhId });
+    let chuKyId =
+      $("#select-chu-ki").val() != -1 ? $("#select-chu-ki").val() : null;
+    let nganhId =
+      $("#select-nganh").val() != -1 ? $("#select-nganh").val() : null;
+    renderUser({
+      search: search,
+      nhomKsId: nhomKsId,
+      chuKyId: chuKyId,
+      nganhId: nganhId,
+    });
   });
-  $("#btn-reset").on("click", function() {
-   $("#search").val("");
-  $("#nhom-ks-select").val(-1) // Sets it to the first option
-  $("#select-chu-ki").val(-1)
-  $("#select-nganh").val(-1)
-  resetSearchForm();
-});
+  $("#btn-reset").on("click", function () {
+    $("#search").val("");
+    $("#nhom-ks-select").val(-1); // Sets it to the first option
+    $("#select-chu-ki").val(-1);
+    $("#select-nganh").val(-1);
+    resetSearchForm();
+  });
   $("#download-excel-templat").on("click", function () {
     window.location.href = "./assets/sample_user.xlsx";
   });
@@ -387,12 +394,12 @@ $(function () {
     let currentPage = Number(
       $("#pagination button[aria-current='page']").data("page")
     );
-    console.log("pre", currentPage);
+    console.log("pre", currentPage, "max",$("#pagination .btn-page").length);
     if (currentPage == $("#pagination .btn-page").length) {
       return;
     }
     currentPage += 1;
-    renderUser((page = currentPage));
+    renderUser({ page: currentPage });
   });
 
   $("#input-file-excel").on("change", function () {
