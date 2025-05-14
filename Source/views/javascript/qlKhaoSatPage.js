@@ -97,7 +97,7 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
       window.AppState.applyPermissionControl();
     }
     $("#pagination").append(
-      `<button type="button" class="btn btn-text btn-prev">Previous</button><div class="flex items-center gap-x-1">`
+      `<button type="button" class="btn btn-text btn-prev"><</button><div class="flex items-center gap-x-1">`
     );
     for (let i = 1; i <= totalPages; i++) {
       let activeClass = i == currentPage ? 'aria-current="page"' : "";
@@ -106,7 +106,7 @@ async function renderAllKhaoSat(page = 1, keyword = null) {
           `);
     }
     $("#pagination").append(
-      `</div><button type="button" class="btn btn-text btn-next">Next</button>`
+      `</div><button type="button" class="btn btn-text btn-next">></button>`
     );
   }
 }

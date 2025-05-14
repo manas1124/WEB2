@@ -230,8 +230,14 @@ $(document).ready(function () {
         icon: "error",
         title: "Lỗi",
         text: "Username không được để trống!",
+      });noSpaceValidation
+    } else if ( /\s/.test($("#username").val()) == true) {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Tên tài khoản không được có khoản cách",
       });
-    } else if ($("#password").val() === "") {
+    }else if ($("#password").val() === "") {
       Swal.fire({
         icon: "error",
         title: "Lỗi",
