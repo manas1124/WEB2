@@ -11,22 +11,30 @@
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
             <div class="w-96 relative">
-                <input type="text" placeholder="Nhập nội dung tìm kiếm" class="input ps-8" id="search-keyword" name="keyword" aria-expanded="false"/>
-                <span class="icon-[tabler--search] text-base-content absolute start-3 top-1/2 size-4 shrink-0 -translate-y-1/2"></span>
+                <label class="label-text mb-1" for="search-keyword">Tìm kiếm</label>
+                <input type="text" placeholder="Nhập nội dung tìm kiếm" class="input ps-8" id="search-keyword" name="keyword" aria-expanded="false" />
+                <span class="icon-[tabler--search] text-base-content absolute left-3 top-1/2 transform translate-y-1/3 -translate-x-1/4 text-xl"></span>
             </div>
         </div>
     </div>
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
             <div>
+                <label class="label-text mb-1" for="select-status">Trạng thái</label>
                 <select class="select" id="select-status">
-                    <option value="-1">Chọn trạng thái</option>
+                    <option value="-1">Tất cả</option>
                     <option value="1">Đang sử dụng</option>
                     <option value="0">Đã khóa</option>
                 </select>
             </div>
-            <button type="button" class="btn btn-primary" id="btn-loc" data-act="chuky-loc">Lọc</button>
-            <button type="button" class="btn btn-primary" id="btn-reset" data-act="reset">Reset</button>
+            <div>
+                <label class="label-text mb-1 invisible">Lọc</label>
+                <button type="button" class="btn btn-primary" id="btn-loc" data-act="chuky-loc">Lọc</button>
+            </div>
+            <div>
+                <label class="label-text mb-1 invisible">Đặt lại</label>
+                <button type="button" class="btn btn-primary" id="btn-reset" data-act="reset">Đặt lại</button>
+            </div>
         </div>
     </div>
 
@@ -37,7 +45,7 @@
                     <th>Mã Chu kỳ</th>
                     <th>Chu kỳ</th>
                     <th>Trạng thái</th>
-                    <th>Action</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody id="chuky-list">

@@ -7,12 +7,12 @@
     </div>
   </div>
   <div class="w-full overflow-x-auto">
-    <table class="table">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>Quyền ID</th>
           <th>Tên Quyền</th>
-          <th>Action</th>
+          <th>Hành động</th>
         </tr>
       </thead>
       <tbody id="quyen-list">

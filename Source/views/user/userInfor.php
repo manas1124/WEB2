@@ -39,9 +39,9 @@
     <div class="modal-footer border-t border-base-content/10">
         <button id="btn-edit-infor" onclick="toggleEditInfor(true)" class="edit-infor btn-edit-infor btn btn-primary">Sửa thông tin cá nhân<button>
         <button id="submit-edit-infor" onclick="submitEditPersonal()" class="edit-infor hidden btn btn-primary hidden">Cập nhật</button>
-        <button id="btn-edit-account" onclick="toggleEditAcc(true)" class="btn btn-primary">Sửa thông tin tài khoản</button>
-        <button id="submit-edit-account" class="edit-account hidden btn btn-primary hidden">Cập nhật tài khoản</button>
-        <button id="btn-exit-edit" onclick="backNormal()"  class="btn btn-primary hidden">Hủy sửa</button>
+        <button id="btn-edit-account" onclick="toggleEditAcc(true)" class="btn btn-primary">Đổi mật khẩu</button>
+        <button id="submit-edit-account" class="edit-account hidden btn btn-primary hidden">Đổi mật khẩu</button>
+        <button id="btn-exit-edit" onclick="backNormal()"  class="btn btn-primary hidden">Hủy</button>
     </div>
 </div>
 <script src="./views/javascript/jquery-3.7.1.min.js"></script>

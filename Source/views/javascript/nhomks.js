@@ -11,7 +11,7 @@ async function getAllNhomKs() {
     const response = await $.ajax({
       url: "./controller/nhomKsController.php",
       type: "POST",
-      data: { func: "getAllNhomKs"},
+      data: { func: "getAllNhomKs" },
       dataType: "json",
     });
     // console.log("fect",response)
@@ -23,6 +23,22 @@ async function getAllNhomKs() {
   }
 }
 async function deletenks(id) {
+  Swal.fire({
+    title: 'Bạn có chắc chắn muốn xóa không?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Có, xóa ngay',
+    cancelButtonText: 'Không'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      console.log("Deleting user with ID:", id);
+      try {
+        const response = await $.ajax({
+          url: "./controller/nhomKsController.php",
+          type: "POST",
+          data: { func: "deletenks", id: id }, // Gửi ID người dùng cần xóa
+          dataType: "json",
+        });
 
   console.log("Deleting user with ID:", id);
   Swal.fire({
@@ -231,6 +247,28 @@ async function action(mode) {
       console.error(" Lỗi khi cập nhật:", result);
     }
   }
+        if (response.success) {
+          Swal.fire({
+            title: 'Zóa nhóm khảo sát thất bại!',
+            icon: 'error',
+            confirmButtonText: 'Đã hiểu'
+          });
+
+        } else {
+          Swal.fire({
+            title: 'Xóa nhóm khảo sát thành công!',
+            icon: 'success',
+            confirmButtonText: 'Đã hiểu'
+          }).then((result)=>{
+              location.reload();
+          });
+        }
+      } catch (error) {
+        console.log("Lỗi khi xóa người dùng");
+
+      }
+    }
+  });
 }
 
   $(function () {

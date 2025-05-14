@@ -7,14 +7,14 @@
     </div>
   </div>
   <div class="w-full overflow-x-auto">
-    <table class="table">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>Tài khoản ID</th>
           <th>Username</th>
           <th>Quyền</th>
           <th>Trạng thái</th>
-          <th>Action</th>
+          <th>Hành động</th>
         </tr>
       </thead>
       <tbody id="account-list">
