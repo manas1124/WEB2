@@ -90,7 +90,8 @@ if (isset($_POST['func'])) {
             //     $accessToken = $_SESSION['accessToken'];
             //     $isVaid = isAuthorization($accessToken, 'edit.account');
             //     if ($isVaid) {
-                    $required = ['tk_id', 'username', 'password', 'dt_id', 'quyen_id', 'status'];
+
+                    $required = ['tk_id', 'username', 'dt_id', 'quyen_id', 'status'];
                     $data = [];
 
                     foreach ($required as $field) {
@@ -113,14 +114,21 @@ if (isset($_POST['func'])) {
                         ]);
                         exit;
                     }
-
-                    // Mã hóa mật khẩu
-                    $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
-
+                    if (isset($_POST['password']) && $_POST['password'] !== '') {
+                        // Mã hóa mật khẩu
+                        $hashedPassword = password_hash(1234, PASSWORD_BCRYPT);
+                        $isPassSuccess = $accountModel->updatePassword($data["tk_id"], $hashedPassword);
+                        if ($isPassSuccess == false) {
+                            echo json_encode([
+                                'status' => false,
+                                'message' => "Cập nhật mật khẩu thất bại status"
+                            ]);
+                            exit;
+                        }
+                    }
                     $isSuccess = $accountModel->update(
                         $data['tk_id'],
                         $data['username'],
-                        $hashedPassword,
                         $data['dt_id'],
                         $data['quyen_id'],
                         $data['status']
@@ -128,8 +136,9 @@ if (isset($_POST['func'])) {
 
                     echo json_encode([
                         'status' => $isSuccess,
-                        'message' => $isSuccess ? "Cập nhật thành công" : "Cập nhật thất bại"
+                        'message' => $isSuccess ? "Cập nhật thành công tk " : "Cập nhật thất bại"
                     ]);
+                    exit;
             //     } else {
             //         echo json_encode([
             //             'status' => false,
@@ -137,7 +146,7 @@ if (isset($_POST['func'])) {
             //         ]);
             //     }
             // }
-            exit;
+         
         case "checkExistAccount":
             $data = $_POST['data'];
             $data = json_decode($data, true);

@@ -104,18 +104,29 @@ if (isset($_POST['func']) && $_POST['func'] === "updatePersonalInfor") {
 //update tai khoan - cap nhat thong tin tai khoan
 if (isset($_POST['action']) && $_POST['action'] == 'updateAccount') {
     $tk_id = $_POST['tk_id'];
+    $previousPassword = $_POST['previousPassword'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     $accountModel = new AccountModel();
-    if ($accountModel->usernameIsExist($username)) {
+    
+    $account = $accountModel->getAccount($username);
+    if (!$account) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Username đã tồn tại!'
+            'message' => 'Lấy thông tin tài khoản ở php lỗi'
         ]);
         exit;
     }
+    $isCorrectPreviousPassword = isValidAccount($account, $previousPassword);
+    
+    if ( $isCorrectPreviousPassword == false ) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => "Mật khẩu cũ không đúng!"]);
+        exit;
+    }
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-    $isSuccess = $accountModel->updateUsernameAndPassword($tk_id, $username, $hashedPassword,);
+    $isSuccess = $accountModel->updatePassword($tk_id, $hashedPassword,);
     if ($isSuccess) {
         echo json_encode([
             'status' => 'success',

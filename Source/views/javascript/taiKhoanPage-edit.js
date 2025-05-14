@@ -67,22 +67,30 @@ function updatepage(params) {
   });
 }
 function validateAccountData(data) {
-  const requiredFields = ["tk_id", "username", "password", "dt_id", "quyen_id"];
+  const requiredFields = ["tk_id", "username", "dt_id", "quyen_id"];
   for (const field of requiredFields) {
     if (!data[field]) {
       console.error(`Thiếu trường ${field}`);
       return false;
     }
   }
+
+  const newPass = $("#password").val()
+  const confirmPass = $("#confirm-password").val()
+  if ( (newPass!=null || confirmPass!=null) && newPass !== confirmPass) {
+    alert("mật khẩu không khớp")
+    console.error(`Mật khẩu xác nhận không trùng khớp`);
+    return false;
+  }
   return true;
 }
 async function updateTaiKhoan(accountData) {
   if (!validateAccountData(accountData)) {
-    Swal.fire(
-      "Thiếu dữ liệu",
-      "Vui lòng kiểm tra lại các trường bắt buộc",
-      "warning"
-    );
+    // Swal.fire(
+    //   "Thiếu dữ liệu",
+    //   "Vui lòng kiểm tra lại các trường bắt buộc hoặc mật khẩu không khớp",
+    //   "warning"
+    // );
     return false;
   }
 
@@ -174,9 +182,9 @@ $(function () {
       $("#username").val(defaultData.username);
     }
 
-    if (passwords.includes(defaultData.password)) {
-      $("#password").val(defaultData.password);
-    }
+    // if (passwords.includes(defaultData.password)) {
+    //   $("#password").val(defaultData.password);
+    // }
 
     $("#select-status").val(defaultData.status);
     if (doiTuongList != null) {
@@ -199,7 +207,7 @@ $(function () {
     }
 
     $("#username").val(defaultData.username);
-    $("#password").val(defaultData.password); // Consider hashing or hiding in production
+    // $("#password").val(defaultData.password); // Consider hashing or hiding in production
     $("#select-status").val(defaultData.status);
   })();
 
@@ -222,10 +230,8 @@ $(function () {
       if (!username) {
         alert("Vui lòng nhập username");
         return false;
-      } else if (!password) {
-        alert("Vui lòng nhập password");
-        return false;
-      } else if (dt_id == "-1") {
+      } 
+      else if (dt_id == "-1") {
         alert("Vui lòng chọn đối tượng");
         return false;
       } else if (quyen_id == "-1") {

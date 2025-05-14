@@ -25,12 +25,12 @@
         <div class="flex flex-row edit-account hidden">
             <div class="modal-body pt-0 mb-4">
                 <div class="w-96">
-                    <label class="label-text" for="username">Tên đăng nhập:</label>
-                    <input type="text" class="input" id="username" />
+                    <label class="label-text" for="previousPassword">Mật khẩu cũ:</label>
+                    <input type="password" class="input" id="previousPassword" />
                     <label class="label-text" for="password">Mật khẩu:</label>
-                    <input type="text" class="input" id="password" />
+                    <input type="password" class="input" id="password" />
                     <label class="label-text" for="confirm-pass">Xác nhận mật khẩu:</label>
-                    <input type="text" class="input" id="confirm-pass" />
+                    <input type="password" class="input" id="confirm-pass" />
                 </div>
             </div>
         </div>
@@ -40,10 +40,11 @@
         <button id="btn-edit-infor" onclick="toggleEditInfor(true)" class="edit-infor btn-edit-infor btn btn-primary">Sửa thông tin cá nhân<button>
         <button id="submit-edit-infor" onclick="submitEditPersonal()" class="edit-infor hidden btn btn-primary hidden">Cập nhật</button>
         <button id="btn-edit-account" onclick="toggleEditAcc(true)" class="btn btn-primary">Sửa thông tin tài khoản</button>
-        <button id="submit-edit-account" class="edit-account hidden btn btn-primary hidden">Cập nhật acc</button>
+        <button id="submit-edit-account" class="edit-account hidden btn btn-primary hidden">Cập nhật tài khoản</button>
         <button id="btn-exit-edit" onclick="backNormal()"  class="btn btn-primary hidden">Hủy sửa</button>
     </div>
 </div>
-<script src="views/javascript/userInfor.js"></script>
+<script src="./views/javascript/jquery-3.7.1.min.js"></script>
+<script src="./views/javascript/userInfor.js"></script>
 
 </script>
