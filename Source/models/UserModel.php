@@ -147,7 +147,7 @@ class UserModel {
        
         $conn = $this->db->getConnection();
     
-        $stmt = $conn->prepare("INSERT INTO doi_tuong (ho_ten, email, diachi, dien_thoai, nhom_ks, loai_dt_id, ctdt_id) VALUES ( ?, ?, ?, ?, ?, ?,?)");
+        $stmt = $conn->prepare("INSERT INTO doi_tuong (ho_ten, email, diachi, dien_thoai, nhom_ks, loai_dt_id, ctdt_id, status) VALUES ( ?, ?, ?, ?, ?, ?,?,1)");
         $stmt->bind_param(
             "sssssss",  $ho_ten,$email,$diachi,$dien_thoai,$nhom_ks,$loai_dt_id,$ctdt_id);
         

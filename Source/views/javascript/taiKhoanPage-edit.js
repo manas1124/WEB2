@@ -97,7 +97,7 @@ async function updateTaiKhoan(accountData) {
   try {
     const formData = new FormData();
     formData.append("func", "updateAccount");
-
+    console.log("update data:",accountData)
     // Gửi từng field riêng biệt thay vì stringify JSON
     for (const key in accountData) {
       formData.append(key, accountData[key]);

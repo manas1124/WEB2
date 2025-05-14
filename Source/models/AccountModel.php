@@ -70,10 +70,9 @@ class AccountModel
     public function getAllTaiKhoan()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("select *,quyen.ten_quyen 
+        $stmt = $conn->prepare("select tai_khoan.*,quyen.ten_quyen 
                             from tai_khoan 
-                            inner join quyen on tai_khoan.quyen_id = quyen.quyen_id 
-                            where tai_khoan.status = 1");
+                            inner join quyen on tai_khoan.quyen_id = quyen.quyen_id");
                                
         if (!$stmt) {
             error_log("Prepare failed: " . $conn->error);
@@ -119,7 +118,7 @@ class AccountModel
     public function softDelete($tk_id)
     {
         $conn = $this->db->getConnection();
-        $sql = "DELETE FROM tai_khoan WHERE tk_id = ?";
+        $sql = "UPDATE tai_khoan set status = 0 where tai_khoan.tk_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $tk_id);
         $result = $stmt->execute();
@@ -170,11 +169,11 @@ class AccountModel
             tai_khoan.quyen_id,
             tai_khoan.status,
             loai_doi_tuong.ten_dt,
-            loai_doi_tuong.status AS dt_status,
             quyen.ten_quyen,
             quyen.status AS quyen_status
         FROM tai_khoan
-        JOIN loai_doi_tuong ON tai_khoan.dt_id = loai_doi_tuong.dt_id
+        LEFT JOIN doi_tuong ON tai_khoan.dt_id = doi_tuong.dt_id
+        LEFT JOIN loai_doi_tuong ON doi_tuong.loai_dt_id = loai_doi_tuong.dt_id
         JOIN quyen ON tai_khoan.quyen_id = quyen.quyen_id
         WHERE tai_khoan.tk_id = ?
     ";
