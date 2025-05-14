@@ -86,6 +86,10 @@ function vadlidate(data) {
         alert("Tên đăng nhập không được để trống!");
         return false;
     }
+    if (/\s/.test(data.username) == true ) {
+        alert("Tên đăng nhập không được có khoảng cách!");
+        return false;
+    }
     if (data.password == "") {
         alert("Mật khẩu không được để trống!");
         return false;

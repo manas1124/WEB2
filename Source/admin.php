@@ -117,15 +117,7 @@
     <script src="./views/javascript/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $("#khao-sat-page").addClass("bg-sky-500/100 text-white");
-        // active nav link
-        $.noConflict();
-        jQuery(document).ready(function() {
-            $(".nav-link").click(function() {
-                $(".nav-link").removeClass("bg-sky-500/100 text-white");
-                $(this).addClass("bg-sky-500/100 text-white");
-            });
-        });
+        
     </script>
     <script>
         function capNhatTrangThai() {

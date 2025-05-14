@@ -1,8 +1,14 @@
-<a href="" class="back-link btn btn-soft ">Quay lại</a>
-<h3 class="modal-title mb-8">Sửa tài khoản</h3>
-<div class="overflow-y-auto">
+<div class="flex flex-col w-full">
+<div>
+        <button id="return-page" class="back-link btn btn-soft ">Quay lại</button>
+    </div>
+    <div class="flex justify-center">
+        <h3 class="modal-title">Sửa quyền</h3>
+    </div>
+<div class="flex justify-center">
+
     <!-- thong tin chung -->
-    <div class="flexx flex-row">
+    <div class="flex flex-row">
         <div class="pt-0 mb-4 ">
             <div class="w-96">
                 <label class="label-text" for="username">ID</label>
@@ -39,7 +45,9 @@
             </div>
         </div>
     </div>
-    <div class="modal-footer border-t border-base-content/10">
+    
+</div>
+<div class="flex justify-center">
         <button id="btn-save-tk" type="submit" class="btn btn-primary">Lưu</button>
     </div>
 </div>
