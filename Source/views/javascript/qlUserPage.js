@@ -178,24 +178,48 @@ async function getUserById(id) {
 }
 
 async function deleteUser(id) {
-  console.log("Deleting user with ID:", id);
-  try {
-    const response = await $.ajax({
-      url: "./controller/UserController.php",
-      type: "POST",
-      data: { func: "deleteUser", id: id },
-      dataType: "json",
-    });
+  Swal.fire({
+    title: 'Bạn có chắc chắn muốn xóa đối tượng?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Có, xóa ngay',
+    cancelButtonText: 'Không',
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33'
+  }).then( async (result) => {
+    if (result.isConfirmed) {
+      console.log("Deleting user with ID:", id);
+      try {
+        const response = await $.ajax({
+          url: "./controller/UserController.php",
+          type: "POST",
+          data: { func: "deleteUser", id: id },
+          dataType: "json",
+        });
 
-    if (response.success) {
-      alert("xóa thất bại");
-    } else {
-      alert("xóa thành công");
-      loadUserList();
+        if (response.success) {
+          Swal.fire({
+                    title: 'Thông báo',
+                    text: 'Xóa thất bại',
+                    icon: 'error',
+                    confirmButtonText: 'Thử lại'
+                  });
+        } else {
+          Swal.fire({
+                    title: 'Thông báo',
+                    text: 'Xóa thành công!',
+                    icon: 'success',
+                    confirmButtonText: 'Tiếp tục'
+                  });
+          loadUserList();
+        }
+      } catch (error) {
+        console.log("Lỗi khi xóa người dùng");
+      }
     }
-  } catch (error) {
-    console.log("Lỗi khi xóa người dùng");
-  }
+  });
+
+
 }
 
 async function loadNhomKsToSelect() {
