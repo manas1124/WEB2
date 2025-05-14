@@ -35,15 +35,34 @@ if (isset($_POST['func'])) {
                     if (
                         isset($_POST["username"]) &&
                         isset($_POST["password"]) &&
-                        isset($_POST["dt_id"]) &&
-                        isset($_POST["quyen_id"])
+                        isset($_POST["quyen_id"]) &&
+                        isset($_POST["hoTen"]) &&
+                        isset($_POST["email"]) &&
+                        isset($_POST["sdt"]) &&
+                        isset($_POST["address"]) &&
+                        isset($_POST["loaiDoiTuong"])
                     ) {
+                        $hoTen = $_POST["hoTen"];
+                        $email = $_POST["email"];
+                        $address = $_POST["address"];
+                        $loaiDoiTuong = $_POST["loaiDoiTuong"];
+                        $sdt = $_POST["sdt"];
+                        require_once __DIR__ . '/../models/UserModel.php';
+                        $userModel = new UserModel();
+                        $dt_id = $userModel->addUser($hoTen,$email,$address,$sdt,null,$loaiDoiTuong,null);
+                        if ($dt_id == false) {
+                            echo json_encode([
+                                "status" => false,
+                                "message" => "Tạo tài khoản thất bại"
+                            ]);
+                            exit;
+                        }
                         $username = $_POST["username"];
                         $password = $_POST["password"];
-                        $dt_id = $_POST["dt_id"];
                         $quyen_id = $_POST["quyen_id"];
                         $status = isset($_POST["status"]) ? $_POST["status"] : null;
-
+                        
+                        
                         $isExistUsername = $accountModel->usernameIsExist($username);
                         $isExistDoiTuongId = $accountModel->isExistDoiTuongId($dt_id);
 
@@ -54,13 +73,7 @@ if (isset($_POST['func'])) {
                             ]);
                             exit;
                         }
-                        if ($isExistDoiTuongId == false) {
-                            echo json_encode([
-                                "status" => false,
-                                "message" => "Không tồn tại đối tượng có id: '$dt_id'"
-                            ]);
-                            exit;
-                        }
+                        
                         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
                         $response = $accountModel->create($username, $hashedPassword, $dt_id, $quyen_id, $status);
                         if ($response == true) {
@@ -205,20 +218,20 @@ if (isset($_POST['func'])) {
             }
             break;
         case "getChiTietAccountById":
-            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
-                $accessToken = $_SESSION['accessToken'];
-                $isVaid = isAuthorization($accessToken, 'view.account');
-                if ($isVaid) {
+            // if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+            //     $accessToken = $_SESSION['accessToken'];
+            //     $isVaid = isAuthorization($accessToken, 'view.account');
+                // if ($isVaid) {
                     $id = $_POST['id'];
                     $response = $accountModel->getAccountById($id);
                     // $response = $ksModel->getAllKhaoSat();
-                } else {
-                    $response = [
-                        'status' => false,
-                        'message' => 'Bạn không có quyền để thực hiện việc này'
-                    ];
-                }
-            }
+                // } else {
+                //     $response = [
+                //         'status' => false,
+                //         'message' => 'Bạn không có quyền để thực hiện việc này'
+                //     ];
+                // }
+            // }
             break;
         case "softDeleteAccount":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
