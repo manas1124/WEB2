@@ -15,7 +15,7 @@ async function addNhomks(ten_nks) {
       console.error("Lỗi khi thêm nhóm:", e);
       return { success: false, message: "Lỗi kết nối server" };
     }
-  }
+}
   
   $(function () {
     $(document).on("click", "#btn-create", async function (e) {
