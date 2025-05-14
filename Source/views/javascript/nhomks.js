@@ -8,7 +8,7 @@ async function getAllNhomKs() {
     const response = await $.ajax({
       url: "./controller/nhomKsController.php",
       type: "POST",
-      data: { func: "getAllNhomKs"},
+      data: { func: "getAllNhomKs" },
       dataType: "json",
     });
     // console.log("fect",response)
@@ -20,46 +20,64 @@ async function getAllNhomKs() {
   }
 }
 async function deletenks(id) {
+  Swal.fire({
+    title: 'Bạn có chắc chắn muốn xóa không?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Có, xóa ngay',
+    cancelButtonText: 'Không'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      console.log("Deleting user with ID:", id);
+      try {
+        const response = await $.ajax({
+          url: "./controller/nhomKsController.php",
+          type: "POST",
+          data: { func: "deletenks", id: id }, // Gửi ID người dùng cần xóa
+          dataType: "json",
+        });
 
-     console.log("Deleting user with ID:", id);
-  try {
-    const response = await $.ajax({
-      url: "./controller/nhomKsController.php",
-      type: "POST",
-      data: { func: "deletenks", id: id }, // Gửi ID người dùng cần xóa
-      dataType: "json",
-    });
-  
-    if (response.success) {
-      alert("xóa thất bại"); 
-      
-    } else {
-      alert("xóa thành công"); 
-      location.reload();
+        if (response.success) {
+          Swal.fire({
+            title: 'Zóa nhóm khảo sát thất bại!',
+            icon: 'error',
+            confirmButtonText: 'Đã hiểu'
+          });
+
+        } else {
+          Swal.fire({
+            title: 'Xóa nhóm khảo sát thành công!',
+            icon: 'success',
+            confirmButtonText: 'Đã hiểu'
+          }).then((result)=>{
+              location.reload();
+          });
+        }
+      } catch (error) {
+        console.log("Lỗi khi xóa người dùng");
+
+      }
     }
-  } catch (error) {
-    console.log("Lỗi khi xóa người dùng");
-    
-  }
+  });
 }
 $(function () {
 
-    $(".main-content").on("click",".action-item", function (e) {
-        e.preventDefault();
-        let action = $(this).data("act");
-        console.log(action)
-        $(".main-content").load(`day la trang ${action}`)
-    });
-  
-  
-    (async () => {
-      let ksList  = await getAllNhomKs();
-      // ksList = JSON.parse(ksList)
-      if (ksList != null) {
-        // console.log(ksList)
-        
-        ksList.map((item) => {
-          $("#nhomks-list").append(`
+  $(".main-content").on("click", ".action-item", function (e) {
+    e.preventDefault();
+    let action = $(this).data("act");
+    console.log(action)
+    $(".main-content").load(`day la trang ${action}`)
+  });
+
+
+  (async () => {
+    let ksList = await getAllNhomKs();
+    // ksList = JSON.parse(ksList)
+    if (ksList != null) {
+      // console.log(ksList)
+
+      ksList.map((item) => {
+        $("#nhomks-list").append(`
             <tr>
                 <td>${item.ten_nks}</td>
                
@@ -70,12 +88,12 @@ $(function () {
             </tr>
     
           `);
-        });
-        window.AppState.applyPermissionControl();
-        
-      }
-      
-      
-  
-    })();
-  });
+      });
+      window.AppState.applyPermissionControl();
+
+    }
+
+
+
+  })();
+});

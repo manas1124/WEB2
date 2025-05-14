@@ -15,7 +15,7 @@ $('#loginForm').on('submit', function (e) {
 
             var data = JSON.parse(response);
             console.log(data);
-            alert(data['message']); // Show the message from the server
+            // alert(data['message']); // Show the message from the server
             if (data['status'] == "success") {
                 window.location.href = "./home.php";
             }
@@ -24,7 +24,11 @@ $('#loginForm').on('submit', function (e) {
         },
         error: function () {
             console.log(response);
-            alert('Có lỗi xảy ra khi gửi dữ liệu!');
+            Swal.fire({
+                title: 'Có lỗi xảy ra khi gửi dữ liệu!',
+                icon: 'error',
+                confirmButtonText: 'Đã hiểu'
+            });
         }
     });
 });
@@ -66,7 +70,12 @@ $('#signUpForm').on('submit', function (e) {
             // console.log(response);
 
             var data = JSON.parse(response);
-            alert(data.message); // Show the message from the server
+            Swal.fire({
+                title: data.message,
+                icon: 'success',
+                confirmButtonText: 'Đã hiểu'
+            });
+            // alert(data.message); // Show the message from the server
             console.log(data);
             if (data.status == "success") {
                 $("#signUpForm").addClass("hidden")
@@ -76,7 +85,11 @@ $('#signUpForm').on('submit', function (e) {
 
         },
         error: function () {
-            alert('Có lỗi xảy ra khi gửi dữ liệu!');
+            Swal.fire({
+                title: 'Có lỗi xảy ra khi gửi dữ liệu!',
+                icon: 'error',
+                confirmButtonText: 'Đã hiểu'
+            });
         }
     });
 });
@@ -86,7 +99,7 @@ function vadlidate(data) {
         alert("Tên đăng nhập không được để trống!");
         return false;
     }
-    if (/\s/.test(data.username) == true ) {
+    if (/\s/.test(data.username) == true) {
         alert("Tên đăng nhập không được có khoảng cách!");
         return false;
     }
@@ -249,7 +262,7 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 $("#main-content").html(response.html);
-                
+
                 let queryString = $.param(params);
                 queryString = cleanQueryString(queryString);
                 // Update the URL
@@ -303,26 +316,43 @@ $(function () {
         updateContent(newParams);
     });
 
-    $("#btn-logout").click(function() {
-            $.ajax({
-                type: 'POST',
-                url: './controller/AuthController.php',
-                data: {
-                    action: 'logout'
-                },
-                success: function(response) {
-                    console.log(response);
+    $("#btn-logout").click(function () {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            text: "Bạn sẽ phải đăng nhập lại nếu muốn tiếp tục sử dụng.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đăng xuất',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: './controller/AuthController.php',
+                    data: {
+                        action: 'logout'
+                    },
+                    success: function (response) {
+                        console.log(response);
 
-                    var data = JSON.parse(response);
-                    alert(data['message']); // Show the message from the server
-                    window.location.href = "./login.php";
+                        var data = JSON.parse(response);
+                        // alert(data['message']); // Show the message from the server
+                        window.location.href = "./login.php";
 
-                },
-                error: function() {
-                    alert('Có lỗi xảy ra khi gửi dữ liệu!');
-                }
-            });
-        })
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: 'Có lỗi xảy ra khi gửi dữ liệu!',
+                            icon: 'error',
+                            confirmButtonText: 'Đã hiểu'
+                        });
+                    }
+                });
+            }
+        });
+    })
 
     // Helper function to get URL parameters
     function getUrlParams() {

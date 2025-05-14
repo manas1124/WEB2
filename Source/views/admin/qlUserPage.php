@@ -90,7 +90,7 @@
     </div>
 
     <div class="w-full overflow-x-auto h-[400px]">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th class="w-1/5 text-center">Họ và tên</th>

@@ -8,11 +8,11 @@
     </div>
    
     <div class="w-full overflow-x-auto">
-        <table class="table">
+        <table class="table-striped table">
             <thead>
                 <tr>
                     <th>Tên Nhóm Khảo sát</th>
-                    <th>Action</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody id="nhomks-list">

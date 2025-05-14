@@ -5,8 +5,9 @@
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-4">
             <div class="w-96 relative">
+                <label class="label-text mb-1" for="search-keyword">Tìm kiếm</label>
                 <input type="text" placeholder="Nhập nội dung tìm kiếm" class="input ps-8" id="search-keyword" name="keyword" aria-expanded="false" />
-                <span class="icon-[tabler--search] text-base-content absolute start-3 top-1/2 size-4 shrink-0 -translate-y-1/2"></span>
+                <span class="icon-[tabler--search] text-base-content absolute left-3 top-1/2 transform translate-y-1/3 -translate-x-1/4 text-xl"></span>
             </div>
         </div>
         <div class="flex items-center gap-4">
@@ -54,7 +55,7 @@
 
         <div class="flex flex-col">
             <label class="label-text mb-1 invisible">Reset</label>
-            <button type="button" class="btn btn-primary h-10" id="btn-reset">Reset</button>
+            <button type="button" class="btn btn-primary h-10" id="btn-reset">Đặt lại</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto h-[500]">
@@ -67,7 +68,7 @@
                     <th>Nhóm khảo sát</th>
                     <th>Ngành</th>
                     <th>Chu kỳ</th>
-                    <th>Action</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody id="ks-list">
