@@ -254,7 +254,9 @@ function toggleStatus(ctdt_id) {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Có, thay đổi ngay',
-        cancelButtonText: 'Không'
+        cancelButtonText: 'Không',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
@@ -373,7 +375,9 @@ $(document).ready(async function () {
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Có, sửa ngay',
-                cancelButtonText: 'Không'
+                cancelButtonText: 'Không',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
             }).then((result) => {
                 if (result.isConfirmed) {
                     update();

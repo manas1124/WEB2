@@ -176,7 +176,9 @@ function toggleStatus(nganh_id) {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Có, thay đổi ngay',
-        cancelButtonText: 'Không'
+        cancelButtonText: 'Không',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
