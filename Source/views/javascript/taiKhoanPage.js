@@ -56,7 +56,7 @@ async function loadAllTaiKhoan() {
     tkList.forEach((item) => {
       const isActive = Number(item.status) == 1;
       const statusBadge =
-        Number(item.status) == 1
+        item.status == 1
           ? '<span class="badge badge-soft badge-success" style="margin-left: -120px">Đang hoạt động</span>'
           : '<span class="badge badge-soft badge-error" style="margin-left: -120px">Đã khóa</span>';
       console.log(`Account ${item.tk_id} status:`, item.status);
@@ -64,7 +64,7 @@ async function loadAllTaiKhoan() {
         <tr>
           <td>${item.tk_id}</td>
           <td>${item.username}</td>
-          <td>${item.quyen_id}</td>
+          <td>${item.ten_quyen}</td>
           <td class="text-center">
             ${statusBadge}
           </td>
@@ -112,22 +112,30 @@ async function loadAllQuyen() {
 function create() {
   const username = $("#username").val();
   const password = $("#password").val();
-  const dt_id = $("#ma-doi-tuong").val();
   const quyen_id = $("#select-quyen").val();
   const status = $("#select-status").val();
-  console.log(username, password, dt_id, quyen_id, status)
+  const hoTen = $("#ho-ten").val();
+  const email = $("#email").val();
+  const sdt = $("#sdt").val();
+  const address = $("#address").val();
+  const loaiDoiTuong = $("#loai").val();
+  console.log(username, password, quyen_id, status)
   $.ajax({
     url: "./controller/accountController.php",
     type: "POST",
     dataType: "json",
-    data: {
-        func: "create",
-        username: username,
-        password: password,
-        dt_id: dt_id,
-        quyen_id: quyen_id,
-        status: status,
-    },
+      data: {
+          func: "create",
+          username: username,
+          password: password,
+          quyen_id: quyen_id,
+          status: status,
+          hoTen: hoTen,
+          email: email,
+          sdt: sdt,
+          address: address,
+          loaiDoiTuong: loaiDoiTuong
+      },
     success: function (response) {
       console.log(response)
         if (response && response.status === true) {
@@ -185,26 +193,7 @@ function updatepage(params) {
     },
   });
 }
-function update() {
-  $.ajax({
-    url: "./controller/accountController.php",
-    type: "GET",
-    dataType: "json",
-    data: {
-      func: "update",
-      tk_id: tk_id,
-      username: username,
-      passowrd: passowrd,
-      dt_id: dt_id,
-      quyen_id: quyen_id,
-      status: status,
-    },
-    success: function (response) {},
-    error: function (error) {
-      console.error("Error loading form sua:", error);
-    },
-  });
-}
+
 $(document).ready(function () {
   loadAllTaiKhoan();
   loadAllDoiTuong();

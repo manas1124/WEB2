@@ -1,3 +1,4 @@
+<div class="flex w-full justify-center">
 <div id="ctdt-content" class="container h-full">
     <div class="flex items-center justify-between mb-4">
         <h1>Quản lý User</h1>
@@ -58,26 +59,30 @@
     </div>
     <div class="my-6 flex flex-row align-items-center gap-4">
         <div class=" flex flex-col">
-            <label for="search" class="font-bold mr-2">Tìm kiếm:</label>
+            <label for="search" class="label-text">Tìm kiếm:</label>
             <input type="text" id="search" name="search" placeholder="Nhập từ khóa tìm kiếm..."
-                class="p-2 w-64 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                class="input w-64">
         </div>
         <div class="w-50 flex flex-col">
-            <label for="nhom-ks-select" class="font-bold ml-4 mr-2">Nhóm khảo sát:</label>
+            <label for="nhom-ks-select" class="label-text">Nhóm khảo sát:</label>
             <select id="nhom-ks-select"
-                class="p-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                class="input ">
                 <option value="-1">Tất cả</option>
             </select>
         </div>
         <div class="w-50 flex flex-col">
-            <label class="font-bold ml-4 mr-2" for="select-nganh">Tất cả</label>
-            <select class="p-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="select-nganh">
+            <label class="label-text" for="select-nganh">Ngành</label>
+            <select
+                class="input "
+                id="select-nganh">
                 <option value="-1">Tất cả</option>
             </select>
         </div>
         <div class="w-50 flex flex-col ">
-            <label class="font-bold ml-4 mr-2" for="select-chu-ki">Tất cả</label>
-            <select class="p-2 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"id="select-chu-ki">
+            <label class="label-text" for="select-chu-ki">Chu kỳ</label>
+            <select
+                class="input "
+                id="select-chu-ki">
                 <option value="-1">Chọn chu kì</option>
             </select>
         </div>
@@ -109,6 +114,7 @@
         </table>
     </div>
     <div id="pagination" class="flex justify-center space-x-3 mt-3"></div>
+</div>
 </div>
 <script src="views/javascript/qlUserPage.js"></script>
 <script src="../node_modules/flyonui/flyonui.js"></script>
