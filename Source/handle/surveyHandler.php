@@ -16,7 +16,7 @@
                     }
                 }
                 else {
-                    echo 'hihi!';
+                    echo 'Không có quyền truy cập!';
                     exit;
                 }
                 

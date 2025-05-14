@@ -2,6 +2,15 @@
 $('#loginForm').on('submit', function (e) {
     console.log("date gui:", $('#txtUsername').val(), $('#txtPassword').val())
     e.preventDefault();
+    if ($('#txtUsername').val() == "" || $('#txtPassword').val() == "") {
+        Swal.fire({
+            title: 'Thông báo',
+            text: "Tên đăng nhập hoặc mật khẩu không được để trống!",
+            icon: 'warning',
+            confirmButtonText: 'Thử lại'
+        });
+        return;
+     }
     $.ajax({
         type: 'POST',
         url: './controller/AuthController.php',
@@ -17,8 +26,29 @@ $('#loginForm').on('submit', function (e) {
             console.log(data);
             // alert(data['message']); // Show the message from the server
             if (data['status'] == "success") {
-                window.location.href = "./home.php";
+                Swal.fire({
+                    title: 'Đăng nhập thành công',
+                    text: " Đang chuyển hướng...",
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Đăng xuất',
+                }).then((result) => {
+                    window.location.href = "./home.php";
+                    
+                });
             }
+            else {
+                Swal.fire({
+                    title: 'Đăng nhập thất bại',
+                    text: data['message'],
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Thử lại',
+                });
+            }
+
 
 
         },
@@ -70,16 +100,31 @@ $('#signUpForm').on('submit', function (e) {
             // console.log(response);
 
             var data = JSON.parse(response);
-            Swal.fire({
-                title: data.message,
-                icon: 'success',
-                confirmButtonText: 'Đã hiểu'
-            });
             // alert(data.message); // Show the message from the server
             console.log(data);
             if (data.status == "success") {
-                $("#signUpForm").addClass("hidden")
-                $("#signInForm").removeClass("hidden")
+                Swal.fire({
+                    title: 'Đăng kí thành công',
+                    text: " Bây giờ bạn có thể đăng nhập",
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Đăng nhập ngay',
+                }).then((result) => {
+                    document.getElementById('signUpForm').reset();
+                    $("#signUpForm").addClass("hidden")
+                    $("#signInForm").removeClass("hidden")
+                });
+            }
+            else {
+                Swal.fire({
+                    title: 'Đăng kí thất bại',
+                    text: data.message,
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Thử lại',
+                });
             }
 
 
@@ -95,65 +140,60 @@ $('#signUpForm').on('submit', function (e) {
 });
 
 function vadlidate(data) {
+    let message = '';
     if (data.username == "") {
-        alert("Tên đăng nhập không được để trống!");
-        return false;
+        message = "Tên đăng nhập không được để trống!";
     }
-    if (/\s/.test(data.username) == true) {
-        alert("Tên đăng nhập không được có khoảng cách!");
-        return false;
+    else if (/\s/.test(data.username) == true ) {
+        message = "Tên đăng nhập không được có khoảng trắng!";
     }
-    if (data.password == "") {
-        alert("Mật khẩu không được để trống!");
-        return false;
+    else if (data.password == "") {
+        message = "Mật khẩu không được để trống!";
     }
-    if (data.passwordConfirm == "") {
-        alert("Mật khẩu không được để trống!");
-        return false;
+    else if (data.passwordConfirm == "") {
+        message = "Mật khẩu xác nhận không được để trống!";
     }
-    if (data.password != data.passwordConfirm) {
-        alert("Mật khẩu không khớp!");
-        return false;
+    else if (data.password != data.passwordConfirm) {
+        message = "Mật khẩu không trùng khớp!";
     }
-    if (data.fullName == "") {
-        alert("Họ tên không được để trống!");
-        return false;
+    else if (data.fullName == "") {
+        message = "Họ tên không được để trống!";
     }
-    if (data.phone == "") {
-        alert("Số điện thoại không được để trống!");
-        return false;
+    else if (data.phone == "") {
+        message = "Số điện thoại không được để trống!";
     }
-    if (data.email == "") {
-        alert("Email không được để trống!");
-        return false;
+    else if (data.email == "") {
+        message = "Email không được để trống!";
     }
-    if (data.address == "") {
-        alert("Địa chỉ không được để trống!");
-        return false;
+    else if (data.address == "") {
+        message = "Địa chỉ không được để trống!";
     }
-    if (data.address.match(/[^\p{L}\p{N}\s]/u)) {
-        alert("Địa chỉ không được có kí tự đặc biệt!");
-        return false;
+    else if (data.address.match(/[^\p{L}\p{N}\s]/u)) {
+        message = "Địa chỉ không được có kí tự đặc biệt!";
     }
-    if (data.ctdt == "") {
-        alert("Vui lòng chọn chương trình đào tạo !");
-        return false;
+    else if (data.ctdt == "") {
+        message = "Vui lòng chọn chương trình đào tạo !";
     }
-    if (data.doiTuong == "") {
-        alert("Vui lòng chọn đối tượng!");
-        return false;
+    else if (data.doiTuong == "") {
+        message = "Vui lòng chọn đối tượng !";
     }
     // username không được có kí tự đặc biệt 
-    if (data.username.match(/[^a-zA-Z0-9]/)) {
-        alert("Tên đăng nhập không được có kí tự đặc biệt!");
-        return false;
+    else if (data.username.match(/[^a-zA-Z0-9]/)) {
+        message = "Tên đăng nhập không được có kí tự đặc biệt!";
     }
-    if (data.phone.match(/[^0-9]/)) {
-        alert("Số điện thoại không được có kí tự đặc biệt!");
-        return false;
+    else if (data.phone.match(/[^0-9]/)) {
+        message = "Số điện thoại không được có kí tự đặc biệt!";
     }
-    if (data.phone.length < 10 || data.phone[0] != 0) {
-        alert("Số điện thoại phải gồm 10 số và bắt đầu bằng 0!");
+    else if (data.phone.length < 10 || data.phone[0] != 0) {
+        message = "Số điện thoại phải gồm 10 số và bắt đầu bằng 0!";
+    }
+    if (message != '') {
+        Swal.fire({
+            title: 'Thông báo',
+            text: message,
+            icon: 'warning',
+            confirmButtonText: 'Thử lại'
+        });
         return false;
     }
     return true;
@@ -270,7 +310,19 @@ $(function () {
 
             },
             error: function (error) {
-                console.error("Error navigate page:", error);
+                Swal.fire({
+                    title: error.responseText,
+                    text: 'Bạn không được phép thực hiện thao tác này',
+                    icon: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Đồng ý',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    location.href = "./home.php";
+                });
+                
 
             }
         });

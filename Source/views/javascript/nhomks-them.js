@@ -30,7 +30,6 @@ $(function () {
       });
       return;
     }
-
     const result = await addNhomks(ten_nks);
     if (result.success) {
       Swal.fire({
