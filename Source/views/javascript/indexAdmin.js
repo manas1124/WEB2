@@ -45,6 +45,10 @@ $(function () {
                 let queryString = $.param(params);
                 queryString = cleanQueryString(queryString);
                 history.pushState(params, "", "admin.php?" + queryString);
+
+                $(".nav-link").removeClass("bg-sky-500/100 text-white");
+                $(".nav-item[data-page='" + params.page + "']").addClass("bg-sky-500/100 text-white");
+
             },
             error: function (error) {
                 console.error("Error navigate page:", error);
