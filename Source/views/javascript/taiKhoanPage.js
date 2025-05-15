@@ -8,7 +8,7 @@ async function getAllTaiKhoan() {
       data: { func: "getAllTaiKhoan" },
       dataType: "json",
     });
-    console.log("fetch",response)
+    console.log("fetch", response);
     return response;
   } catch (error) {
     console.log("Lỗi khi fetch danh sách tài khoản", error.responseText);
@@ -119,60 +119,60 @@ function create() {
   const sdt = $("#sdt").val();
   const address = $("#address").val();
   const loaiDoiTuong = $("#loai").val();
-  console.log(username, password, quyen_id, status)
+  console.log(username, password, quyen_id, status);
   $.ajax({
     url: "./controller/accountController.php",
     type: "POST",
     dataType: "json",
-      data: {
-          func: "create",
-          username: username,
-          password: password,
-          quyen_id: quyen_id,
-          status: status,
-          hoTen: hoTen,
-          email: email,
-          sdt: sdt,
-          address: address,
-          loaiDoiTuong: loaiDoiTuong
-      },
+    data: {
+      func: "create",
+      username: username,
+      password: password,
+      quyen_id: quyen_id,
+      status: status,
+      hoTen: hoTen,
+      email: email,
+      sdt: sdt,
+      address: address,
+      loaiDoiTuong: loaiDoiTuong,
+    },
     success: function (response) {
-      console.log(response)
-        if (response && response.status === true) {
-            Swal.fire({
-                icon: "success",
-                title: "Tạo thành công!",
-                showConfirmButton: true,
-                timer: 2000,
-            });
-            navigateTaiKhoanPage()
-        } else if (response && response.status === false && response.message) {
-            Swal.fire({
-                icon: "error",
-                title: "Lỗi",
-                text: response.message, // Display the server-sent error message
-            });
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: "Lỗi",
-                text: "Đã có lỗi xảy ra!", // Generic error message if no specific message from server
-            });
-        }
+      console.log(response);
+      if (response && response.status === true) {
+        Swal.fire({
+          icon: "success",
+          title: "Tạo thành công!",
+          showConfirmButton: true,
+          timer: 2000,
+        });
+        navigateTaiKhoanPage();
+      } else if (response && response.status === false && response.message) {
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: response.message, // Display the server-sent error message
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Đã có lỗi xảy ra!", // Generic error message if no specific message from server
+        });
+      }
     },
     error: function (xhr, status, error) {
-        console.error("AJAX Error:", {
-            status: status,
-            error: error,
-            responseText: xhr.responseText,
-        });
-        Swal.fire({
-            icon: "error",
-            title: "Lỗi server",
-            html: `<b>${xhr.status} ${xhr.statusText}</b><br><pre>${xhr.responseText}</pre>`,
-        });
+      console.error("AJAX Error:", {
+        status: status,
+        error: error,
+        responseText: xhr.responseText,
+      });
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi server",
+        html: `<b>${xhr.status} ${xhr.statusText}</b><br><pre>${xhr.responseText}</pre>`,
+      });
     },
-});
+  });
 }
 function updatepage(params) {
   $.ajax({
@@ -219,14 +219,15 @@ $(document).ready(function () {
         icon: "error",
         title: "Lỗi",
         text: "Username không được để trống!",
-      });noSpaceValidation
-    } else if ( /\s/.test($("#username").val()) == true) {
+      });
+      noSpaceValidation;
+    } else if (/\s/.test($("#username").val()) == true) {
       Swal.fire({
         icon: "error",
         title: "Lỗi",
         text: "Tên tài khoản không được có khoản cách",
       });
-    }else if ($("#password").val() === "") {
+    } else if ($("#password").val() === "") {
       Swal.fire({
         icon: "error",
         title: "Lỗi",
@@ -245,7 +246,40 @@ $(document).ready(function () {
         text: "Bạn quên chọn quyền rồi kìa!",
       });
     } else {
-      create();
+      const hoTen = $("#ho-ten").val();
+      const email = $("#email").val();
+      const sdt = $("#sdt").val();
+      const address = $("#address").val();
+      let message = "";
+      if (!hoTen || hoTen.trim() === "") {
+        message = "Họ tên không được để trống!";
+      } else if (/[^a-zA-ZÀ-Ỹà-ỹ\s]/.test(hoTen.trim())) {
+        message = "Họ tên không được chứa số hoặc ký tự đặc biệt!";
+      } else if (!email || email.trim() === "") {
+        message = "Email không được để trống!";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+        message = "Email không đúng định dạng!";
+      }
+      else if (!sdt || sdt.trim() === "") {
+        message = "Số điện thoại không được để trống!";
+      } else if (!/^0\d{9}$/.test(sdt.trim())) {
+        message = "Số điện thoại phải có 10 chữ số và bắt đầu bằng 0!";
+      } else if (!address || address.trim() === "") {
+        message = "Địa chỉ không được để trống!";
+      } else if (/[^\p{L}\p{N}\s,.-]/u.test(address.trim())) {
+        message = "Địa chỉ không được chứa ký tự đặc biệt!";
+      } 
+      if (message !== '') {
+        Swal.fire({
+          title: 'Thông báo',
+          text: message,
+          icon: 'warning',
+          confirmButtonText: 'Thử lại'
+        });
+        return false;
+      } else {
+              create();
+      }
     }
   });
 });
@@ -258,8 +292,8 @@ $(document).on("click", '[id="tk-xoa"]', function () {
     showCancelButton: true,
     confirmButtonText: "Xóa",
     cancelButtonText: "Hủy",
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33'
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
