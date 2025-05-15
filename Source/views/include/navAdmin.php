@@ -54,11 +54,6 @@ echo '  <aside id="default-sidebar"
                         </a>
                     </li>
                     <li class="nav-menu view-survey hidden">
-                        <a href="" class="nav-item nav-link text-nowrap" data-page="surveyPage">
-                            Khảo sát - client
-                        </a>
-                    </li>
-                    <li class="nav-menu view-survey hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="ketQuaKhaoSat">
                             Kết quả khảo sát
                         </a>
