@@ -144,21 +144,7 @@ $(".main-content").on("click", ".action-item", function (e) {
           `);
         });
       }
-      // if(LoaidtList !=null){
-      //   LoaidtList.map((item)=>{
-      //     $("#loai-doituong").append(
-      //       `<option value='${item.dt_id}'>${item.ten_dt}</option>`
-      //     );
-      //   });
-      // }
-      // if(nhomKsList !=null){
-      //   nhomKsList.map((item) => {
-      //     $("nhom-ks").append(
-      //       `<option value =' ${item.nks_id}'>${item.ten_nks}</option>`
-      //     );
-      //   });
-      // }
-
+     
       if (ctdtList != null) {
         ctdtList.map((item) => {
           $("#ctdt_id").append(
@@ -172,7 +158,8 @@ $(".main-content").on("click", ".action-item", function (e) {
     $("#diachi").val(defaultData.diachi);
     $("#dien_thoai").val(defaultData.dien_thoai);
     $("#ctdt_id").val(defaultData.ctdt_id);
-
+    $("#nhom-ks").val(defaultData.nhom_ks);
+    $("#loai-doituong").val(defaultData.loai_dt_id);
     function validate(data) {
       let message = '';
 
