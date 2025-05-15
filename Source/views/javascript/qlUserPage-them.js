@@ -216,7 +216,12 @@ $(function () {
                     showCancelButton: false,
                     confirmButtonText: 'Tiếp tục',
                     confirmButtonColor: '#3085d6'
-                });
+                }).then((res) => {
+                      if (res.isConfirmed) {
+                        window.location.href = "./admin.php?page=qlUserPage";
+                      }
+
+                    });
         } else {
           Swal.fire({
                     title: 'Thêm đối tượng thất bại!',

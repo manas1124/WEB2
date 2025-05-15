@@ -29,9 +29,10 @@
         </div>
     </div>
     <div class="w-full overflow-x-auto">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Tên Nhóm Khảo sát</th>
                     <th>Hành động</th>
                 </tr>
