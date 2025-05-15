@@ -426,12 +426,6 @@ $(function () {
       surveyContainer.appendChild(createSection({}));
     });
 
-    // Create sections and questions based on the sample data
-    if (surveyContent) {
-      Object.values(surveyContent).forEach((sectionData) => {
-        surveyContainer.appendChild(createSection(sectionData));
-      });
-    }
     //xu ly submit
     submitSurveyButton.addEventListener("click", () => {
       const surveyContent = [];
@@ -546,6 +540,7 @@ $(function () {
               "Nếu cập nhật sẽ mất kết quả của bài khảo sát cũ (nếu có) ??"
             )
           ) {
+            //xu ly update
             updateKhaoSat(editSurveyData).then((response) => {
               if (response) {
                 $("#khao-sat-page").trigger("click");
