@@ -123,21 +123,21 @@
         
     </script>
     <script>
-        function capNhatTrangThai() {
-            $.ajax({
-                url: './controller/TuDongCapNhatTrangThaiKS.php', 
-                method: 'GET',
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Lỗi khi cập nhật:', error);
-                }
-            });
-        }
+        // function capNhatTrangThai() {
+        //     $.ajax({
+        //         url: './controller/TuDongCapNhatTrangThaiKS.php', 
+        //         method: 'GET',
+        //         success: function(response) {
+        //             console.log(response);
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error('Lỗi khi cập nhật:', error);
+        //         }
+        //     });
+        // }
 
-        // Gọi tự động mỗi 10 phút (600000ms)
-        setInterval(capNhatTrangThai, 600000);
+        // // Gọi tự động mỗi 10 phút (600000ms)
+        // setInterval(capNhatTrangThai, 600000);
     </script>
 </body>
 

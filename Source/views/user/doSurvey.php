@@ -32,7 +32,7 @@ $typeScore = $answerType->getTraLoiByIdKhaoSat($_GET['surveyId']);
                                             <td name="txt-' . $question['ch_id'] . '">' . $question['noi_dung'] . '</td>
                                     ';
                             for ($i = 1; $i <= $typeScore['thang_diem']; $i++) {
-                                echo '<td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value='. $i .' class="radio radio-primary" /></td>';
+                                echo '<td class="text-center"><input type="radio" name="radio-' . $question['ch_id'] . '" value=' . $i . ' class="radio radio-primary" /></td>';
                             }
                             echo '</tr>';
                         }
@@ -43,6 +43,18 @@ $typeScore = $answerType->getTraLoiByIdKhaoSat($_GET['surveyId']);
 
             </div>
         </div>
-        <button class="btn btn-primary" name="send-survey" type="button" onclick=sendSurvey(this)>Nộp khảo sát</button>
+        <div class="flex items-center justify-end mb-4">
+            <div class="flex items-center gap-8">
+                <div>
+                    <a href="./home.php">
+                        <button class="btn btn-error" type="button">Hủy</button>
+                    </a>
+                </div>
+                <div>
+                    <button class="btn btn-primary" name="send-survey" type="button" onclick=sendSurvey(this)>Nộp khảo sát</button>
+                </div>
+
+            </div>
+        </div>
     </div>
 </form>
