@@ -211,7 +211,7 @@ async function deleteUser(id) {
                     icon: 'success',
                     confirmButtonText: 'Tiếp tục'
                   });
-          loadUserList();
+          renderUser();
         }
       } catch (error) {
         console.log("Lỗi khi xóa người dùng");
