@@ -30,10 +30,13 @@
     }
     $surveyModel = new SurveyModel();
     $listSurvey = json_decode($surveyModel->getAllSurveys(), true);
-    echo '<div class="h-full w-full grid grid-cols-4 gap-4 p-5">';
+    echo '<div class="min-h-[608px] w-full grid grid-cols-4 gap-4 p-5 -z-1">';
     foreach($listSurvey as $survey) { 
+        if($survey['su_dung'] == 0 || $survey['su_dung'] == 2){
+            continue;
+        }
         $isDisabled =disabledBtn($doiTuongId,$survey['ks_id']);
-        echo '<div class="card">
+        echo '<div><div class="card">
                     <div class="card-header">
                         <h5 class="card-title">'. $survey['ten_ks'] .'</h5>
                     </div>
@@ -47,7 +50,7 @@
                         ? '' 
                         : 'disabled') .' onclick="doSurvey(this, '. $survey['ks_id'] .')" data-act="do-survey">Làm khảo sát</button>
                     </div>
-                </div>';
+                </div></div>';
     }
     echo '</div>';
         
