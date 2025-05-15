@@ -381,6 +381,8 @@ $(function () {
       const isSuDung = $("#select-su-dung").val();
       const start = new Date(dateStart);
       const end = new Date(dateEnd);
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
