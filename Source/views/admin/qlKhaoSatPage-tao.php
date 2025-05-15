@@ -1,3 +1,6 @@
+<div class="flex items-center justify-between mb-4">
+    <a href="" class="back-link btn btn-soft ">Quay lại</a>
+</div>
 <div class="flex w-full justify-center">
     <div class="flex flex-col ">
         <h3 class="modal-title">Tạo bài khảo sát</h3>
