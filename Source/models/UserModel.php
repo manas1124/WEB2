@@ -2,7 +2,7 @@
 // app/Models/KhaoSat.php
 
 require_once __DIR__ .'/database.php'; 
-
+require_once __DIR__ .'/AccountModel.php'; 
 class UserModel {
 
     private $db; // Database connection
@@ -154,6 +154,20 @@ class UserModel {
             if ($stmt->execute()) {
                 $id = $stmt->insert_id;
                 $stmt->close();
+                 $accountModel = new AccountModel();
+                $username = $email;
+                $defaultPassword = '123456';
+                $hashedPassword = password_hash($defaultPassword, PASSWORD_DEFAULT);
+                $quyenId = 3; 
+                $accountCreated = $accountModel->create($username, $hashedPassword, $id, $quyenId);
+
+            if (!$accountCreated) {
+                $deleteStmt = $conn->prepare("DELETE FROM doi_tuong WHERE dt_id = ?");
+                $deleteStmt->bind_param("i", $id);
+                $deleteStmt->execute();
+                $deleteStmt->close();
+                return false;
+            }
                 return $id;
             } else {
                 $stmt->close();
@@ -174,9 +188,22 @@ class UserModel {
 }
     public function deleteUser($id) {
         $conn = $this->db->getConnection();
+        try {
+        
+        $stmt1 = $conn->prepare("DELETE FROM tai_khoan WHERE dt_id = ?");
+        $stmt1->bind_param("i", $id);
+        if (!$stmt1->execute()) {
+            throw new Exception("Không thể xóa tài khoản.");
+        }
         $stmt = $conn->prepare("DELETE FROM doi_tuong WHERE dt_id = ?");
         $stmt->bind_param("i", $id);
         return $stmt->execute();
+     } catch (Exception $e) {
+       
+        $conn->rollback();
+        error_log($e->getMessage());
+        return false;
+    }
     }
     
 }
