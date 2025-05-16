@@ -73,9 +73,9 @@ if (isset($_POST['func'])) {
                         $ctdtId,
                         1
                     );
-                    
+
                     if ($idNewKs >= 0) {
-                        $parentMucArray = $content; 
+                        $parentMucArray = $content;
                         foreach ($parentMucArray as $mucItem) {
                             //neu muc cha co cau hoi thi tao cau hoi, nguoc lai neu khong co thi kiem tra muc con
                             $newMucId = $mucKhaoSatModel->create($mucItem["sectionName"], $idNewKs);
@@ -108,19 +108,19 @@ if (isset($_POST['func'])) {
                         exit;
                     }
                 } else {
+                    echo json_encode([
+                        "status" => "error",
+                        "message" => "không có quyền tạo khảo sát"
+                    ]);
+                    exit;
+                }
+            } else {
                 echo json_encode([
                     "status" => "error",
-                    "message" => "không có quyền tạo khảo sát"
+                    "message" => "chưa có đăng nhập hoặc không lấy được accessToken trong session :" . ($_SESSION['accessToken'] ?? '') // Use null coalescing operator to avoid potential undefined index for $_SESSION
                 ]);
                 exit;
             }
-        } else {
-            echo json_encode([
-                "status" => "error",
-                "message" => "chưa có đăng nhập hoặc không lấy được accessToken trong session :" . ($_SESSION['accessToken'] ?? '') // Use null coalescing operator to avoid potential undefined index for $_SESSION
-            ]);
-            exit;
-        }
 
         case "checkExistCtdt":
             $data = $_POST['data'];
@@ -150,6 +150,71 @@ if (isset($_POST['func'])) {
             $id = $_POST['id'];
             $response = json_decode($surveyModel->getsurveyFieldAndQuestion($id));
             break;
+
+        case "getSurveyContentBySurveyId":
+            $ksId = $_POST['ksId'];
+            if (!isset($ksId)) {
+                echo json_encode([
+                    "status" => "error",
+                    "message" =>"Don't have right input"]);
+                exit;
+            }
+            $sections = $mucKhaoSatModel->getMucKhaoSatByKsId(22);
+            $questions = $mucKhaoSatModel->getQuestionsByKsId(22);
+
+            //map tat ca section theo mau sau
+            $sectionMap = [];
+            foreach ($sections as $section) {
+                $sectionMap[$section['mks_id']] = [
+                    'sectionId' => $section['mks_id'],
+                    'sectionParentId' => $section['parent_mks_id'],
+                    'sectionName' => $section['ten_muc'],
+                    'questions' => [],
+                    'subSections' => []
+                ];
+            }
+
+            //map cau hoi vao section
+            foreach ($questions as $question) {
+                $sectionId = $question['sectionId'];
+                if (isset($sectionMap[$sectionId])) {
+                    $sectionMap[$sectionId]['questions'][] = [
+                        'questionId' => $question['questionId'],
+                        'sectionId' => $sectionId,
+                        'questionContent' => $question['questionContent']
+                    ];
+                }
+            }
+            //create hierarchy for parent-child section json
+            $mockSurveyContent = [];
+            foreach ($sectionMap as $mks_id => $section) {
+                if ($section['sectionParentId'] === null) {
+                    $mockSurveyContent[] = &$sectionMap[$mks_id];
+                } else {
+                    $parentId = $section['sectionParentId'];
+                    if (isset($sectionMap[$parentId])) {
+                        $sectionMap[$parentId]['subSections'][] = &$sectionMap[$mks_id];
+                    }
+                }
+            }
+
+            // Output the JSON
+            // echo json_encode($mockSurveyContent, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+            $response = $mockSurveyContent;
+            if ($mockSurveyContent == null) {
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "error in getSurveyContentBySurveyId khaosatcontroller"
+                ]);
+            } else {
+                echo json_encode([
+                    "status" => "success",
+                    "data" => $mockSurveyContent
+                ]);
+
+            }
+            exit;
         case "updateKhaoSat":
             if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
                 $accessToken = $_SESSION['accessToken'];

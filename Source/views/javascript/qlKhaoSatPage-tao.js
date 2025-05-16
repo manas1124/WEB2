@@ -443,60 +443,7 @@ function createSection(sectionData = {}, isSubsection = false) {
 
   return section;
 }
-function loadSurveyContent(data, container) {
-  const mockSurveyContent = [
-    {
-      sectionName: "Mục cha 1",
-      questions: ["Câu hỏi 1", "Câu hỏi 2"],
-      subSections: [],
-    },
-    {
-      sectionName: "Mục cha 2 (có mục con)",
-      questions: [],
-      subSections: [
-        {
-          sectionName: "Mục con 2.1",
-          questions: ["Câu hỏi con 1", "Câu hỏi con 2"],
-          subSections: [], // không có mục con của mục con
-        },
-        {
-          sectionName: "Mục con 2.2",
-          questions: ["Câu hỏi con 3", "Câu hỏi con 4"],
-          subSections: [], // không có mục con của mục con
-        },
-      ],
-    },
-  ];
-  data = mockSurveyContent;
-  data.forEach((sectionData) => {
-    const sectionEl = createSection(
-      {
-        ten_muc: sectionData.sectionName,
-        cau_hoi: (sectionData.questions || []).map((q) => ({
-          noi_dung: q,
-        })),
-      },
-      false
-    );
 
-    if (sectionData.subSections && sectionData.subSections.length > 0) {
-      const subContainer = sectionEl.querySelector(".sub-section-container");
-      sectionData.subSections.forEach((subSectionData) => {
-        const subEl = createSection(
-          {
-            ten_muc: subSectionData.sectionName,
-            cau_hoi: (subSectionData.questions || []).map((q) => ({
-              noi_dung: q,
-            })),
-          },
-          true
-        );
-        subContainer.appendChild(subEl);
-      });
-    }
-    container.appendChild(sectionEl);
-  });
-}
 function createQuestion(questionContainer, questionText = "") {
   const question = document.createElement("div");
   question.classList.add(
