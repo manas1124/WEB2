@@ -230,130 +230,7 @@ $(function () {
     const surveyContainer = document.getElementById("survey-container");
     const btnAddSection = document.getElementById("btn-add-question");
     const submitSurveyButton = document.getElementById("btn-save-ks");
-
-    function createSection(sectionData = {}, isSubsection = false) {
-      const section = document.createElement("div");
-      section.classList.add(
-        "mb-4",
-        "border",
-        "border-gray-300",
-        "p-4",
-        "section"
-      );
-      if (isSubsection) section.classList.add("ml-4");
-
-      const sectionTitle = document.createElement("h3");
-      sectionTitle.textContent = isSubsection ? "Tên mục con:" : "Tên mục:";
-      section.appendChild(sectionTitle);
-
-      const sectionNameInput = document.createElement("input");
-      sectionNameInput.placeholder = "Nhập tên mục";
-      sectionNameInput.classList.add("input", "mb-4");
-      sectionNameInput.value = sectionData.ten_muc || "";
-      section.appendChild(sectionNameInput);
-
-      const questionContainer = document.createElement("div");
-      questionContainer.classList.add("question-container");
-      section.appendChild(questionContainer);
-
-      const subSectionContainer = document.createElement("div");
-      subSectionContainer.classList.add("sub-section-container");
-      section.appendChild(subSectionContainer);
-
-      const btnAddQuestion = document.createElement("button");
-      btnAddQuestion.textContent = "Thêm câu hỏi";
-      btnAddQuestion.classList.add("btn", "btn-primary", "btn-sm", "mr-2");
-      btnAddQuestion.addEventListener("click", () => {
-        createQuestion(questionContainer);
-        // ẩn nút thêm mục con nếu có câu hỏi
-        btnAddSubSection.style.display = "none";
-      });
-      section.appendChild(btnAddQuestion);
-
-      const btnAddSubSection = document.createElement("button");
-      btnAddSubSection.textContent = "Thêm mục con";
-      btnAddSubSection.classList.add("btn", "btn-secondary", "btn-sm", "mr-2");
-      btnAddSubSection.addEventListener("click", () => {
-        const subSec = createSection({}, true);
-        subSectionContainer.appendChild(subSec);
-        // ẩn nút thêm mục con nếu có câu hỏi
-        btnAddQuestion.style.display = "none";
-      });
-      if (isSubsection) {
-        btnAddSubSection.style.display = "none"; // mục con không cho thêm mục con
-      }
-      section.appendChild(btnAddSubSection);
-
-      const deleteSectionButton = document.createElement("button");
-      deleteSectionButton.textContent = isSubsection
-        ? "Xóa mục"
-        : "Xóa mục cha";
-      deleteSectionButton.classList.add("btn", "btn-error", "btn-sm");
-      deleteSectionButton.addEventListener("click", () => {
-  const parentSection = section.parentElement.closest(".section");
-  section.remove();
-
-  // Nếu là mục con và sau khi xóa không còn mục con nào nữa
-  if (isSubsection && parentSection) {
-    const remainingSub = parentSection.querySelectorAll(":scope > .sub-section-container > .section");
-    if (remainingSub.length === 0) {
-      const btnAddQuestion = parentSection.querySelector("button.btn-primary");
-      if (btnAddQuestion) btnAddQuestion.style.display = "inline-block";
-    }
-  }
-});
-
-      section.appendChild(deleteSectionButton);
-
-      // Add existing questions if any
-      if (sectionData.cau_hoi && sectionData.cau_hoi.length > 0) {
-        sectionData.cau_hoi.forEach((questionData) => {
-          createQuestion(questionContainer, questionData.noi_dung);
-        });
-        btnAddSubSection.style.display = "none"; // nếu có sẵn câu hỏi thì ẩn nút thêm mục con
-      }
-
-      return section;
-    }
-
-    function createQuestion(questionContainer, questionText = "") {
-      const question = document.createElement("div");
-      question.classList.add(
-        "question-item",
-        "flex-row",
-        "flex",
-        "items-center",
-        "gap-4",
-        "mb-4"
-      );
-      question.innerHTML = `
-    <label class="label-text text-nowrap">Câu hỏi:</label>
-    <input type="text" class="questionInput input w-s" value="${questionText}"/>
-    <button class="deleteQuestion btn btn-square btn-outline btn-error">
-      <span class="icon-[tabler--x]">X</span>
-    </button>
-  `;
-      questionContainer.appendChild(question);
-
-      const deleteQuestionButton = question.querySelector(".deleteQuestion");
-      deleteQuestionButton.addEventListener("click", () => {
-        question.remove();
-
-        const section = questionContainer.closest(".section");
-        const questionItems = section.querySelectorAll(".question-item");
-
-        // Chỉ hiển thị lại nút nếu là mục CHA (không phải mục con)
-        const isSubSection = section.classList.contains("ml-4");
-        if (!isSubSection && questionItems.length === 0) {
-          const buttons = section.querySelectorAll("button");
-          buttons.forEach((btn) => {
-            if (btn.textContent.trim() === "Thêm mục con") {
-              btn.style.display = "inline-block";
-            }
-          });
-        }
-      });
-    }
+    // loadSurveyContent(mockSurveyContent, surveyContainer);
 
     btnAddSection.addEventListener("click", () => {
       surveyContainer.appendChild(createSection({}));
@@ -362,7 +239,9 @@ $(function () {
     //xu ly submit
     submitSurveyButton.addEventListener("click", () => {
       const surveyContent = [];
-      const sections = surveyContainer.querySelectorAll(".section");
+      const sections = surveyContainer.querySelectorAll(
+        "div.section:not(.sub-section-container > div.section)"
+      );
 
       const tenKhaoSat = $("#ten-ks").val();
       const idNhomKs = selectedNhomKs.value;
@@ -402,7 +281,13 @@ $(function () {
       sections.forEach((section) => {
         surveyContent.push(parseSection(section));
       });
-      let isValideData = () => { /*
+      // neu subsection khac rong thi khong luu question content trong thu muc cha
+      surveyContent.forEach((section) => {
+        if (section.subSections.length > 0) {
+          section.questions = [];
+        }
+      });
+      let isValideData = () => {
         let messages = [];
 
         if (tenKhaoSat == "") {
@@ -441,7 +326,7 @@ $(function () {
           });
           return false;
         }
-          */
+
         return true;
       };
 
@@ -472,10 +357,181 @@ $(function () {
             formData.append("content", surveyContent);
             formData.append("content", JSON.stringify(surveyContent));
           }
-          console.log(surveyContent)
-          // createKhaoSat(formData);
+          console.log(surveyContent);
+          createKhaoSat(formData);
         });
       }
     });
   })();
 });
+function createSection(sectionData = {}, isSubsection = false) {
+  const section = document.createElement("div");
+  section.classList.add("mb-4", "border", "border-gray-300", "p-4", "section");
+  if (isSubsection) section.classList.add("ml-4");
+
+  const sectionTitle = document.createElement("h3");
+  sectionTitle.textContent = isSubsection ? "Tên mục con:" : "Tên mục:";
+  section.appendChild(sectionTitle);
+
+  const sectionNameInput = document.createElement("input");
+  sectionNameInput.placeholder = "Nhập tên mục";
+  sectionNameInput.classList.add("input", "mb-4");
+  sectionNameInput.value = sectionData.ten_muc || "";
+  section.appendChild(sectionNameInput);
+
+  const questionContainer = document.createElement("div");
+  questionContainer.classList.add("question-container");
+  section.appendChild(questionContainer);
+
+  const subSectionContainer = document.createElement("div");
+  subSectionContainer.classList.add("sub-section-container");
+  section.appendChild(subSectionContainer);
+
+  const btnAddQuestion = document.createElement("button");
+  btnAddQuestion.textContent = "Thêm câu hỏi";
+  btnAddQuestion.classList.add("btn", "btn-primary", "btn-sm", "mr-2");
+  btnAddQuestion.addEventListener("click", () => {
+    createQuestion(questionContainer);
+    // ẩn nút thêm mục con nếu có câu hỏi
+    btnAddSubSection.style.display = "none";
+  });
+  section.appendChild(btnAddQuestion);
+
+  const btnAddSubSection = document.createElement("button");
+  btnAddSubSection.textContent = "Thêm mục con";
+  btnAddSubSection.classList.add("btn", "btn-secondary", "btn-sm", "mr-2");
+  btnAddSubSection.addEventListener("click", () => {
+    const subSec = createSection({}, true);
+    subSectionContainer.appendChild(subSec);
+    // ẩn nút thêm mục con nếu có câu hỏi
+    btnAddQuestion.style.display = "none";
+  });
+  if (isSubsection) {
+    btnAddSubSection.style.display = "none"; // mục con không cho thêm mục con
+  }
+  section.appendChild(btnAddSubSection);
+
+  const deleteSectionButton = document.createElement("button");
+  deleteSectionButton.textContent = isSubsection ? "Xóa mục" : "Xóa mục cha";
+  deleteSectionButton.classList.add("btn", "btn-error", "btn-sm");
+  deleteSectionButton.addEventListener("click", () => {
+    const parentSection = section.parentElement.closest(".section");
+    section.remove();
+
+    // Nếu là mục con và sau khi xóa không còn mục con nào nữa
+    if (isSubsection && parentSection) {
+      const remainingSub = parentSection.querySelectorAll(
+        ":scope > .sub-section-container > .section"
+      );
+      if (remainingSub.length === 0) {
+        const btnAddQuestion =
+          parentSection.querySelector("button.btn-primary");
+        if (btnAddQuestion) btnAddQuestion.style.display = "inline-block";
+      }
+    }
+  });
+
+  section.appendChild(deleteSectionButton);
+
+  // Add existing questions if any
+  if (sectionData.cau_hoi && sectionData.cau_hoi.length > 0) {
+    sectionData.cau_hoi.forEach((questionData) => {
+      createQuestion(questionContainer, questionData.noi_dung);
+    });
+    btnAddSubSection.style.display = "none"; // nếu có sẵn câu hỏi thì ẩn nút thêm mục con
+  }
+
+  return section;
+}
+function loadSurveyContent(data, container) {
+  const mockSurveyContent = [
+    {
+      sectionName: "Mục cha 1",
+      questions: ["Câu hỏi 1", "Câu hỏi 2"],
+      subSections: [],
+    },
+    {
+      sectionName: "Mục cha 2 (có mục con)",
+      questions: [],
+      subSections: [
+        {
+          sectionName: "Mục con 2.1",
+          questions: ["Câu hỏi con 1", "Câu hỏi con 2"],
+          subSections: [], // không có mục con của mục con
+        },
+        {
+          sectionName: "Mục con 2.2",
+          questions: ["Câu hỏi con 3", "Câu hỏi con 4"],
+          subSections: [], // không có mục con của mục con
+        },
+      ],
+    },
+  ];
+  data = mockSurveyContent;
+  data.forEach((sectionData) => {
+    const sectionEl = createSection(
+      {
+        ten_muc: sectionData.sectionName,
+        cau_hoi: (sectionData.questions || []).map((q) => ({
+          noi_dung: q,
+        })),
+      },
+      false
+    );
+
+    if (sectionData.subSections && sectionData.subSections.length > 0) {
+      const subContainer = sectionEl.querySelector(".sub-section-container");
+      sectionData.subSections.forEach((subSectionData) => {
+        const subEl = createSection(
+          {
+            ten_muc: subSectionData.sectionName,
+            cau_hoi: (subSectionData.questions || []).map((q) => ({
+              noi_dung: q,
+            })),
+          },
+          true
+        );
+        subContainer.appendChild(subEl);
+      });
+    }
+    container.appendChild(sectionEl);
+  });
+}
+function createQuestion(questionContainer, questionText = "") {
+  const question = document.createElement("div");
+  question.classList.add(
+    "question-item",
+    "flex-row",
+    "flex",
+    "items-center",
+    "gap-4",
+    "mb-4"
+  );
+  question.innerHTML = `
+    <label class="label-text text-nowrap">Câu hỏi:</label>
+    <input type="text" class="questionInput input w-s" value="${questionText}"/>
+    <button class="deleteQuestion btn btn-square btn-outline btn-error">
+      <span class="icon-[tabler--x]">X</span>
+    </button>
+  `;
+  questionContainer.appendChild(question);
+
+  const deleteQuestionButton = question.querySelector(".deleteQuestion");
+  deleteQuestionButton.addEventListener("click", () => {
+    question.remove();
+
+    const section = questionContainer.closest(".section");
+    const questionItems = section.querySelectorAll(".question-item");
+
+    // Chỉ hiển thị lại nút nếu là mục CHA (không phải mục con)
+    const isSubSection = section.classList.contains("ml-4");
+    if (!isSubSection && questionItems.length === 0) {
+      const buttons = section.querySelectorAll("button");
+      buttons.forEach((btn) => {
+        if (btn.textContent.trim() === "Thêm mục con") {
+          btn.style.display = "inline-block";
+        }
+      });
+    }
+  });
+}

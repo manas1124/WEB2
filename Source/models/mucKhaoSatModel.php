@@ -9,12 +9,12 @@ class MucKhaoSatModel
         $this->db = new MyConnection(); // Create a Database instance
     }
 
-    public function create($ten_muc,$ks_id)
+    public function create($ten_muc,$ks_id,$parent_id = null)
     {   
         $conn = $this->db->getConnection();
-        $sql = "INSERT INTO muc_khao_sat (ten_muc,ks_id,status) VALUES (?,?,1)";
+        $sql = "INSERT INTO muc_khao_sat (ten_muc,ks_id,parent_mks_id,status) VALUES (?,?,?,1)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("si", $ten_muc, $ks_id);
+        $stmt->bind_param("sii", $ten_muc, $ks_id,$parent_id);
 
         if ($stmt->execute()) {
             $id = $stmt->insert_id;

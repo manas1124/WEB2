@@ -429,8 +429,7 @@ $(function () {
     //xu ly submit
     submitSurveyButton.addEventListener("click", () => {
       const surveyContent = [];
-      const sections = surveyContainer.querySelectorAll(".section");
-
+      const sections = surveyContainer.querySelectorAll('div.section:not(.sub-section-container > div.section)');
       const tenKhaoSat = $("#ten-ks").val();
       const idNhomKs = selectedNhomKs.value;
       const dateStart = $("#begin").val();
@@ -447,6 +446,7 @@ $(function () {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
+      //van lay question trong parent section neu ton tai subsection, be xu ly neu co subsection, thi chi dung subsection
       function parseSection(sectionEl) {
         const sectionName = sectionEl.querySelector("input").value;
         const questions = Array.from(
@@ -469,7 +469,12 @@ $(function () {
       sections.forEach((section) => {
         surveyContent.push(parseSection(section));
       });
-
+      surveyContent.forEach((section) => {
+        if (section.subSections.length > 0) {
+          section.questions =[]
+        }
+      })
+      console.log(surveyContent);
       const editSurveyData = {
         "ks-id": currentKsId,
         "ten-ks": tenKhaoSat,
@@ -480,7 +485,8 @@ $(function () {
         content: surveyContent,
         "su-dung": isSuDung,
       };
-
+      console.log(editSurveyData);
+      
       let isValideData = () => {
         let messages = [];
 
@@ -522,7 +528,7 @@ $(function () {
         }
         return true;
       };
-      console.log(editSurveyData);
+      
 
       if (isValideData()) {
         checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {
@@ -561,8 +567,10 @@ $(function () {
           }
         });
       }
+         
     });
   })();
+ 
 });
 
 const mockSurveyContent = [
@@ -578,6 +586,11 @@ const mockSurveyContent = [
       {
         sectionName: "Mục con 2.1",
         questions: ["Câu hỏi con 1", "Câu hỏi con 2"],
+        subSections: [], // không có mục con của mục con
+      },
+      {
+        sectionName: "Mục con 2.2",
+        questions: ["Câu hỏi con 3", "Câu hỏi con 4"],
         subSections: [], // không có mục con của mục con
       },
     ],
