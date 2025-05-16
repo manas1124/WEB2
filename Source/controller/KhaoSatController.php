@@ -159,8 +159,8 @@ if (isset($_POST['func'])) {
                     "message" =>"Don't have right input"]);
                 exit;
             }
-            $sections = $mucKhaoSatModel->getMucKhaoSatByKsId(22);
-            $questions = $mucKhaoSatModel->getQuestionsByKsId(22);
+            $sections = $mucKhaoSatModel->getMucKhaoSatByKsId($ksId);
+            $questions = $mucKhaoSatModel->getQuestionsByKsId($ksId);
 
             //map tat ca section theo mau sau
             $sectionMap = [];
