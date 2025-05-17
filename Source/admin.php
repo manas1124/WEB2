@@ -7,7 +7,7 @@
     <title>Admin Page</title>
     <link rel="shortcut icon" href="./assets/image/sgu.png">
     <link href="./assets/css/output.css" rel="stylesheet">
-    
+
     <style>
         button[aria-current="page"] {
             background-color: var(--color-primary);
@@ -119,9 +119,8 @@
     <script src="./views/javascript/survey.js"></script>
     <script src="./views/javascript/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
     <script>
         // function capNhatTrangThai() {
         //     $.ajax({

@@ -37,6 +37,11 @@ async function loadAllNganh(page = 1, status = null, txt_search = null) {
         const currentPage = res.currentPage;
         $("#nganh-list").empty();
         $("#pagination").empty();
+        if (nganhList.length == 0) {
+            $("#nganh-list").html("<tr><td colspan='7' class='text-center text-gray-500 italic py-4 bg-gray-100 rounded'>Không tìm thấy ngành.</td></tr>");
+            $("#pagination").empty();
+            return;
+        }
         nganhList.forEach(item => {
             $("#nganh-list").append(`
               <tr>

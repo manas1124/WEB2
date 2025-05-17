@@ -74,6 +74,11 @@ async function loadAllCTDT(page = 1, nganh_id = null, ck_id = null, la_ctdt = nu
         const totalPages = res.totalPages;
         const currentPage = res.currentPage;
         $("#ctdt-list").empty();
+        if (ctdtList.length == 0) {
+            $("#ctdt-list").html("<tr><td colspan='7' class='text-center text-gray-500 italic py-4 bg-gray-100 rounded'>Không tìm thấy chương trình đạo tạo.</td></tr>");
+            $("#pagination").empty();
+            return;
+        }
         ctdtList.forEach(item => {
             $("#ctdt-list").append(`
               <tr>
