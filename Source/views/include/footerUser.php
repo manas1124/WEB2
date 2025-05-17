@@ -6,7 +6,7 @@ echo '<footer class=" h-[100px] h-fit px-[4rem] py-[1rem] "
                 <div class="inline-flex ">
                     <img class="w-[6rem]" src="./assets/image/sgu.png" alt="logo" />
                     <h3 class="ml-3 text-nowrap  font-bold text-lg flex items-center justify-center">
-                        Trường đại học Sài Gòn
+                        Trường Đại học Sài Gòn
                     </h3>
                 </div>
                 <ul class="flex flex-col gap-2">

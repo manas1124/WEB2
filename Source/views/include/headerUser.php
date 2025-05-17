@@ -6,10 +6,20 @@ echo '<nav class="navbar rounded-box shadow-base-300/20 shadow-sm">
                     <a class="link text-base-content text-xl font-bold" href="./home.php"><img class="w-30"
                             src="./assets/image/sgu.png" alt="logo" /></a>
                     <h3 class="ml-3 text-nowrap font-bold text-lg flex items-center justify-center">
-                        Trường đại học Sài Gòn
+                        Trường Đại học Sài Gòn
                     </h3>
                 </div>
             </div>
+            <!-- Nút menu hiển thị trên mobile -->
+            <button class="md:hidden flex items-center gap-2 bg-white text-gray-800 px-0 py-0 rounded shadow hover:bg-gray-100 transition"
+                    onclick="toggleNavbar()">
+            <!-- Icon menu -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+            </button>
             <div id="default-navbar-collapse"
                 class="md:navbar-end collapse hidden grow basis-full overflow-hidden transition-[height] duration-300 max-md:w-full">
                 <ul class="menu md:menu-horizontal gap-2 p-0 text-base max-md:mt-2">
@@ -37,4 +47,10 @@ echo '<nav class="navbar rounded-box shadow-base-300/20 shadow-sm">
                 </ul>
             </div>
         </div>
-    </nav>';
+    </nav>
+    <script>
+        function toggleNavbar() {
+            const nav = document.getElementById(\'default-navbar-collapse\');
+            nav.classList.toggle(\'hidden\');
+        }
+    </script>';
