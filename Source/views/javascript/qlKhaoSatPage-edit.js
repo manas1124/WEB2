@@ -131,11 +131,18 @@ async function getSurveryContentQuestion(id) {
     const response = await $.ajax({
       url: "./controller/KhaoSatController.php",
       type: "POST",
-      data: { func: "getSurveyFieldAndQuestion", id: id },
+      data: { func: "getSurveyContentBySurveyId", ksId: id },
       dataType: "json",
     });
-    console.log("fect", response);
-    return response;
+    if (response.status === "error") {
+      Swal.fire({
+        title: "Thông báo",
+        html: response.message,
+        icon: "warning",
+      });
+      return null;
+    }
+    return response.data;
   } catch (e) {
     console.log(e);
     console.log("loi fetchdata noi dung ks ");
@@ -156,14 +163,15 @@ $(function () {
         html: "Bài khảo sát đã bị đã đang được thực hiện, không được chỉnh sửa !",
         icon: "warning",
       });
-      window.location.href = "./admin.php?page=qlKhaoSatPage";
+      // window.location.href = "./admin.php?page=qlKhaoSatPage";
       return;
     }
     const nhomKsList = await getNhomKs();
     const nganhList = await getAllNganh();
     const chuKiList = await getAllChuKi();
     const answerTypeList = await getAllTraLoi();
-    const surveyContent = await getSurveryContentQuestion(currentKsId);
+    const surveyContent = await getSurveryContentQuestion(22);
+    console.log(surveyContent);
 
     if (nhomKsList != null) {
       nhomKsList.map((item) => {
@@ -270,106 +278,23 @@ $(function () {
         nhomKsDropdown.classList.add("hidden");
       }
     });
-    //xu lý thêm nội dung
-    const survey = document.getElementById("survey-container");
+    //xu lý thêm nội dung mặc định
+    const surveyContainer = document.getElementById("survey-container");
     const btnAddSection = document.getElementById("btn-add-question");
     const submitSurveyButton = document.getElementById("btn-save-ks");
 
-    function createSection(sectionData) {
-      const section = document.createElement("div");
-      section.classList.add(
-        "mb-4",
-        "border",
-        "border-gray-300",
-        "p-8",
-        "section"
-      );
-
-      const sectionTitle = document.createElement("h3");
-      sectionTitle.textContent = "Tên mục:";
-      section.appendChild(sectionTitle);
-
-      const sectionNameInput = document.createElement("input");
-      sectionNameInput.placeholder = "Nhập tên mục";
-      sectionNameInput.classList.add("input", "mb-4");
-      sectionNameInput.value = sectionData.ten_muc || "";
-      section.appendChild(sectionNameInput);
-
-      const questionContainer = document.createElement("div");
-      questionContainer.classList.add("question-container");
-      section.appendChild(questionContainer);
-
-      const btnAddQuestion = document.createElement("button");
-      btnAddQuestion.textContent = "Thêm câu hỏi";
-      btnAddQuestion.classList.add("btn", "btn-primary", "btn-sm");
-      btnAddQuestion.addEventListener("click", () => {
-        createQuestion(questionContainer);
-      });
-      section.appendChild(btnAddQuestion);
-
-      const deleteSectionButton = document.createElement("button");
-      deleteSectionButton.textContent = "Xóa mục";
-      deleteSectionButton.classList.add(
-        "btn",
-        "btn-error",
-        "ml-[10px]",
-        "btn-sm"
-      );
-      deleteSectionButton.addEventListener("click", () => {
-        section.remove();
-      });
-      section.appendChild(deleteSectionButton);
-
-      // Add existing questions if any
-      if (sectionData.cau_hoi && sectionData.cau_hoi.length > 0) {
-        sectionData.cau_hoi.forEach((questionData) => {
-          createQuestion(questionContainer, questionData.noi_dung);
-        });
-      }
-
-      return section;
-    }
-
-    function createQuestion(questionContainer, questionText = "") {
-      const question = document.createElement("div");
-      question.classList.add(
-        "question-item",
-        "flex-row",
-        "flex",
-        "items-center",
-        "gap-4",
-        "mb-4"
-      );
-      question.innerHTML = `
-        <label class="label-text text-nowrap">Câu hỏi:</label>
-        <input type="text" class="questionInput input w-s" value="${questionText}"/>
-        <button class="deleteQuestion btn btn-square btn-outline btn-error">
-          <span class="icon-[tabler--x]"></span>
-        </button>
-      `;
-      questionContainer.appendChild(question);
-
-      const deleteQuestionButton = question.querySelector(".deleteQuestion");
-      deleteQuestionButton.addEventListener("click", () => {
-        question.remove();
-      });
-    }
+    loadSurveyContent(surveyContent, surveyContainer);
 
     btnAddSection.addEventListener("click", () => {
-      survey.appendChild(createSection({}));
+      surveyContainer.appendChild(createSection({}));
     });
 
-    // Create sections and questions based on the sample data
-    if (surveyContent) {
-      Object.values(surveyContent).forEach((sectionData) => {
-        survey.appendChild(createSection(sectionData));
-      });
-    }
     //xu ly submit
     submitSurveyButton.addEventListener("click", () => {
       const surveyContent = [];
-      const sections = survey.querySelectorAll(".section");
-
+      const sections = surveyContainer.querySelectorAll(
+        "div.section:not(.sub-section-container > div.section)"
+      );
       const tenKhaoSat = $("#ten-ks").val();
       const idNhomKs = selectedNhomKs.value;
       const dateStart = $("#begin").val();
@@ -386,23 +311,35 @@ $(function () {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
+      //van lay question trong parent section neu ton tai subsection, be xu ly neu co subsection, thi chi dung subsection
+      function parseSection(sectionEl) {
+        const sectionName = sectionEl.querySelector("input").value;
+        const questions = Array.from(
+          sectionEl.querySelectorAll(".question-item .questionInput")
+        ).map((input) => input.value);
+
+        const subSections = Array.from(
+          sectionEl.querySelectorAll(
+            ":scope > .sub-section-container > .section"
+          )
+        ).map(parseSection);
+
+        return {
+          sectionName,
+          questions,
+          subSections,
+        };
+      }
+
       sections.forEach((section) => {
-        const sectionName = section.querySelector("input").value;
-        const questions = [];
-        const questionElements = section.querySelectorAll(".question-item");
-
-        questionElements.forEach((questionElement) => {
-          const questionInput =
-            questionElement.querySelector(".questionInput").value;
-          questions.push(questionInput);
-        });
-
-        surveyContent.push({
-          sectionName: sectionName,
-          questions: questions,
-        });
+        surveyContent.push(parseSection(section));
       });
-
+      surveyContent.forEach((section) => {
+        if (section.subSections.length > 0) {
+          section.questions = [];
+        }
+      });
+      console.log(surveyContent);
       const editSurveyData = {
         "ks-id": currentKsId,
         "ten-ks": tenKhaoSat,
@@ -413,6 +350,7 @@ $(function () {
         content: surveyContent,
         "su-dung": isSuDung,
       };
+      console.log(editSurveyData);
 
       let isValideData = () => {
         let messages = [];
@@ -455,7 +393,6 @@ $(function () {
         }
         return true;
       };
-      console.log(editSurveyData);
 
       if (isValideData()) {
         checkExistCtdt(nganh, chuKi, loaiKs).then((isExistCtdt) => {
@@ -473,6 +410,7 @@ $(function () {
               "Nếu cập nhật sẽ mất kết quả của bài khảo sát cũ (nếu có) ??"
             )
           ) {
+            //xu ly update
             updateKhaoSat(editSurveyData).then((response) => {
               if (response) {
                 $("#khao-sat-page").trigger("click");
@@ -496,3 +434,201 @@ $(function () {
     });
   })();
 });
+
+function createSection(sectionData = {}, isSubsection = false) {
+  const section = document.createElement("div");
+  section.classList.add("mb-4", "border", "border-gray-300", "p-4", "section");
+  if (isSubsection) section.classList.add("ml-4");
+
+  const sectionTitle = document.createElement("h3");
+  sectionTitle.textContent = isSubsection ? "Tên mục con:" : "Tên mục:";
+  section.appendChild(sectionTitle);
+
+  const sectionNameInput = document.createElement("input");
+  sectionNameInput.placeholder = "Nhập tên mục";
+  sectionNameInput.classList.add("input", "mb-4");
+  sectionNameInput.value = sectionData.ten_muc || "";
+  section.appendChild(sectionNameInput);
+
+  const questionContainer = document.createElement("div");
+  questionContainer.classList.add("question-container");
+  section.appendChild(questionContainer);
+
+  const subSectionContainer = document.createElement("div");
+  subSectionContainer.classList.add("sub-section-container");
+  section.appendChild(subSectionContainer);
+
+  const btnAddQuestion = document.createElement("button");
+  btnAddQuestion.textContent = "Thêm câu hỏi";
+  btnAddQuestion.classList.add("btn", "btn-primary", "btn-sm", "mr-2");
+  btnAddQuestion.addEventListener("click", () => {
+    createQuestion(questionContainer);
+    // ẩn nút thêm mục con nếu có câu hỏi
+    btnAddSubSection.style.display = "none";
+  });
+  section.appendChild(btnAddQuestion);
+
+  const btnAddSubSection = document.createElement("button");
+  btnAddSubSection.textContent = "Thêm mục con";
+  btnAddSubSection.classList.add("btn", "btn-secondary", "btn-sm", "mr-2");
+  btnAddSubSection.addEventListener("click", () => {
+    const subSec = createSection({}, true);
+    subSectionContainer.appendChild(subSec);
+  });
+  if (isSubsection) {
+    btnAddSubSection.style.display = "none"; // mục con không cho thêm mục con
+  }
+  section.appendChild(btnAddSubSection);
+
+  const deleteSectionButton = document.createElement("button");
+  deleteSectionButton.textContent = isSubsection ? "Xóa mục" : "Xóa mục cha";
+  deleteSectionButton.classList.add("btn", "btn-error", "btn-sm");
+  deleteSectionButton.addEventListener("click", () => {
+    section.remove();
+  });
+  section.appendChild(deleteSectionButton);
+
+  // Add existing questions if any
+  if (sectionData.cau_hoi && sectionData.cau_hoi.length > 0) {
+    sectionData.cau_hoi.forEach((questionData) => {
+      createQuestion(questionContainer, questionData.noi_dung);
+    });
+    btnAddSubSection.style.display = "none"; // nếu có sẵn câu hỏi thì ẩn nút thêm mục con
+  }
+
+  return section;
+}
+
+function createQuestion(questionContainer, questionText = "") {
+  const question = document.createElement("div");
+  question.classList.add(
+    "question-item",
+    "flex-row",
+    "flex",
+    "items-center",
+    "gap-4",
+    "mb-4"
+  );
+  question.innerHTML = `
+    <label class="label-text text-nowrap">Câu hỏi:</label>
+    <input type="text" class="questionInput input w-s" value="${questionText}"/>
+    <button class="deleteQuestion btn btn-square btn-outline btn-error">
+      <span class="icon-[tabler--x]">X</span>
+    </button>
+  `;
+  questionContainer.appendChild(question);
+
+  const deleteQuestionButton = question.querySelector(".deleteQuestion");
+  deleteQuestionButton.addEventListener("click", () => {
+    question.remove();
+
+    const section = questionContainer.closest(".section");
+    const questionItems = section.querySelectorAll(".question-item");
+
+    // Chỉ hiển thị lại nút nếu là mục CHA (không phải mục con)
+    const isSubSection = section.classList.contains("ml-4");
+    if (!isSubSection && questionItems.length === 0) {
+      const buttons = section.querySelectorAll("button");
+      buttons.forEach((btn) => {
+        if (btn.textContent.trim() === "Thêm mục con") {
+          btn.style.display = "inline-block";
+        }
+      });
+    }
+  });
+}
+function loadSurveyContent(data, container) {
+  data.forEach((sectionData) => {
+    const sectionEl = createSection(
+      {
+        ten_muc: sectionData.sectionName,
+        cau_hoi: (sectionData.questions || []).map((q) => ({
+          noi_dung: q.questionContent,
+        })),
+      },
+      false
+    );
+
+    if (sectionData.subSections && sectionData.subSections.length > 0) {
+      const subContainer = sectionEl.querySelector(".sub-section-container");
+      sectionData.subSections.forEach((subSectionData) => {
+        const subEl = createSection(
+          {
+            ten_muc: subSectionData.sectionName,
+            cau_hoi: (subSectionData.questions || []).map((q) => ({
+              noi_dung: q.questionContent,
+            })),
+          },
+          true
+        );
+        subContainer.appendChild(subEl);
+      });
+    }
+    container.appendChild(sectionEl);
+  });
+}
+
+/*
+  const mockSurveyContent = [
+    {
+      sectionId: 1,
+      sectionParentId: null,
+      sectionName: "Mục cha 1",
+      questions: [
+            {
+              questionId: 8,
+              sectionId: 1,
+              questionContent: "Câu hỏi con 1.1",
+            },
+            {
+              questionId: 9,
+              sectionId: 1,
+              questionContent: "Câu hỏi con 1.2",
+            },],
+      subSections: [],
+    },
+    {
+      sectionId: 2,
+      sectionParentId: null,
+      sectionName: "Mục cha 2 (có mục con)",
+      questions: [],
+      subSections: [
+        {
+          sectionId: 3,
+          sectionParentId: 2,
+          sectionName: "Mục con 2.1",
+          questions: [
+            {
+              questionId: 1,
+              sectionId: 3,
+              questionContent: "Câu hỏi con 1",
+            },
+            {
+              questionId: 2,
+              sectionId: 3,
+              questionContent: "Câu hỏi con 2",
+            },
+          ],
+          subSections: [], // không có mục con của mục con
+        },
+        { sectionId: 4,
+          sectionName: "Mục con 2.2",
+          questions: [
+            {
+              questionId: 3,
+              sectionId: 3,
+              questionContent: "Câu hỏi con 3",
+            },
+            {
+              questionId: 2,
+              sectionId: 3,
+              questionContent: "Câu hỏi con 4",
+            },
+          ],
+          subSections: [], // không có mục con của mục con
+        },
+      ],
+    },
+  ];
+  data = mockSurveyContent;
+  */

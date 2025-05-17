@@ -151,6 +151,7 @@ function showModal(mode) {
   else {
     $("#modal-title").text("Thêm nhóm khảo sát");
     $("#btn-save").text("Thêm");
+    $("#ten-nhomks").val('');
   }
 
 }
@@ -271,6 +272,7 @@ async function action(mode) {
         ksList.map((item) => {
           $("#nhomks-list").append(`
           <tr>
+              <td>${item.nks_id}</td>
               <td>${item.ten_nks}</td>
               
               <td>

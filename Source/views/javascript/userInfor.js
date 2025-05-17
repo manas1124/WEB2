@@ -7,7 +7,16 @@ async function getCurrentLoginAcount() {
       data: { func: "getCurrentLoginUser" },
     });
     if (response.status == "error") {
-      alert(response.message);
+       Swal.fire({
+        title: 'Thất bại',
+        text: response.message,
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+      
       return null;
     }
     console.log("return user data", response);
@@ -63,18 +72,54 @@ function submitEditAccount(tk_id,username) {
   var confirmPassword = $("#confirm-pass").val();
 
   if (previousPassword === "") {
-    alert("Vui lòng nhập mật khẩu cũ.");
+    Swal.fire({
+        title: 'Thất bại',
+        text: 'Vui lòng nhập mật khẩu cũ.',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+    // alert("Vui lòng nhập mật khẩu cũ.");
     return false;
   }
   if (password === "") {
-    alert("Vui lòng nhập mật khẩu.");
+    Swal.fire({
+        title: 'Thất bại',
+        text: 'Vui lòng nhập mật khẩu.',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+    // alert("Vui lòng nhập mật khẩu.");
     return false;
   }
   if (confirmPassword === "") {
-    alert("Vui lòng xác nhận mật khẩu.");
+    Swal.fire({
+        title: 'Thất bại',
+        text: 'Vui lòng xác nhận mật khẩu.',
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+    // alert("Vui lòng xác nhận mật khẩu.");
     return false;
   }
   if (password !== confirmPassword) {
+    Swal.fire({
+        title: 'Thất bại',
+        text: response.message,
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
     alert("Mật khẩu không khớp.");
     return false;
   }
@@ -92,9 +137,19 @@ function submitEditAccount(tk_id,username) {
     success: function (response) {
       console.log(response);
       var data = JSON.parse(response);
-      alert(data["message"]); // Show the message from the server
+      Swal.fire({
+        title: 'Thất bại',
+        text: data["message"],
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+      // alert(data["message"]); // Show the message from the server
     },
     error: function () {
+
       alert("Có lỗi xảy ra khi gửi dữ liệu!");
     },
   });
@@ -106,19 +161,45 @@ function submitEditPersonal() {
   const dienThoai = $("#phone").val().trim();
 
   if (!hoTen || !email || !diaChi || !dienThoai) {
-    alert("Vui lòng nhập đầy đủ thông tin.");
+    Swal.fire({
+        title: 'Thất bại',
+        text: "Vui lòng nhập đầy đủ thông tin.",
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
     return;
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    alert("Email không hợp lệ.");
+    Swal.fire({
+        title: 'Thất bại',
+        text: "Email không hợp lệ.",
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+
     return;
   }
 
   const phoneRegex = /^[0-9\-\+]{9,15}$/;
   if (!phoneRegex.test(dienThoai)) {
-    alert("Số điện thoại không hợp lệ.");
+     Swal.fire({
+        title: 'Thất bại',
+        text: "Số điện thoại không hợp lệ.",
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+
     return;
   }
 
@@ -136,7 +217,16 @@ function submitEditPersonal() {
       diachi: diaChi,
     },
     success: function (response) {
-      alert(response.message);
+       Swal.fire({
+        title: 'Thất bại',
+        text:response.message,
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+
       if (response.status === "success") {
         if (typeof backNormal === "function") {
           backNormal();
@@ -144,7 +234,16 @@ function submitEditPersonal() {
       }
     },
     error: function (xhr) {
-      alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+       Swal.fire({
+        title: 'Thất bại',
+        text: "Đã xảy ra lỗi khi gửi yêu cầu.",
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonText: 'Thử lại',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      });
+   
       console.error("Lỗi server:", xhr.responseText);
     },
     complete: function () {

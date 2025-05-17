@@ -60,6 +60,7 @@ async function renderUser({
   nganhId = null,
   page = 1,
 }) {
+  
   const res = await getUserByPageNumber(
     search,
     nhomKsId,
@@ -67,7 +68,7 @@ async function renderUser({
     nganhId,
     page
   );
-
+console.log("load lai",res)
   if (res) {
     const { userList, totalPages, currentPage } = res;
 
@@ -127,6 +128,7 @@ async function renderUser({
       `</div><button type="button" class="btn btn-text btn-next">></button>`
     );
   }
+  console.log("load lai thanh cong")
 }
 async function getNhomKs() {
   try {
@@ -177,7 +179,7 @@ async function getUserById(id) {
   }
 }
 
-async function deleteUser(id) {
+function deleteUser(id) {
   Swal.fire({
     title: 'Bạn có chắc chắn muốn xóa đối tượng?',
     icon: 'warning',
@@ -186,11 +188,11 @@ async function deleteUser(id) {
     cancelButtonText: 'Không',
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33'
-  }).then( async (result) => {
+  }).then(  (result) => {
     if (result.isConfirmed) {
       console.log("Deleting user with ID:", id);
       try {
-        const response = await $.ajax({
+        const response = $.ajax({
           url: "./controller/UserController.php",
           type: "POST",
           data: { func: "deleteUser", id: id },
@@ -211,15 +213,15 @@ async function deleteUser(id) {
                     icon: 'success',
                     confirmButtonText: 'Tiếp tục'
                   });
-          renderUser();
+          window.location.reload();
+          console.log("reload")
         }
       } catch (error) {
         console.log("Lỗi khi xóa người dùng");
       }
     }
   });
-
-
+ 
 }
 
 async function loadNhomKsToSelect() {

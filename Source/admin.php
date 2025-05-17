@@ -135,7 +135,7 @@
         //     });
         // }
 
-        // // Gọi tự động mỗi 10 phút (600000ms)
+        // Gọi tự động mỗi 10 phút (600000ms)
         // setInterval(capNhatTrangThai, 600000);
     </script>
 </body>

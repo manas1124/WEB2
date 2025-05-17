@@ -77,7 +77,7 @@
                  </div>
              </div>
              <!-- cau hoi -->
-             <div class="modal-body pt-0 mb-4">
+             <div class="pt-0 mb-4">
                  <p class="mb-4">
                      Nội dung khảo sát
                  </p>
