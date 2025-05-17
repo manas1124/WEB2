@@ -17,18 +17,9 @@
         <p class="mt-2 text-md font-medium text-gray-700"><strong>Số lượng tham gia khảo sát: </strong> <span id="ks-soluongthamgia"></span></p>
     </div>
     <div class="w-full overflow-x-auto">
-        <table class="table">
-            <thead id="cauhoi-list">
-                <tr>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="traloi-list">
-                <tr>
+        <div class="flex flex-col" id="ketqua-list">
 
-                </tr>
-            </tbody>
-        </table>
+        </div>
     </div>
 </div>
 <script src="./views/javascript/ketquakhaosat-xemkq.js"></script>

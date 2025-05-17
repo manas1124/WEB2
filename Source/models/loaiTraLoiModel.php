@@ -95,7 +95,7 @@ class LoaiTraLoiModel
             ltl_id LIKE '%$textSearchEscaped%' OR
             thang_diem LIKE '%$textSearchEscaped%' OR
             mota LIKE '%$textSearchEscaped%' OR
-            motachitiet LIKE '%$textSearchEscaped%'
+            chitiet_mota LIKE '%$textSearchEscaped%'
         ) ";
         }
 
