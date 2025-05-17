@@ -152,90 +152,135 @@ async function loadDuLieu(ks_id) {
     console.log(kqks);
     console.log(traLoi);
 
+    const ltlContainer = document.getElementById("ltl-container");
 
-    // 6. Tạo tiêu đề bảng
-    const cauhoiList = document.getElementById('cauhoi-list');
-    cauhoiList.innerHTML = ''; // Xóa nội dung cũ
+    const chitiet_mota = khaoSat.ltl_chitiet_mota ? khaoSat.ltl_chitiet_mota.split(",").map(item => item.trim()) : null;
+    chitiet_mota.forEach((item, index) => {
+        const section = document.createElement("div");
+        section.className = `p-4 section min-w-[125px] min-h-[125px] rounded-full item-center`;
+        section.innerHTML = `
+                    <div>
+                        <h3 class='mt-3 text-center'>${index + 1}</h3>
+                    </div>
+                    <div>
+                        <p class='mt-3 text-center'>${item}</p>
+                    </div>
+                `;
+        ltlContainer.appendChild(section);
+    });
 
-    const headerRow = document.createElement('tr');
-    const cauHoiTh = document.createElement('th');
-    cauHoiTh.textContent = 'Câu hỏi';
-    headerRow.appendChild(cauHoiTh);
-    const thangDiem = document.createElement('th');
-    thangDiem.textContent = 'Thang điểm';
-    thangDiem.colSpan = khaoSat.thang_diem;
-    thangDiem.style.textAlign = "center";
-    headerRow.appendChild(thangDiem);
-    cauhoiList.appendChild(headerRow);
+    // 5. Tạo nội dung bảng
+    const ketQuaList = document.getElementById('ketqua-list');
+    ketQuaList.innerHTML = '';
 
-    const headerRow2 = document.createElement('tr');
-    const space = document.createElement('th');
-    headerRow2.appendChild(space);
-    for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
-        const th = document.createElement('th');
-        th.textContent = diem;
-        th.style.textAlign = "center";
-        headerRow2.appendChild(th);
-    }
-    cauhoiList.appendChild(headerRow2);
-
-    // 7. Tạo nội dung bảng
-    const traloiList = document.getElementById('traloi-list');
-    traloiList.innerHTML = '';
-
-    // Duyệt qua từng mục khảo sát
+    // Gom dữ liệu vào Map như trước
+    const mksTheoCha = new Map();
     mucKhaoSat.forEach(mks => {
-        // Dòng tiêu đề mục
-        const mksRow = document.createElement('tr');
-        mksRow.classList.add('hover');
-        const mksTd = document.createElement('td');
-        mksTd.textContent = mks.ten_muc;
-        mksTd.colSpan = khaoSat.thang_diem + 1;
-        mksTd.style.fontWeight = 'bold';
-        mksRow.appendChild(mksTd);
-        traloiList.appendChild(mksRow);
+        const parentId = mks.parent_mks_id || 'root';
+        if (!mksTheoCha.has(parentId)) {
+            mksTheoCha.set(parentId, []);
+        }
+        mksTheoCha.get(parentId).push(mks);
+    });
 
-        // Tìm các câu hỏi thuộc mục khảo sát này
-        const relatedQuestions = cauHoi.filter(ch => ch.mks_id === mks.mks_id);
+    const cauHoiTheoMks = new Map();
+    cauHoi.forEach(ch => {
+        if (!cauHoiTheoMks.has(ch.mks_id)) {
+            cauHoiTheoMks.set(ch.mks_id, []);
+        }
+        cauHoiTheoMks.get(ch.mks_id).push(ch);
+    });
 
-        relatedQuestions.forEach(ch => {
-            const row = document.createElement('tr');
-            row.classList.add('hover');
+    const traLoiTheoCauHoi = new Map();
+    traLoi.forEach(tl => {
+        const key = `${tl.ch_id}-${tl.ket_qua}`;
+        traLoiTheoCauHoi.set(key, (traLoiTheoCauHoi.get(key) || 0) + 1);
+    });
 
-            // Cột câu hỏi
-            const cauHoiTd = document.createElement('td');
-            cauHoiTd.textContent = ch.noi_dung;
-            row.appendChild(cauHoiTd);
+    function taoDongCauHoi(ch, prefix = '') {
+        const row = document.createElement('tr');
+        row.classList.add('hover');
 
-            // Tạo các ô radio tương ứng với mỗi mức điểm
-            for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
+        const cauHoiTd = document.createElement('td');
+        cauHoiTd.textContent = `${prefix} ${ch.noi_dung}`;
+        row.appendChild(cauHoiTd);
+
+        //đôi đoạn này
+        for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
+            const count = traLoiTheoCauHoi.get(`${ch.ch_id}-${diem}`) || 0;
+            const td = document.createElement('td');
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = `${ch.ch_id}-${diem}`;
+            radio.disabled = true;
+            radio.checked = count == 0 ? false : true;
+            radio.classList.add('radio', 'before:text-[#3085d6]');
+            td.appendChild(radio);
+            td.classList.add("text-center");
+            row.appendChild(td);
+        }
+
+        return row;
+    }
+
+    // Duyệt các mục cha
+    const mucChaList = mksTheoCha.get('root') || [];
+    mucChaList.forEach((mucCha, indexMuc) => {
+        // Tạo tiêu đề cho mục cha
+        const tieude = document.createElement('h3');
+        tieude.textContent = mucCha.ten_muc;
+        tieude.style.marginTop = '30px';
+        tieude.style.fontWeight = 'bold';
+        ketQuaList.appendChild(tieude);
+
+        // Tạo bảng mới
+        const tableContainer = document.createElement('div');
+        const table = document.createElement('table');
+        table.classList.add('table', 'table-striped', 'w-full', 'mb-4', 'border-collapse', 'border', 'border-black', 'mt-2');
+
+        // Header bảng
+        const thead = document.createElement('thead');
+        const headRow1 = document.createElement('tr');
+        headRow1.innerHTML = `<th rowspan=2 class="border border-black">Nội dung</th>
+                              <th class="text-center border border-black" colspan=${khaoSat.thang_diem}>${khaoSat.ltl_mota}</th>`;
+        thead.appendChild(headRow1);
+        const headRow2 = document.createElement('tr');
+        headRow2.innerHTML = Array.from({ length: khaoSat.thang_diem }, (_, i) => `<th class="text-center border border-black">${i + 1}</th>`).join('');
+        thead.appendChild(headRow2);
+        table.appendChild(thead);
+
+        // Body bảng
+        const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        const mucConList = mksTheoCha.get(mucCha.mks_id) || [];
+
+        if (mucConList.length > 0) {
+            // Có mục con
+            mucConList.forEach(mucCon => {
+                const row = document.createElement('tr');
                 const td = document.createElement('td');
-                td.style.textAlign = "center";
-
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `ch_${ch.ch_id}`;
-                // radio.disabled = true;
-                radio.className = 'radio radio-accent';
-
-                // Nếu có ít nhất 1 người chọn mức điểm này
-                const count = traLoi.filter(tl =>
-                    Number(tl.ch_id) === Number(ch.ch_id) &&
-                    Number(tl.ket_qua) === diem
-                ).length;
-
-                if (count > 0) {
-                    radio.checked = true;
-                } else {
-                    radio.disabled = true;
-                }
-
-                td.appendChild(radio);
+                td.textContent = `${indexMuc + 1}. ${mucCon.ten_muc}`;
+                td.colSpan = khaoSat.thang_diem + 1;
+                td.style.fontWeight = 'bold';
+                td.style.paddingLeft = '10px';
                 row.appendChild(td);
-            }
+                tbody.appendChild(row);
 
-            traloiList.appendChild(row);
-        });
+                const relatedQuestions = cauHoiTheoMks.get(mucCon.mks_id) || [];
+                relatedQuestions.forEach((ch, indexCH) => {
+                    tbody.appendChild(taoDongCauHoi(ch, `${indexMuc + 1}.${indexCH + 1}.`));
+                });
+            });
+        } else {
+            // Không có mục con → render trực tiếp câu hỏi
+            const relatedQuestions = cauHoiTheoMks.get(mucCha.mks_id) || [];
+            relatedQuestions.forEach((ch, indexCH) => {
+                tbody.appendChild(taoDongCauHoi(ch, `${indexMuc + 1}.${indexCH + 1}.`));
+            });
+        }
+        tableContainer.appendChild(table);
+        ketQuaList.appendChild(tableContainer);
     });
 }
 

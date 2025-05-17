@@ -31,7 +31,7 @@
                         </strong>
                     </div>
 
-                    <div id="ltl-container" class="flex flex-row gap-4 flex-wrap wrap">
+                    <div id="ltl-container" class="flex flex-row gap-4 flex-wrap wrap justify-around">
 
                     </div>
                 </div>
@@ -40,42 +40,6 @@
     </div>
 </div>
 <script>
-    function interpolateColor(color1, color2, factor) {
-        const result = color1.slice();
-        for (let i = 0; i < 3; i++) {
-            result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-        }
-        return result;
-    }
-
-    function rgbToHex(rgb) {
-        return "#" + rgb.map(x => x.toString(16).padStart(2, '0')).join('');
-    }
-
-    function generateGradientColors(n) {
-        const red = [255, 0, 0];
-        const yellow = [255, 255, 0];
-        const green = [0, 255, 0];
-        const colors = [];
-
-        if (n === 2) {
-            colors.push(rgbToHex(red), rgbToHex(green));
-        } else {
-            const half = Math.floor(n / 2);
-            for (let i = 0; i < half; i++) {
-                const factor = i / (half - 1 || 1); // Tránh chia 0
-                const color = interpolateColor(red, yellow, factor);
-                colors.push(rgbToHex(color));
-            }
-            for (let i = half; i < n; i++) {
-                const factor = (i - half) / (n - half - 1 || 1);
-                const color = interpolateColor(yellow, green, factor);
-                colors.push(rgbToHex(color));
-            }
-        }
-
-        return colors;
-    }
     async function getLoaiTraLoiById(ltl_id) {
         if (!ltl_id || isNaN(ltl_id)) {
             console.warn("ID không hợp lệ");
@@ -116,9 +80,6 @@
         const status = response.data.status;
         const data = response.data.chitiet_mota ? response.data.chitiet_mota.split(",").map(item => item.trim()) : null;
 
-        const colors = generateGradientColors(thang_diem);
-        console.log(colors);
-
         document.getElementById("ltl_id").textContent = "Chi tiết loại trả lời: Mã loại trả lời - " + id;
         document.getElementById("select-status").value = status;
         document.getElementById("mo-ta").value = mota;
@@ -126,16 +87,13 @@
         if (data) {
             data.forEach((item, index) => {
                 const section = document.createElement("div");
-                const color = colors[index];
-                console.log(color);
-                section.className = `mb-4 border-5 p-4 section min-w-[125px] min-h-[125px] rounded-full item-center`;
-                section.style.border = `solid ${color}`;
+                section.className = `p-4 section min-w-[125px] min-h-[125px] rounded-full item-center`;
                 section.innerHTML = `
                     <div>
-                        <h3 class='my-2 text-center'>Lựa chọn ${index + 1}:</h3>
+                        <h3 class='mt-3 text-center'>${index + 1}</h3>
                     </div>
                     <div>
-                        <p class='my-4 text-center'>${item}</p>
+                        <p class='mt-3 text-center'>${item}</p>
                     </div>
                 `;
                 ltlContainer.appendChild(section);
