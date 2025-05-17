@@ -127,6 +127,23 @@ async function loadDuLieu(ks_id) {
     console.log(kqks.data);
     console.log(traLoi);
 
+    const ltlContainer = document.getElementById("ltl-container");
+
+    const chitiet_mota = khaoSat.ltl_chitiet_mota ? khaoSat.ltl_chitiet_mota.split(",").map(item => item.trim()) : null;
+    chitiet_mota.forEach((item, index) => {
+        const section = document.createElement("div");
+        section.className = `p-4 section min-w-[125px] min-h-[125px] rounded-full item-center`;
+        section.innerHTML = `
+                    <div>
+                        <h3 class='mt-3 text-center'>${index + 1}</h3>
+                    </div>
+                    <div>
+                        <p class='mt-3 text-center'>${item}</p>
+                    </div>
+                `;
+        ltlContainer.appendChild(section);
+    });
+
     // 5. Tạo nội dung bảng
     const ketQuaList = document.getElementById('ketqua-list');
     ketQuaList.innerHTML = '';

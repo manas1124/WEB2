@@ -7,14 +7,27 @@
         </div>
     </div>
     <div id="info-khaosat" class="mb-4 p-5 border rounded-lg shadow-md">
-        <p class="mt-2 text-md font-medium text-gray-700"><strong>Tên bài khảo sát: </strong><span id="ks-ten"></span></p>
-        <p class="mt-2 text-md font-medium text-gray-700"><strong>Thang điểm: </strong> <span id="ks-thangdiem"></span></p>
-        <p class="mt-2 text-md font-medium text-gray-700"><strong>Ngày bắt đầu: </strong> <span id="ks-ngaybatdau"></span></p>
-        <p class="mt-2 text-md font-medium text-gray-700"><strong>Ngày kết thúc: </strong> <span id="ks-ngayketthuc"></span></p>
-        <p class="mt-2 text-md font-medium text-gray-700"><strong>Ngành: </strong> <span id="ks-nganh"></span></p>
-        <p class="mt-2 text-md font-medium text-gray-700"><strong>Chu kỳ: </strong> <span id="ks-chuky"></span></p>
-        <p class="mt-2 text-md font-medium text-gray-700"><strong>Nhóm khảo sát: </strong> <span id="ks-nhom"></span></p>
+        <div class="w-full flex flex-wrap wrap justify-between md:justify-around">
+            <div>
+                <p class="mt-2 text-md font-medium text-gray-700"><strong>Tên bài khảo sát: </strong><span id="ks-ten"></span></p>
+                <p class="mt-2 text-md font-medium text-gray-700"><strong>Ngày bắt đầu: </strong> <span id="ks-ngaybatdau"></span></p>
+                <p class="mt-2 text-md font-medium text-gray-700"><strong>Ngày kết thúc: </strong> <span id="ks-ngayketthuc"></span></p>
+            </div>
+            <div>
+                <p class="mt-2 text-md font-medium text-gray-700"><strong>Ngành: </strong> <span id="ks-nganh"></span></p>
+                <p class="mt-2 text-md font-medium text-gray-700"><strong>Chu kỳ: </strong> <span id="ks-chuky"></span></p>
+                <p class="mt-2 text-md font-medium text-gray-700"><strong>Nhóm khảo sát: </strong> <span id="ks-nhom"></span></p>
+            </div>
+        </div>
         <p class="mt-2 text-md font-medium text-gray-700"><strong>Số lượng tham gia khảo sát: </strong> <span id="ks-soluongthamgia"></span></p>
+    </div>
+    <div class="fles flex-col">
+        <div>
+            <p class="mt-2 text-md font-medium text-gray-700"><strong>Thang điểm: </strong> <span id="ks-thangdiem"></span></p>
+        </div>
+        <div class="w-full flex flex-wrap wrap justify-center gap-4" id="ltl-container">
+
+        </div>
     </div>
     <div class="w-full overflow-x-auto">
         <div class="flex flex-col" id="ketqua-list">
