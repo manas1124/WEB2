@@ -29,7 +29,7 @@ class TraLoiModel {
 
     public function getTraLoiByIdKhaoSat($idKhaoSat) {
         $con = $this->db->getConnection();
-        $sql = "SELECT thang_diem
+        $sql = "SELECT thang_diem, chitiet_mota
                 FROM khao_sat ks JOIN loai_tra_loi ltl ON ks.ltl_id = ltl.ltl_id
                 WHERE ks.ks_id = ? AND ltl.status = 1 AND ks.status = 1";
         $stmt = $con->prepare($sql);
