@@ -2,9 +2,11 @@
 require_once __DIR__ . '/../../models/SurveyModel.php';
 require_once __DIR__ . '/../../models/loaiTraLoiModel.php';
 $surveyModel = new SurveyModel();
+
 $answerType = new TraLoiModel();
 
 // $listSurveyFieldAndQuestion = json_decode($surveyModel->getSurveyFieldAndQuestion($listEx), true);
+
 $typeScore = $answerType->getTraLoiByIdKhaoSat($_GET['surveyId']);
 $listParent = json_decode($surveyModel->getAllParent($_GET['surveyId']), true); // Muc cha
 

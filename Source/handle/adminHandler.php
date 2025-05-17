@@ -22,6 +22,14 @@ if ($page) {
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;
+        case "qlLoaiTraLoi":
+            // Use require_once to include the file, ensuring it's only included once
+            // include("../views/admin/qlKhaoSatPage.php")
+            ob_start();
+            $filePath = "../views/admin/qlLoaiTraLoi.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
         case "ctdtPage":
             ob_start();
             require_once("../views/admin/ctdtPage.php");
@@ -96,6 +104,24 @@ if ($act) {
         case "ks-chi-tiet":
             ob_start();
             $filePath = "../views/admin/qlKhaoSatPage-detail.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "ltl-them":
+            ob_start();
+            $filePath = "../views/admin/qlLoaiTraLoi-them.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "ltl-sua":
+            ob_start();
+            $filePath = "../views/admin/qlLoaiTraLoi-sua.php";
+            require_once($filePath);
+            $response["html"] = ob_get_clean();
+            break;
+        case "ltl-chi-tiet":
+            ob_start();
+            $filePath = "../views/admin/qlLoaiTraLoi-chitiet.php";
             require_once($filePath);
             $response["html"] = ob_get_clean();
             break;

@@ -118,7 +118,7 @@ class KhaoSatModel
         $query = "
             SELECT 
             khao_sat.ks_id, khao_sat.ten_ks, khao_sat.ngay_bat_dau,khao_sat.ngay_ket_thuc,khao_sat.su_dung,khao_sat.status,
-            loai_tra_loi.ltl_id,loai_tra_loi.thang_diem,
+            loai_tra_loi.ltl_id,loai_tra_loi.thang_diem, loai_tra_loi.mota AS ltl_mota, loai_tra_loi.chitiet_mota AS ltl_chitiet_mota,
             nhom_khao_sat.nks_id,nhom_khao_sat.ten_nks,
             chu_ki.ck_id,chu_ki.ten_ck,
             nganh.nganh_id, nganh.ten_nganh,

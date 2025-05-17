@@ -1,13 +1,13 @@
 window.HSStaticMethods.autoInit();
 
-async function getAllChuky(page = 1, status = null, txt_search = null) {
+async function getAllLoaiTraLoi(page = 1, status = null, txt_search = null) {
     try {
         const response = await $.ajax({
-            url: "./controller/chuKyController.php",
+            url: "./controller/loaiTraLoiController.php",
             type: "GET",
             dataType: "json",
             data: {
-                func: "getAllpaging",
+                func: "getAllPaging",
                 page: page,
                 status: status,
                 txt_search: txt_search
@@ -20,8 +20,9 @@ async function getAllChuky(page = 1, status = null, txt_search = null) {
     }
 }
 
-async function loadAllChuky(page = 1, status = null, txt_search = null) {
-    const res = await getAllChuky(page, status, txt_search);
+async function loadAllLoaiTraLoi(page = 1, status = null, txt_search = null) {
+    console.log("page:" + page + ", status:" + status + ", txt_search:" + txt_search)
+    const res = await getAllLoaiTraLoi(page, status, txt_search);
     if (res?.status == false && res?.message) {
         Swal.fire({
             title: "Thông báo",
@@ -32,31 +33,34 @@ async function loadAllChuky(page = 1, status = null, txt_search = null) {
     }
     if (res) {
         console.log(res);
-        const chukyList = res.data;
+        const loaiTraLoiList = res.data;
         const totalPages = res.totalPages;
         const currentPage = res.currentPage;
-        $("#chuky-list").empty();
-        if (chukyList.length == 0) {
-            $("#chuky-list").html("<tr><td colspan='7' class='text-center text-gray-500 italic py-4 bg-gray-100 rounded'>Không tìm thấy chu kỳ.</td></tr>");
+        $("#loaiTraLoi-list").empty();
+        if (loaiTraLoiList.length == 0) {
+            $("#loaiTraLoi-list").html("<tr><td colspan='7' class='text-center text-gray-500 italic py-4 bg-gray-100 rounded'>Không tìm thấy loại trả lời.</td></tr>");
             $("#pagination").empty();
             return;
         }
-        chukyList.forEach(item => {
-            $("#chuky-list").append(`
+        loaiTraLoiList.forEach(item => {
+            $("#loaiTraLoi-list").append(`
               <tr>
-                    <td>${item.ck_id}</td>
-                    <td>${item.ten_ck}</td>
+                    <td>${item.ltl_id}</td>
+                    <td>${item.thang_diem}</td>
+                    <td>${item.mota}</td>
                     <td>${item.status == 1
                     ? '<span class="badge badge-soft badge-success ">Đang sử dụng</span>'
                     : '<span class="badge badge-soft badge-error ">Đã khóa</span>'
                 }</td>
                     <td>
-                        <button class="action-item btn btn-circle btn-text btn-sm edit-program hidden" aria-label="Action button" data-act="chuky-sua" data-id="${item.ck_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
-                        <button class="btn btn-circle btn-text btn-sm delete-program hidden" aria-label="Action button" onclick="toggleStatus(${item.ck_id})"><span class="icon-[tabler--trash] size-5"></span></button>
+                        <button class="action-item btn btn-circle btn-text btn-sm view-survey hidden" aria-label="Action button" data-act="ltl-chi-tiet" data-id="${item.ltl_id}"><span class="icon-[tabler--eye] size-5"></span></button>
+                        <button class="action-item btn btn-circle btn-text btn-sm edit-survey hidden" aria-label="Action button" data-act="ltl-sua" data-id="${item.ltl_id}"><span class="icon-[tabler--pencil] size-5"></span></button>
+                        <button class="btn btn-circle btn-text btn-sm delete-survey hidden" aria-label="Action button" onclick="toggleStatus(${item.ltl_id})"><span class="icon-[tabler--trash] size-5"></span></button>
                     </td>
                 </tr>
             `);
         });
+
         window.AppState.applyPermissionControl();
         renderPagination(totalPages, currentPage);
     }
@@ -82,99 +86,7 @@ function renderPagination(totalPages, currentPage) {
     $("#pagination").append(`</div><button type="button" class="btn btn-text btn-next">></button>`);
 }
 
-function create() {
-    const ten_ck = $("#ten-chuky").val();
-    const status = $("#select-status").val();
-    $.ajax({
-        url: "./controller/chuKyController.php",
-        type: "GET",
-        dataType: "json",
-        data: {
-            func: "create",
-            ten_ck: ten_ck,
-            status: status
-        },
-        success: function (response) {
-            if (!response.status) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi',
-                    text: response.message
-                });
-            }
-            else {
-                if (response.data) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Tạo thành công!',
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Tạo không thành công!'
-                    });
-                }
-            }
-
-            history.back();
-        },
-        error: function (error) {
-            console.error("Error navigate page:", error);
-
-        }
-    });
-}
-
-function update() {
-    const ck_id = $("#ck_id").val();
-    const ten_ck = $("#ten-ck").val();
-    const status = $("#select-status").val();
-    $.ajax({
-        url: "./controller/chuKyController.php",
-        type: "GET",
-        dataType: "json",
-        data: {
-            func: "update",
-            ck_id: ck_id,
-            ten_ck: ten_ck,
-            status: status
-        },
-        success: function (response) {
-            if (!response.status) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi',
-                    text: response.message
-                });
-            }
-            else {
-                if (response.data) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Lưu thay đổi thành công!',
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Lưu thay đổi thất bại!'
-                    });
-                }
-            }
-            history.back();
-        },
-        error: function (error) {
-            console.error("Error loading form sua:", error);
-        }
-    });
-}
-
-function toggleStatus(ck_id) {
+function toggleStatus(ltl_id) {
     Swal.fire({
         title: 'Bạn có chắc chắn muốn thay đổi trạng thái không?',
         icon: 'warning',
@@ -186,12 +98,12 @@ function toggleStatus(ck_id) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "./controller/chuKyController.php",
-                type: "GET",
+                url: "./controller/loaiTraLoiController.php",
+                type: "POST",
                 dataType: "json",
                 data: {
                     func: "toggleStatus",
-                    ck_id: ck_id,
+                    ltl_id: ltl_id
                 },
                 success: function (response) {
                     if (response?.status == false && response?.message) {
@@ -201,7 +113,7 @@ function toggleStatus(ck_id) {
                             icon: "warning"
                         });
                     } else {
-                        if (response) {
+                        if (response.status == true) {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Đổi trạng thái thành công!',
@@ -211,7 +123,7 @@ function toggleStatus(ck_id) {
                             const txtSearch = $("#search-keyword").val().trim();
                             const selectedValue = $("#select-status").val();
                             const status = selectedValue == -1 ? null : selectedValue;
-                            loadAllChuky(1, status, txtSearch);
+                            loadAllLoaiTraLoi(1, status, txtSearch);
                         }
                     }
 
@@ -226,53 +138,32 @@ function toggleStatus(ck_id) {
 }
 
 $(document).ready(function () {
-    loadAllChuky(1);
+    loadAllLoaiTraLoi(1);
 
     // Xử lý nút Lọc
     $("#btn-loc").on("click", function () {
         const txtSearch = $("#search-keyword").val().trim();
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        loadAllChuky(1, status, txtSearch);
+        loadAllLoaiTraLoi(1, status, txtSearch);
     });
 
     $("#search-keyword").on("input", function () {
         const txtSearch = $("#search-keyword").val().trim();
         const selectedValue = $("#select-status").val();
         const status = selectedValue == -1 ? null : selectedValue;
-        loadAllChuky(1, status, txtSearch);
+        loadAllLoaiTraLoi(1, status, txtSearch);
     });
 
 
     $("#btn-reset").on("click", function () {
         $("#select-status").val(-1);
         const txtSearch = $("#search-keyword").val().trim();
-        loadAllChuky(1, null, txtSearch);
-    });
-
-
-    $("#btn-create").on("click", function () {
-        if ($("#ten-chuky").val() != "") {
-            create();
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Tên chu kỳ không được để trống!'
-            });
-        }
+        loadAllLoaiTraLoi(1, null, txtSearch);
     });
 
     $("#btn-save").on("click", function () {
-        const tenChuky = $("#ten-ck").val().trim();
-        if (!tenChuky) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Tên chu kỳ không được để trống!'
-            });
-            return;
-        }
+
 
         Swal.fire({
             title: 'Bạn có chắc chắn muốn sửa?',
@@ -299,7 +190,7 @@ $(document).ready(function () {
         if (currentPage == selectedPage) {
             return;
         }
-        loadAllChuky(selectedPage, status, txtSearch);
+        loadAllLoaiTraLoi(selectedPage, status, txtSearch);
     });
 
     $("#pagination").on("click", ".btn-prev", function () {
@@ -313,7 +204,7 @@ $(document).ready(function () {
         }
         currentPage -= 1;
         console.log(currentPage);
-        loadAllChuky(currentPage, status, txtSearch);
+        loadAllLoaiTraLoi(currentPage, status, txtSearch);
     });
 
     $("#pagination").on("click", ".btn-next", function () {
@@ -328,6 +219,6 @@ $(document).ready(function () {
         }
         currentPage += 1;
         console.log(currentPage);
-        loadAllChuky(currentPage, status, txtSearch);
+        loadAllLoaiTraLoi(currentPage, status, txtSearch);
     });
 });
