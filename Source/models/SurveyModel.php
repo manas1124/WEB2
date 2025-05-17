@@ -28,7 +28,11 @@ class SurveyModel
     public function getAllSurveys()
     {
         $conn = $this->db->getConnection();
-        $stmt = $conn->prepare("SELECT * FROM khao_sat WHERE status = 1 ORDER BY ks_id DESC");
+        $stmt = $conn->prepare("SELECT ks.*, nks.ten_nks
+                                        FROM khao_sat ks
+                                        JOIN nhom_khao_sat nks ON ks.nks_id = nks.nks_id
+                                        WHERE ks.status = 1
+                                        ORDER BY ks.ks_id DESC;");
         $stmt->execute();
         $result = $stmt->get_result();
 
