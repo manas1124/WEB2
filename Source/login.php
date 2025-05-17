@@ -143,10 +143,7 @@
     </script>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/flyonui/flyonui.js"></script>
-
-    <!-- <script src="./views/javascript/indexAdmin.js"></script> -->
     <script src="./views/javascript/indexUser.js"></script>
-    <script src="./views/javascript/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
