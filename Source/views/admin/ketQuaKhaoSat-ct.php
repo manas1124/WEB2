@@ -32,8 +32,8 @@
                 </div>
             </div>
         </div>
-        <div class="mb-4 p-5 border rounded-lg shadow-md">
-            <p class="mt-2 text-md font-medium text-gray-700"><strong>Số lượng tham gia khảo sát: </strong> <span id="ks-soluongthamgia"></span></p>
+        <div id="thongke-khaosat" class="mb-4 p-5 border rounded-lg shadow-md">
+
         </div>
     </div>
     <div class="fles flex-col">

@@ -215,4 +215,22 @@ class DoiTuongModel
 
         return $data;
     }
+
+    public function getAllByNhomKs($nhom_ks)
+    {
+        $conn = $this->db->getConnection();
+        $sql = "SELECT * FROM doi_tuong WHERE nhom_ks = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $nhom_ks); // i = integer
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
 }

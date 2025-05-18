@@ -139,6 +139,23 @@ if (isset($_GET['func'])) {
                 }
             }
             break;
+        case "getAllByNhomKs":
+            if (isset($_SESSION['accessToken']) && $_SESSION['accessToken']) {
+                $accessToken = $_SESSION['accessToken'];
+                $isVaid = isAuthorization($accessToken, 'view.target');
+                if ($isVaid) {
+                    if (isset($_GET['nhom_ks'])) {
+                        $nhom_ks = $_GET['nhom_ks'];
+                        $response = $doiTuongModel->getAllByNhomKs($nhom_ks);
+                    }
+                } else {
+                    $response = [
+                        'status' => false,
+                        'message' => 'Bạn không có quyền để thực hiện việc này'
+                    ];
+                }
+            }
+            break;
         default:
             $response = [
                 'error' => 'Page not found',

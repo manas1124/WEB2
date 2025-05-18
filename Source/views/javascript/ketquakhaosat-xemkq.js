@@ -113,8 +113,22 @@ async function getUserByIds(dt_ids) {
             data: { func: "getByIds", dt_ids: dt_ids },
             dataType: "json",
         });
-        console.log(" Phản hồi getUserById:", response);
+        return response;
+    } catch (error) {
+        console.log("Lỗi khi lấy dữ liệu người dùng", error);
+        return null;
+    }
+}
 
+async function getAllByNhomKs(nhom_ks) {
+    try {
+        const response = await $.ajax({
+
+            url: "./controller/doiTuongController.php",
+            type: "GET",
+            data: { func: "getAllByNhomKs", nhom_ks: nhom_ks },
+            dataType: "json",
+        });
         return response;
     } catch (error) {
         console.log("Lỗi khi lấy dữ liệu người dùng", error);
@@ -156,21 +170,50 @@ async function loadDuLieu(ks_id) {
     const doiTuong_Ids = kqks.data.map(item => item.nguoi_lamks_id);
 
     const loaiDoiTuongs = await getAllLoaidt();
-    const doiTuongs = await getUserByIds(doiTuong_Ids);
+    const doiTuongThamGias = await getUserByIds(doiTuong_Ids);
+    const doiTuongs = await getAllByNhomKs(khaoSat.nks_id);
 
     console.log(loaiDoiTuongs);
     console.log(doiTuongs);
+    console.log(doiTuongThamGias);
 
+    const thongKeKhaoSat = document.getElementById('thongke-khaosat');
 
-    document.getElementById('ks-soluongthamgia').textContent = kqks_ids.length || 'Chưa có';
+    const tongSoPhieu = document.createElement('p');
+    tongSoPhieu.className = "mt-2 text-md font-medium text-gray-700";
+    tongSoPhieu.innerHTML = `<strong>Tổng số phiếu: </strong> <span>${doiTuongs.length}</span>`;
+    thongKeKhaoSat.appendChild(tongSoPhieu);
+
+    const soLuongThamGia = document.createElement('p');
+    soLuongThamGia.className = "mt-2 text-md font-medium text-gray-700";
+    soLuongThamGia.innerHTML = `<strong>Số lượng tham gia khảo sát: </strong> <span>${kqks_ids.length}</span>`;
+    thongKeKhaoSat.appendChild(soLuongThamGia);
+
+    const tongPhieuTheoLoaiDT = new Map();
+    doiTuongs.forEach(item => {
+        const key = String(item.loai_dt_id);
+        tongPhieuTheoLoaiDT.set(key, (tongPhieuTheoLoaiDT.get(key) || 0) + 1);
+    });
+
+    const thamGiaTheoLoaiDT = new Map();
+    doiTuongThamGias.forEach(item => {
+        const key = String(item.loai_dt_id);
+        thamGiaTheoLoaiDT.set(key, (thamGiaTheoLoaiDT.get(key) || 0) + 1);
+    });
+
+    loaiDoiTuongs.forEach(item => {
+        const key = String(item.dt_id);
+        const tong = tongPhieuTheoLoaiDT.get(key) || 0;
+        const thamgia = thamGiaTheoLoaiDT.get(key) || 0;
+
+        const p = document.createElement('p');
+        p.className = "mt-2 text-md font-medium text-gray-700";
+        p.innerHTML = `<strong>${item.ten_dt}:</strong> Tổng phiếu: <span>${tong}</span>, Tham gia: <span>${thamgia}</span>`;
+        thongKeKhaoSat.appendChild(p);
+    });
 
     // 4. Lấy danh sách trả lời
     const traLoi = await getAllTraLoi(kqks_ids);
-
-    console.log(mucKhaoSat);
-    console.log(cauHoi);
-    console.log(kqks.data);
-    console.log(traLoi);
 
     const ltlContainer = document.getElementById("ltl-container");
 
