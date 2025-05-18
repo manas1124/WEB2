@@ -194,7 +194,10 @@ class DoiTuongModel
 
         $placeholders = implode(',', array_fill(0, count($dt_ids), '?'));
 
-        $sql = "SELECT * FROM doi_tuong WHERE dt_id IN ($placeholders)";
+        $sql = "SELECT dt.*, ldt.ten_dt
+                FROM doi_tuong dt
+                JOIN loai_doi_tuong ldt ON dt.loai_dt_id = ldt.dt_id
+                WHERE dt.dt_id IN ($placeholders);";
 
         $stmt = $conn->prepare($sql);
 
