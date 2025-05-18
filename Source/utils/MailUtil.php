@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 $mail = new PHPMailer(true);
 $email = 'quangdeeptry1911@gmail.com'; //  email 
 $password = 'hmayehbweofjrkzu'; // password
-$nameMail = 'Quang tèo'; // tên người gửi
+$nameMail = 'Quang Nguyen'; // tên người gửi
 
 if (isset($_POST['act']) && $_POST['act']) {
     $listEmail = $_POST['listEmail'];

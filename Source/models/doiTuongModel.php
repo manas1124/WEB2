@@ -194,13 +194,34 @@ class DoiTuongModel
 
         $placeholders = implode(',', array_fill(0, count($dt_ids), '?'));
 
-        $sql = "SELECT * FROM doi_tuong WHERE dt_id IN ($placeholders)";
+        $sql = "SELECT dt.*, ldt.ten_dt
+                FROM doi_tuong dt
+                JOIN loai_doi_tuong ldt ON dt.loai_dt_id = ldt.dt_id
+                WHERE dt.dt_id IN ($placeholders);";
 
         $stmt = $conn->prepare($sql);
 
         $types = str_repeat('i', count($dt_ids));
 
         $stmt->bind_param($types, ...$dt_ids);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
+
+    public function getAllByNhomKs($nhom_ks)
+    {
+        $conn = $this->db->getConnection();
+        $sql = "SELECT * FROM doi_tuong WHERE nhom_ks = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $nhom_ks); // i = integer
 
         $stmt->execute();
         $result = $stmt->get_result();

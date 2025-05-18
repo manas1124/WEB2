@@ -7,7 +7,7 @@
     <title>Admin Page</title>
     <link rel="shortcut icon" href="./assets/image/sgu.png">
     <link href="./assets/css/output.css" rel="stylesheet">
-    
+
     <style>
         button[aria-current="page"] {
             background-color: var(--color-primary);
@@ -113,31 +113,27 @@
 
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/flyonui/flyonui.js"></script>
-
-    <!-- <script src="./views/javascript/indexAdmin.js"></script> -->
     <script src="./views/javascript/indexAdmin.js"></script>
     <script src="./views/javascript/survey.js"></script>
-    <script src="./views/javascript/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
     <script>
-        
-    </script>
-    <script>
-        function capNhatTrangThai() {
-            $.ajax({
-                url: './controller/TuDongCapNhatTrangThaiKS.php', 
-                method: 'GET',
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Lỗi khi cập nhật:', error);
-                }
-            });
-        }
+        // function capNhatTrangThai() {
+        //     $.ajax({
+        //         url: './controller/TuDongCapNhatTrangThaiKS.php', 
+        //         method: 'GET',
+        //         success: function(response) {
+        //             console.log(response);
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error('Lỗi khi cập nhật:', error);
+        //         }
+        //     });
+        // }
 
         // Gọi tự động mỗi 10 phút (600000ms)
-        setInterval(capNhatTrangThai, 600000);
+        // setInterval(capNhatTrangThai, 600000);
     </script>
 </body>
 

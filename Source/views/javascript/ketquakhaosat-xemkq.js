@@ -85,6 +85,57 @@ async function getAllTraLoi(kqks_ids) {
     }
 }
 
+async function getAllLoaidt() {
+    try {
+        const response = await $.ajax({
+            url: "./controller/LoaidtController.php",
+            type: "GET",
+            data: { func: "getAllLoaidt" },
+            dataType: "json",
+        });
+        if (response.error) {
+            console.log("fect", response.error);
+        }
+        return response;
+    } catch (error) {
+        console.log(error);
+        console.log("loi fetchdata getAllKhaoSat 1");
+        return null;
+    }
+}
+
+async function getUserByIds(dt_ids) {
+    try {
+        const response = await $.ajax({
+
+            url: "./controller/doiTuongController.php",
+            type: "GET",
+            data: { func: "getByIds", dt_ids: dt_ids },
+            dataType: "json",
+        });
+        return response;
+    } catch (error) {
+        console.log("Lỗi khi lấy dữ liệu người dùng", error);
+        return null;
+    }
+}
+
+async function getAllByNhomKs(nhom_ks) {
+    try {
+        const response = await $.ajax({
+
+            url: "./controller/doiTuongController.php",
+            type: "GET",
+            data: { func: "getAllByNhomKs", nhom_ks: nhom_ks },
+            dataType: "json",
+        });
+        return response;
+    } catch (error) {
+        console.log("Lỗi khi lấy dữ liệu người dùng", error);
+        return null;
+    }
+}
+
 async function loadDuLieu(ks_id) {
 
     // 0. Lấy chi tiết khảo sát
@@ -97,7 +148,7 @@ async function loadDuLieu(ks_id) {
         });
         return;
     }
-    
+
     document.getElementById('ks-ten').textContent = khaoSat.ten_ks || 'Không rõ';
     document.getElementById('ks-thangdiem').textContent = khaoSat.thang_diem || 'Chưa có';
     document.getElementById('ks-ngaybatdau').textContent = khaoSat.ngay_bat_dau || 'Chưa có';
@@ -116,83 +167,178 @@ async function loadDuLieu(ks_id) {
     // 3. Lấy kết quả khảo sát
     const kqks = await getAllKqks(ks_id);
     const kqks_ids = kqks.data.map(item => item.kqks_id);
+    const doiTuong_Ids = kqks.data.map(item => item.nguoi_lamks_id);
 
-    document.getElementById('ks-soluongthamgia').textContent = kqks_ids.length || 'Chưa có';
+    const loaiDoiTuongs = await getAllLoaidt();
+    const doiTuongThamGias = await getUserByIds(doiTuong_Ids);
+    const doiTuongs = await getAllByNhomKs(khaoSat.nks_id);
+
+    console.log(loaiDoiTuongs);
+    console.log(doiTuongs);
+    console.log(doiTuongThamGias);
+
+    const thongKeKhaoSat = document.getElementById('thongke-khaosat');
+
+    const tongSoPhieu = document.createElement('p');
+    tongSoPhieu.className = "mt-2 text-md font-medium text-gray-700";
+    tongSoPhieu.innerHTML = `<strong>Tổng số phiếu: </strong> <span>${doiTuongs.length}</span>`;
+    thongKeKhaoSat.appendChild(tongSoPhieu);
+
+    const soLuongThamGia = document.createElement('p');
+    soLuongThamGia.className = "mt-2 text-md font-medium text-gray-700";
+    soLuongThamGia.innerHTML = `<strong>Số lượng tham gia khảo sát: </strong> <span>${kqks_ids.length}</span>`;
+    thongKeKhaoSat.appendChild(soLuongThamGia);
+
+    const tongPhieuTheoLoaiDT = new Map();
+    doiTuongs.forEach(item => {
+        const key = String(item.loai_dt_id);
+        tongPhieuTheoLoaiDT.set(key, (tongPhieuTheoLoaiDT.get(key) || 0) + 1);
+    });
+
+    const thamGiaTheoLoaiDT = new Map();
+    doiTuongThamGias.forEach(item => {
+        const key = String(item.loai_dt_id);
+        thamGiaTheoLoaiDT.set(key, (thamGiaTheoLoaiDT.get(key) || 0) + 1);
+    });
+
+    loaiDoiTuongs.forEach(item => {
+        const key = String(item.dt_id);
+        const tong = tongPhieuTheoLoaiDT.get(key) || 0;
+        const thamgia = thamGiaTheoLoaiDT.get(key) || 0;
+
+        const p = document.createElement('p');
+        p.className = "mt-2 text-md font-medium text-gray-700";
+        p.innerHTML = `<strong>${item.ten_dt}:</strong> Tổng phiếu: <span>${tong}</span>, Tham gia: <span>${thamgia}</span>`;
+        thongKeKhaoSat.appendChild(p);
+    });
 
     // 4. Lấy danh sách trả lời
     const traLoi = await getAllTraLoi(kqks_ids);
 
-    console.log(mucKhaoSat);
-    console.log(cauHoi);
-    console.log(kqks.data);
-    console.log(traLoi);
+    const ltlContainer = document.getElementById("ltl-container");
 
-
-    // 6. Tạo tiêu đề bảng
-    const cauhoiList = document.getElementById('cauhoi-list');
-    cauhoiList.innerHTML = ''; // Xóa nội dung cũ
-
-    const headerRow = document.createElement('tr');
-    const cauHoiTh = document.createElement('th');
-    cauHoiTh.textContent = 'Câu hỏi';
-    headerRow.appendChild(cauHoiTh);
-    const thangDiem = document.createElement('th');
-    thangDiem.textContent = 'Thang điểm';
-    thangDiem.colSpan = khaoSat.thang_diem;
-    thangDiem.style.textAlign = "center";
-    headerRow.appendChild(thangDiem);
-    cauhoiList.appendChild(headerRow);
-
-    const headerRow2 = document.createElement('tr');
-    const space = document.createElement('th');
-    headerRow2.appendChild(space);
-    for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
-        const th = document.createElement('th');
-        th.textContent = diem;
-        th.style.textAlign = "center";
-        headerRow2.appendChild(th);
-    }
-    cauhoiList.appendChild(headerRow2);
-
-    // 7. Tạo nội dung bảng
-    const traloiList = document.getElementById('traloi-list');
-    traloiList.innerHTML = '';
-
-    // Duyệt qua từng mục khảo sát
-    mucKhaoSat.forEach(mks => {
-        // Dòng tiêu đề mục
-        const mksRow = document.createElement('tr');
-        mksRow.classList.add('hover');
-        const mksTd = document.createElement('td');
-        mksTd.textContent = mks.ten_muc;
-        mksTd.colSpan = khaoSat.thang_diem + 1;
-        mksTd.style.fontWeight = 'bold';
-        mksRow.appendChild(mksTd);
-        traloiList.appendChild(mksRow);
-
-        // Tìm các câu hỏi thuộc mục khảo sát này
-        const relatedQuestions = cauHoi.filter(ch => ch.mks_id === mks.mks_id);
-
-        relatedQuestions.forEach(ch => {
-            const row = document.createElement('tr');
-            row.classList.add('hover');
-            const cauHoiTd = document.createElement('td');
-            cauHoiTd.textContent = ch.noi_dung;
-            row.appendChild(cauHoiTd);
-
-            // Đếm số trả lời theo từng điểm
-            for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
-                const count = traLoi.filter(tl => Number(tl.ch_id) === Number(ch.ch_id) &&
-                    Number(tl.ket_qua) === Number(diem)).length;
-                const td = document.createElement('td');
-                td.textContent = count;
-                td.classList.add("text-center");
-                row.appendChild(td);
-            }
-
-            traloiList.appendChild(row);
-        });
+    const chitiet_mota = khaoSat.ltl_chitiet_mota ? khaoSat.ltl_chitiet_mota.split(",").map(item => item.trim()) : null;
+    chitiet_mota.forEach((item, index) => {
+        const section = document.createElement("div");
+        section.className = `p-4 section min-w-[125px] min-h-[125px] rounded-full item-center`;
+        section.innerHTML = `
+                    <div>
+                        <h3 class='mt-3 text-center'>${index + 1}</h3>
+                    </div>
+                    <div>
+                        <p class='mt-3 text-center'>${item}</p>
+                    </div>
+                `;
+        ltlContainer.appendChild(section);
     });
+
+    // 5. Tạo nội dung bảng
+    const ketQuaList = document.getElementById('ketqua-list');
+    ketQuaList.innerHTML = '';
+
+    // Gom dữ liệu vào Map như trước
+    const mksTheoCha = new Map();
+    mucKhaoSat.forEach(mks => {
+        const parentId = mks.parent_mks_id || 'root';
+        if (!mksTheoCha.has(parentId)) {
+            mksTheoCha.set(parentId, []);
+        }
+        mksTheoCha.get(parentId).push(mks);
+    });
+
+    const cauHoiTheoMks = new Map();
+    cauHoi.forEach(ch => {
+        if (!cauHoiTheoMks.has(ch.mks_id)) {
+            cauHoiTheoMks.set(ch.mks_id, []);
+        }
+        cauHoiTheoMks.get(ch.mks_id).push(ch);
+    });
+
+    const traLoiTheoCauHoi = new Map();
+    traLoi.forEach(tl => {
+        const key = `${tl.ch_id}-${tl.ket_qua}`;
+        traLoiTheoCauHoi.set(key, (traLoiTheoCauHoi.get(key) || 0) + 1);
+    });
+
+    function taoDongCauHoi(ch, prefix = '') {
+        const row = document.createElement('tr');
+        row.classList.add('hover');
+
+        const cauHoiTd = document.createElement('td');
+        cauHoiTd.textContent = `${prefix} ${ch.noi_dung}`;
+        row.appendChild(cauHoiTd);
+
+        for (let diem = 1; diem <= khaoSat.thang_diem; diem++) {
+            const count = traLoiTheoCauHoi.get(`${ch.ch_id}-${diem}`) || 0;
+            const td = document.createElement('td');
+            td.textContent = count;
+            td.classList.add("text-center");
+            row.appendChild(td);
+        }
+
+        return row;
+    }
+
+    // Duyệt các mục cha
+    const mucChaList = mksTheoCha.get('root') || [];
+    mucChaList.forEach((mucCha, indexMuc) => {
+        // Tạo tiêu đề cho mục cha
+        const tieude = document.createElement('h3');
+        tieude.textContent = mucCha.ten_muc;
+        tieude.style.marginTop = '30px';
+        tieude.style.fontWeight = 'bold';
+        ketQuaList.appendChild(tieude);
+
+        // Tạo bảng mới
+        const tableContainer = document.createElement('div');
+        const table = document.createElement('table');
+        table.classList.add('table', 'table-striped', 'w-full', 'mb-4', 'border-collapse', 'border', 'border-black', 'mt-2');
+
+        // Header bảng
+        const thead = document.createElement('thead');
+        const headRow1 = document.createElement('tr');
+        headRow1.innerHTML = `<th rowspan=2 class="border border-black">Nội dung</th>
+                              <th class="text-center border border-black" colspan=${khaoSat.thang_diem}>${khaoSat.ltl_mota}</th>`;
+        thead.appendChild(headRow1);
+        const headRow2 = document.createElement('tr');
+        headRow2.innerHTML = Array.from({ length: khaoSat.thang_diem }, (_, i) => `<th class="text-center border border-black">${i + 1}</th>`).join('');
+        thead.appendChild(headRow2);
+        table.appendChild(thead);
+
+        // Body bảng
+        const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        const mucConList = mksTheoCha.get(mucCha.mks_id) || [];
+
+        if (mucConList.length > 0) {
+            // Có mục con
+            mucConList.forEach(mucCon => {
+                const row = document.createElement('tr');
+                const td = document.createElement('td');
+                td.textContent = `${indexMuc + 1}. ${mucCon.ten_muc}`;
+                td.colSpan = khaoSat.thang_diem + 1;
+                td.style.fontWeight = 'bold';
+                td.style.paddingLeft = '10px';
+                row.appendChild(td);
+                tbody.appendChild(row);
+
+                const relatedQuestions = cauHoiTheoMks.get(mucCon.mks_id) || [];
+                relatedQuestions.forEach((ch, indexCH) => {
+                    tbody.appendChild(taoDongCauHoi(ch, `${indexMuc + 1}.${indexCH + 1}.`));
+                });
+            });
+        } else {
+            // Không có mục con → render trực tiếp câu hỏi
+            const relatedQuestions = cauHoiTheoMks.get(mucCha.mks_id) || [];
+            relatedQuestions.forEach((ch, indexCH) => {
+                tbody.appendChild(taoDongCauHoi(ch, `${indexMuc + 1}.${indexCH + 1}.`));
+            });
+        }
+        tableContainer.appendChild(table);
+        ketQuaList.appendChild(tableContainer);
+    });
+
 }
 
 function xuatExel(ks_id) {
@@ -238,6 +384,30 @@ function xuatExel(ks_id) {
     });
 }
 
+function printDiv() {
+    var divContents = document.getElementById("print-content").innerHTML;
+    var printWindow = window.open('', '', 'height=600,width=800');
+
+    // Lấy toàn bộ thẻ <style> và <link> từ trang gốc
+    var styles = '';
+    document.querySelectorAll('link[rel="stylesheet"], style').forEach((style) => {
+        styles += style.outerHTML;
+    });
+
+    printWindow.document.write('<html>');
+    printWindow.document.write('<head><title>In nội dung</title>' + styles + '</head>');
+    printWindow.document.write('<body>');
+    printWindow.document.write('<div>' + divContents + '</div>');
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+
+    printWindow.onload = function () {
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };
+}
+
 $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
     const ks_id = urlParams.get('id');
@@ -247,5 +417,8 @@ $(document).ready(function () {
     $('#excel').on('click', function () {
         xuatExel(ks_id);
     });
-    $('.table').addClass('table-striped');
+
+    $('#pdf').on('click', function () {
+        printDiv();
+    });
 });

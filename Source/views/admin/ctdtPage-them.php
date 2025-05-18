@@ -1,6 +1,5 @@
 <div class="w-full h-full mx-auto container p-5">
     <div class="flex items-center justify-between mb-4">
-
         <a href="" class="back-link btn btn-soft ">Quay lại</a>
     </div>
     <div class="flex items-center justify-center mb-4">

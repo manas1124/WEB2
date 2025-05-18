@@ -1,7 +1,11 @@
-
+<div class="w-full h-full mx-auto container p-5">
+    <div class="flex items-center justify-between mb-4">
 <a href="" class="back-link btn btn-soft ">Quay lại</a>
-
+    </div>
+    <div class="flex items-center justify-center mb-4">
 <h3 class="modal-title">Thêm đối tượng</h3>
+    </div>
+    <div class="flex items-center justify-center mb-4">
 <div class="overflow-y-auto">
     <!-- Thông tin người dùng -->
     <div class="flex flex-row">
@@ -56,6 +60,7 @@
     <div class="border-t border-base-content/10 pt-4 flex justify-end">
         <button id="btn-save-doituong" type="submit" class="btn btn-primary">Lưu</button>
     </div>
-
+    </div>
+</div>
 
 <script src="views/javascript/qlUserPage-them.js"></script>

@@ -117,6 +117,3 @@
 </div>
 </div>
 <script src="views/javascript/qlUserPage.js"></script>
-<script src="../node_modules/flyonui/flyonui.js"></script>
-<script src="../path/to/lodash/lodash.js"></script>
-<script src="../path/to/dropzone/dist/dropzone-min.js"></script>

@@ -144,6 +144,7 @@ class KqKhaoSatModel
                     khao_sat.ngay_bat_dau,
                     khao_sat.ngay_ket_thuc,
                     loai_tra_loi.thang_diem,
+                    loai_tra_loi.chitiet_mota,
                     nhom_khao_sat.ten_nks,
                     chu_ki.ten_ck,
                     nganh.ten_nganh,
@@ -171,11 +172,16 @@ class KqKhaoSatModel
 
             // 2. Lấy danh sách mục khảo sát và câu hỏi
             $questionsQuery = "
-                SELECT mks.mks_id, mks.ten_muc, ch.ch_id, ch.noi_dung
+                SELECT 
+                    mks.mks_id, 
+                    mks.ten_muc, 
+                    mks.parent_mks_id, 
+                    ch.ch_id, 
+                    ch.noi_dung
                 FROM muc_khao_sat mks
-                JOIN cau_hoi ch ON mks.mks_id = ch.mks_id
-                WHERE mks.ks_id = ? AND mks.status = 1 AND ch.status = 1
-                ORDER BY mks.mks_id, ch.ch_id
+                LEFT JOIN cau_hoi ch ON mks.mks_id = ch.mks_id AND ch.status = 1
+                WHERE mks.ks_id = ? AND mks.status = 1
+                ORDER BY ISNULL(mks.parent_mks_id) DESC, mks.parent_mks_id, mks.mks_id, ch.ch_id
             ";
             $stmt = $conn->prepare($questionsQuery);
             $stmt->bind_param('i', $ks_id);
@@ -184,25 +190,59 @@ class KqKhaoSatModel
             $questions = $result->fetch_all(MYSQLI_ASSOC);
 
             // Tổ chức cấu trúc tiêu đề
-            $headers = ['Email']; // Cột đầu tiên là Email
-            $questionMap = []; // Lưu ánh xạ ch_id với vị trí cột
-            $currentMksId = null;
-            $colIndex = 1; // Bắt đầu từ cột B (sau cột Email)
+            $mucMap = []; // mks_id => ['ten_muc' => ..., 'parent_mks_id' => ...]
+            $tree = [];   // parent_mks_id => array of mks_id
+            $questionListByMks = []; // mks_id => list of questions
 
-            foreach ($questions as $question) {
-                // Nếu gặp mục khảo sát mới, thêm tiêu đề mục khảo sát
-                if ($question['mks_id'] !== $currentMksId) {
-                    $headers[$colIndex] = $question['ten_muc'];
-                    $colIndex++;
-                    $currentMksId = $question['mks_id'];
+            foreach ($questions as $q) {
+                $mks_id = $q['mks_id'];
+
+                // Map thông tin mục khảo sát
+                if (!isset($mucMap[$mks_id])) {
+                    $mucMap[$mks_id] = [
+                        'ten_muc' => $q['ten_muc'],
+                        'parent_mks_id' => $q['parent_mks_id']
+                    ];
+                    $tree[$q['parent_mks_id']][] = $mks_id;
                 }
-                // Thêm tiêu đề câu hỏi
-                if ($question['ch_id']) {
-                    $headers[$colIndex] = $question['noi_dung'];
-                    $questionMap[$question['ch_id']] = $colIndex;
-                    $colIndex++;
+
+                // Gom câu hỏi theo mks_id
+                if (!empty($q['ch_id'])) {
+                    $questionListByMks[$mks_id][] = [
+                        'ch_id' => $q['ch_id'],
+                        'noi_dung' => $q['noi_dung']
+                    ];
                 }
             }
+
+            $headers = ['Email'];
+            $questionMap = [];
+            $colIndex = 1;
+
+            $buildHeaders = function ($parentId, &$tree, &$mucMap, &$questionListByMks, &$headers, &$questionMap, &$colIndex) use (&$buildHeaders) {
+                    if (!isset($tree[$parentId])) return;
+
+                    foreach ($tree[$parentId] as $mks_id) {
+                        // Ghi tiêu đề mục khảo sát
+                        $headers[$colIndex] = $mucMap[$mks_id]['ten_muc'];
+                        $colIndex++;
+
+                        // Ghi câu hỏi của mục này (nếu có)
+                        if (isset($questionListByMks[$mks_id])) {
+                            foreach ($questionListByMks[$mks_id] as $q) {
+                                $headers[$colIndex] = $q['noi_dung'];
+                                $questionMap[$q['ch_id']] = $colIndex;
+                                $colIndex++;
+                            }
+                        }
+
+                        // Đệ quy duyệt mục con
+                        $buildHeaders($mks_id, $tree, $mucMap, $questionListByMks, $headers, $questionMap, $colIndex);
+                    }
+                };
+
+            // Bắt đầu từ root (parent_mks_id = NULL)
+            $buildHeaders(null, $tree, $mucMap, $questionListByMks, $headers, $questionMap, $colIndex);
 
             // 3. Lấy danh sách người tham gia và kết quả trả lời
             $resultsQuery = "
@@ -282,22 +322,39 @@ class KqKhaoSatModel
             $sheet->setCellValue('A9', 'Thang điểm');
             $sheet->setCellValue('B9', $survey['thang_diem']);
 
-            // Ghi tiêu đề bảng
+            // Mô tả chi tiết thang điểm
             $row = 10;
+            if (!empty($survey['chitiet_mota'])) {
+                $sheet->setCellValue('A' . $row, 'Mô tả thang điểm');
+                $motas = explode(',', $survey['chitiet_mota']);
+                foreach ($motas as $index => $mota) {
+                    $sheet->setCellValue('A' . ($row + $index + 1), $index + 1 );
+                    $sheet->setCellValue('B' . ($row + $index + 1),  trim($mota));
+                }
+                $row = $row + count($motas) + 2;
+            } else {
+                $row = 10;
+            }
+
+            array_unshift($headers, 'STT');
+            // Ghi tiêu đề bảng
             foreach (array_values($headers) as $colIndex => $header) {
-                $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1); // Excel bắt đầu từ 1
+                $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
                 $sheet->setCellValue($colLetter . $row, $header);
                 $sheet->getStyle($colLetter . $row)->getFont()->setBold(true);
             }
 
             // Ghi dữ liệu
             $row++;
+            $stt = 1;
             foreach ($data as $dataRow) {
+                $sheet->setCellValue('A' . $row, $stt);
                 foreach (array_values($dataRow) as $colIndex => $value) {
-                    $colLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
+                    $colLetter = Coordinate::stringFromColumnIndex($colIndex + 2);
                     $sheet->setCellValue($colLetter . $row, $value);
                 }
                 $row++;
+                $stt++;
             }
 
             // Tự động điều chỉnh kích thước cột
@@ -371,14 +428,14 @@ class KqKhaoSatModel
             'data' => $ks_ids
         ];
     }
-    public function getByIdKhaoSatAndIdUser($kqks_id, $nguoi_lamks_id) 
-{
-    $conn = $this->db->getConnection();
-    $stmt = $conn->prepare("SELECT * FROM kq_khao_sat WHERE ks_id = ? AND nguoi_lamks_id = ?");
-    $stmt->bind_param("ii", $kqks_id, $nguoi_lamks_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    public function getByIdKhaoSatAndIdUser($kqks_id, $nguoi_lamks_id)
+    {
+        $conn = $this->db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM kq_khao_sat WHERE ks_id = ? AND nguoi_lamks_id = ?");
+        $stmt->bind_param("ii", $kqks_id, $nguoi_lamks_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    return $result->fetch_assoc();
-}
+        return $result->fetch_assoc();
+    }
 }

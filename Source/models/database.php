@@ -7,10 +7,6 @@ class MyConnection
     private $password = "";
     private $database = "student_survey_management";
 
-
-    // private $server = "localhost:3307";
-    // private $username = "root";
-    // private $password = "516423";
     public function __construct()
     { 
     }

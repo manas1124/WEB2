@@ -18,6 +18,11 @@ echo '  <aside id="default-sidebar"
                             Khảo sát
                         </a>
                     </li>
+                    <li class="nav-menu view-survey hidden">
+                        <a href="" class="nav-item nav-link text-nowrap" id="loai-tra-loi-page" data-page="qlLoaiTraLoi">
+                            Loại trả lời
+                        </a>
+                    </li>
                     <li class="nav-menu view-program hidden">
                         <a href="" class="nav-item nav-link text-nowrap" data-page="ctdtPage">
                             Chương trình đào tạo
@@ -51,11 +56,6 @@ echo '  <aside id="default-sidebar"
                     <li class="nav-menu view-permission hidden">
                         <a href="" class="nav-item nav-link text-nowrap" id="quyen-page" data-page="quyenPage">
                             Quyền
-                        </a>
-                    </li>
-                    <li class="nav-menu view-survey hidden">
-                        <a href="" class="nav-item nav-link text-nowrap" data-page="surveyPage">
-                            Khảo sát - client
                         </a>
                     </li>
                     <li class="nav-menu view-survey hidden">
