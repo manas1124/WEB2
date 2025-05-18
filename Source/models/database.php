@@ -4,7 +4,7 @@ class MyConnection
     private $connection;
     private $server = "localhost";
     private $username = "root";
-    private $password = "123456";
+    private $password = "";
     private $database = "student_survey_management";
 
     public function __construct()
