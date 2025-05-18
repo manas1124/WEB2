@@ -85,6 +85,57 @@ async function getAllTraLoi(kqks_ids) {
     }
 }
 
+async function getAllLoaidt() {
+    try {
+        const response = await $.ajax({
+            url: "./controller/LoaidtController.php",
+            type: "GET",
+            data: { func: "getAllLoaidt" },
+            dataType: "json",
+        });
+        if (response.error) {
+            console.log("fect", response.error);
+        }
+        return response;
+    } catch (error) {
+        console.log(error);
+        console.log("loi fetchdata getAllKhaoSat 1");
+        return null;
+    }
+}
+
+async function getUserByIds(dt_ids) {
+    try {
+        const response = await $.ajax({
+
+            url: "./controller/doiTuongController.php",
+            type: "GET",
+            data: { func: "getByIds", dt_ids: dt_ids },
+            dataType: "json",
+        });
+        return response;
+    } catch (error) {
+        console.log("Lỗi khi lấy dữ liệu người dùng", error);
+        return null;
+    }
+}
+
+async function getAllByNhomKs(nhom_ks) {
+    try {
+        const response = await $.ajax({
+
+            url: "./controller/doiTuongController.php",
+            type: "GET",
+            data: { func: "getAllByNhomKs", nhom_ks: nhom_ks },
+            dataType: "json",
+        });
+        return response;
+    } catch (error) {
+        console.log("Lỗi khi lấy dữ liệu người dùng", error);
+        return null;
+    }
+}
+
 async function loadDuLieu(ks_id) {
 
     // 0. Lấy chi tiết khảo sát
@@ -116,16 +167,53 @@ async function loadDuLieu(ks_id) {
     // 3. Lấy kết quả khảo sát
     const kqks = await getAllKqks(ks_id);
     const kqks_ids = kqks.data.map(item => item.kqks_id);
+    const doiTuong_Ids = kqks.data.map(item => item.nguoi_lamks_id);
 
-    document.getElementById('ks-soluongthamgia').textContent = kqks_ids.length || 'Chưa có';
+    const loaiDoiTuongs = await getAllLoaidt();
+    const doiTuongThamGias = await getUserByIds(doiTuong_Ids);
+    const doiTuongs = await getAllByNhomKs(khaoSat.nks_id);
+
+    console.log(loaiDoiTuongs);
+    console.log(doiTuongs);
+    console.log(doiTuongThamGias);
+
+    const thongKeKhaoSat = document.getElementById('thongke-khaosat');
+
+    const tongSoPhieu = document.createElement('p');
+    tongSoPhieu.className = "mt-2 text-md font-medium text-gray-700";
+    tongSoPhieu.innerHTML = `<strong>Tổng số phiếu: </strong> <span>${doiTuongs.length}</span>`;
+    thongKeKhaoSat.appendChild(tongSoPhieu);
+
+    const soLuongThamGia = document.createElement('p');
+    soLuongThamGia.className = "mt-2 text-md font-medium text-gray-700";
+    soLuongThamGia.innerHTML = `<strong>Số lượng tham gia khảo sát: </strong> <span>${kqks_ids.length}</span>`;
+    thongKeKhaoSat.appendChild(soLuongThamGia);
+
+    const tongPhieuTheoLoaiDT = new Map();
+    doiTuongs.forEach(item => {
+        const key = String(item.loai_dt_id);
+        tongPhieuTheoLoaiDT.set(key, (tongPhieuTheoLoaiDT.get(key) || 0) + 1);
+    });
+
+    const thamGiaTheoLoaiDT = new Map();
+    doiTuongThamGias.forEach(item => {
+        const key = String(item.loai_dt_id);
+        thamGiaTheoLoaiDT.set(key, (thamGiaTheoLoaiDT.get(key) || 0) + 1);
+    });
+
+    loaiDoiTuongs.forEach(item => {
+        const key = String(item.dt_id);
+        const tong = tongPhieuTheoLoaiDT.get(key) || 0;
+        const thamgia = thamGiaTheoLoaiDT.get(key) || 0;
+
+        const p = document.createElement('p');
+        p.className = "mt-2 text-md font-medium text-gray-700";
+        p.innerHTML = `<strong>${item.ten_dt}:</strong> Tổng phiếu: <span>${tong}</span>, Tham gia: <span>${thamgia}</span>`;
+        thongKeKhaoSat.appendChild(p);
+    });
 
     // 4. Lấy danh sách trả lời
     const traLoi = await getAllTraLoi(kqks_ids);
-
-    console.log(mucKhaoSat);
-    console.log(cauHoi);
-    console.log(kqks.data);
-    console.log(traLoi);
 
     const ltlContainer = document.getElementById("ltl-container");
 
@@ -228,7 +316,7 @@ async function loadDuLieu(ks_id) {
             mucConList.forEach(mucCon => {
                 const row = document.createElement('tr');
                 const td = document.createElement('td');
-                td.textContent = `${indexMuc+1}. ${mucCon.ten_muc}`;
+                td.textContent = `${indexMuc + 1}. ${mucCon.ten_muc}`;
                 td.colSpan = khaoSat.thang_diem + 1;
                 td.style.fontWeight = 'bold';
                 td.style.paddingLeft = '10px';
@@ -237,14 +325,14 @@ async function loadDuLieu(ks_id) {
 
                 const relatedQuestions = cauHoiTheoMks.get(mucCon.mks_id) || [];
                 relatedQuestions.forEach((ch, indexCH) => {
-                    tbody.appendChild(taoDongCauHoi(ch, `${indexMuc+1}.${indexCH+1}.`));
+                    tbody.appendChild(taoDongCauHoi(ch, `${indexMuc + 1}.${indexCH + 1}.`));
                 });
             });
         } else {
             // Không có mục con → render trực tiếp câu hỏi
             const relatedQuestions = cauHoiTheoMks.get(mucCha.mks_id) || [];
             relatedQuestions.forEach((ch, indexCH) => {
-                tbody.appendChild(taoDongCauHoi(ch, `${indexMuc+1}.${indexCH+1}.`));
+                tbody.appendChild(taoDongCauHoi(ch, `${indexMuc + 1}.${indexCH + 1}.`));
             });
         }
         tableContainer.appendChild(table);
@@ -296,6 +384,30 @@ function xuatExel(ks_id) {
     });
 }
 
+function printDiv() {
+    var divContents = document.getElementById("print-content").innerHTML;
+    var printWindow = window.open('', '', 'height=600,width=800');
+
+    // Lấy toàn bộ thẻ <style> và <link> từ trang gốc
+    var styles = '';
+    document.querySelectorAll('link[rel="stylesheet"], style').forEach((style) => {
+        styles += style.outerHTML;
+    });
+
+    printWindow.document.write('<html>');
+    printWindow.document.write('<head><title>In nội dung</title>' + styles + '</head>');
+    printWindow.document.write('<body>');
+    printWindow.document.write('<div>' + divContents + '</div>');
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+
+    printWindow.onload = function () {
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };
+}
+
 $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
     const ks_id = urlParams.get('id');
@@ -305,5 +417,8 @@ $(document).ready(function () {
     $('#excel').on('click', function () {
         xuatExel(ks_id);
     });
-    $('.table').addClass('table-striped');
+
+    $('#pdf').on('click', function () {
+        printDiv();
+    });
 });
